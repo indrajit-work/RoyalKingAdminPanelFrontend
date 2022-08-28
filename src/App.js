@@ -15,7 +15,7 @@ function App() {
             <Redirect to="/dashboard" />
           </Route>
           <Route path="/dashboard" exact>
-            <h1>Dash</h1>
+         
           </Route>
         </Switch>
     </>
