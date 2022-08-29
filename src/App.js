@@ -2,6 +2,7 @@ import { Route, Switch, Redirect, Router } from "react-router-dom";
 import { isAuth } from "./utils/auth";
 import Login from "./components/Login";
 import Sidebar from "./components/Sidebar";
+import Dashboard from "./pages/Dashboard";
 function App() {
   return (
     <>
@@ -10,12 +11,16 @@ function App() {
       </Route>
    
         <Switch>
-         {isAuth() && <Sidebar />}
+         {/* {isAuth() && <Sidebar/>} */}
           <Route path="/" exact>
-            <Redirect to="/dashboard" />
+          <Redirect to="/dashboard" />
+       
+            
           </Route>
           <Route path="/dashboard" exact>
-            <h1>Dash</h1>
+            <Sidebar></Sidebar>
+            <Dashboard/>
+           
           </Route>
         </Switch>
     </>

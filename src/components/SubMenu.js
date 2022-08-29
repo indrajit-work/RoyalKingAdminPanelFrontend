@@ -11,12 +11,13 @@ const SidebarLink = styled(Link)`
   list-style: none;
   height: 55px;
   text-decoration: none;
-  font-size: 14px;
+  font-size: 12px;
   &:hover {
     background: #252831;
     text-decoration:none;
     border-left: 4px solid #632ce4;
     cursor: pointer;
+    font-size:14px;
   }
 `;
 
@@ -32,7 +33,7 @@ const DropdownLink = styled(Link)`
   align-items: center;
   text-decoration: none ;
   color: #f5f5f5;
-  font-size: 16px;
+  font-size: 15px;
   &:hover {
     background: #a9abad;
     text-decoration:none;
