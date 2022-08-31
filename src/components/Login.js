@@ -19,9 +19,9 @@ import { isAuth } from "../utils/auth";
     const { buttonText, success, password, msg, username } = regState;
     const history = useHistory();
   
-    // useEffect(() => {
-    //   isAuth() && history.push('/')
-    // }, []);
+    useEffect(() => {
+      isAuth() && history.push('/')
+    }, []);
   
     const handleChange = (name) => (e) => {
       console.log(e.target.value);

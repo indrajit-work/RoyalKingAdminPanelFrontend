@@ -14,7 +14,7 @@ export const SidebarData = [
       },
 {
     title: 'Profile',
-    path: '/overview',
+    path: '#',
     icon: <AiIcons.AiFillHome />,
     iconClosed: <RiIcons.RiArrowDownSFill />,
     iconOpened: <RiIcons.RiArrowUpSFill />,
@@ -22,36 +22,31 @@ export const SidebarData = [
     subNav: [
       {
         title: 'Change Passowrd',
-        path: '/overview/users',
+        path: '/profile/changepassword',
         icon: <IoIcons.IoIosPaper />
       },
     ]
   },
   {
-    title: 'User Manager',
-    path: '/reports',
+    title: 'Distributor',
+    // path: '',
     icon: <IoIcons.IoIosPaper />,
     iconClosed: <RiIcons.RiArrowDownSFill />,
     iconOpened: <RiIcons.RiArrowUpSFill />,
 
     subNav: [
       {
-        title: 'Admin',
-        path: '/reports/reports1',
-        icon: <IoIcons.IoIosPaper />,
+        title: 'List Distributor',
+        path: '/distributor/list',
+        icon: <AiIcons.AiOutlineBars />,
         cName: 'sub-nav'
       },
       {
-        title: 'Distributor ',
+        title: 'Add Distributor ',
         path: '/reports/reports2',
         icon: <IoIcons.IoIosPaper />,
         cName: 'sub-nav'
       },
-      {
-        title: 'Stockist',
-        path: '/reports/reports3',
-        icon: <IoIcons.IoIosPaper />
-      }
     ]
   },
   {

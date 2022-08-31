@@ -3,6 +3,8 @@ import { isAuth } from "./utils/auth";
 import Login from "./components/Login";
 import Sidebar from "./components/Sidebar";
 import Dashboard from "./pages/Dashboard";
+import ChangePassword from "./pages/ChangePassword";
+import ListDistributor from "./pages/ListDistributor";
 function App() {
   return (
     <>
@@ -11,6 +13,7 @@ function App() {
       </Route>
    
         <Switch>
+        {/* <Sidebar/> */}
          {/* {isAuth() && <Sidebar/>} */}
           <Route path="/" exact>
           <Redirect to="/dashboard" />
@@ -18,9 +21,23 @@ function App() {
             
           </Route>
           <Route path="/dashboard" exact>
-            <Sidebar></Sidebar>
+            <Sidebar/>
             <Dashboard/>
-           
+          
+          </Route>
+          <Route path="/profile" exact>
+            <Sidebar/>
+            <Dashboard/>
+
+          </Route>
+          <Route path="/profile/changepassword" exact>
+            <Sidebar/>
+            <ChangePassword/>
+          </Route>
+          <Route path="/distributor/list" exact>
+            <Sidebar/>
+            <ListDistributor/>
+
           </Route>
         </Switch>
     </>
