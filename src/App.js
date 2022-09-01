@@ -39,9 +39,7 @@ function App() {
             <ListDistributor/>
 
           </Route>
-          <Route path="*" exact>
-          <Redirect to="/dashboard" />
-          </Route>
+          
         </Switch>
     </>
   );
