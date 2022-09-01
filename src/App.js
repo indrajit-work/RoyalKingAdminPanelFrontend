@@ -39,7 +39,7 @@ function App() {
             <ListDistributor/>
 
           </Route>
-          <Route path="*">
+          <Route path="*" exact>
           <Redirect to="/dashboard" />
           </Route>
         </Switch>
