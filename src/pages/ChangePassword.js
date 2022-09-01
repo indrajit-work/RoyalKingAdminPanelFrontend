@@ -48,7 +48,7 @@ const ChangePassword = () => {
 
     try {
       const res = await axios.post(
-        `${process.env.REACT_APP_API}/users/login/admin/resetpassword`,
+        `https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/resetpassword`,
         {
           userID: parseInt(userID),
           oldPassword,
