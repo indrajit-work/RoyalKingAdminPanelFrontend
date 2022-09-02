@@ -85,7 +85,7 @@ import { isAuth } from "../utils/auth";
               <input
                 type="text"
                 placeholder="Enter Username..."
-                className="name"
+                className="name inputLogin"
                 onChange={handleChange("username")}
                 value={username}
                 required
@@ -95,7 +95,7 @@ import { isAuth } from "../utils/auth";
               <input
                 type="password"
                 placeholder="Enter password..."
-                className="name"
+                className="name inputLogin"
                 onChange={handleChange("password")}
                 value={password}
                 required
@@ -103,7 +103,7 @@ import { isAuth } from "../utils/auth";
               />
             </div>
             <div className="login-button">
-              <button className="login-btn">{buttonText}</button>
+              <button className="login-btn btnS ">{buttonText}</button>
             </div>
           </div>
           </form>

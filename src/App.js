@@ -5,6 +5,9 @@ import Sidebar from "./components/Sidebar";
 import Dashboard from "./pages/Dashboard";
 import ChangePassword from "./pages/ChangePassword";
 import ListDistributor from "./pages/ListDistributor";
+import RegDistributor from "./pages/RegDistributor";
+import StokistList from "./pages/StokistList";
+import RegStokist from "./pages/RegStokist";
 function App() {
   return (
     <>
@@ -34,10 +37,25 @@ function App() {
             <Sidebar/>
             <ChangePassword/>
           </Route>
+          <Route path="/distributor/create" exact>
+            <Sidebar/>
+                <RegDistributor/>
+          
+          </Route>
           <Route path="/distributor/list" exact>
             <Sidebar/>
             <ListDistributor/>
 
+          </Route>
+          <Route path="/stokist/list" exact>
+            <Sidebar/>
+            <StokistList/>
+
+          </Route>
+  
+          <Route path="/stokist/create" exact>
+            <Sidebar/>
+            <RegStokist/>
           </Route>
           
         </Switch>

@@ -43,7 +43,29 @@ export const SidebarData = [
       },
       {
         title: 'Add Distributor ',
-        path: '/reports/reports2',
+        path: '/distributor/create',
+        icon: <IoIcons.IoIosPaper />,
+        cName: 'sub-nav'
+      },
+    ]
+  },
+  {
+    title: 'Stokist',
+    // path: '',
+    icon: <IoIcons.IoIosPaper />,
+    iconClosed: <RiIcons.RiArrowDownSFill />,
+    iconOpened: <RiIcons.RiArrowUpSFill />,
+
+    subNav: [
+      {
+        title: 'List Stokist',
+        path: '/stokist/list',
+        icon: <AiIcons.AiOutlineBars />,
+        cName: 'sub-nav'
+      },
+      {
+        title: 'Add Stokist ',
+        path: '/stokist/create',
         icon: <IoIcons.IoIosPaper />,
         cName: 'sub-nav'
       },

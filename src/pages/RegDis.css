@@ -1,0 +1,4 @@
+.disable{
+    pointer-events: auto! important;
+    cursor: not-allowed! important;
+}

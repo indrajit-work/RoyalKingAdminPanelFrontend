@@ -55,7 +55,7 @@ const ListDistributor = () => {
   return (
     <MDBContainer>
       <div style={{ marginTop: "80px" }}>
-        <h1 className="text-center mb-5 text-muted"> Distributors </h1>
+        <h1 className="text-center mb-5 text-muted"> Stokists </h1>
   
      {/* <input className="mb-2" placeholder="search..."  value={filterVal} onInput={(e)=>handleFilter(e)}/> */}
     

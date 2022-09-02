@@ -101,6 +101,7 @@ const ChangePassword = () => {
                   type="password"
                   required
                   onChange={handleChange("oldPassword")}
+                  className="changePassS"
                   value={oldPassword}
                 />
               </Form.Group>
@@ -112,6 +113,7 @@ const ChangePassword = () => {
                   type="password"
                   required
                   onChange={handleChange("newPassword")}
+                  className="changePassS"
                   value={newPassword}
                 />
               </Form.Group>
@@ -123,11 +125,12 @@ const ChangePassword = () => {
                 <Form.Control
                   type="password"
                   required
+                  className="changePassS"
                   onChange={handleChange("verifyPassword")}
                   value={verifyPassword}
                 />
               </Form.Group>
-              <Button size="sm" className="float-right mt-4 btn " type="submit">
+              <Button size="sm" className="float-right mt-4 btn btnChange" type="submit">
                 {buttonText}
               </Button>
             </Form>
