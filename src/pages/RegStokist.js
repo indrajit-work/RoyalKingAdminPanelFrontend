@@ -52,7 +52,7 @@ const RegStokist = () => {
                 </Form.Control>
               </Form.Group>
 
-              <Form.Group>
+              {/* <Form.Group> */}
                 <Form.Label className="text-muted font-weight-bold pt-2">
                   Role
                 </Form.Label>
