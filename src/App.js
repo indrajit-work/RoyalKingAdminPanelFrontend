@@ -8,6 +8,8 @@ import ListDistributor from "./pages/ListDistributor";
 import RegDistributor from "./pages/RegDistributor";
 import StokistList from "./pages/StokistList";
 import RegStokist from "./pages/RegStokist";
+import PlayerList from "./pages/PlayerList";
+import ListPlayer from "./pages/ListPlayers";
 function App() {
   return (
     <>
@@ -56,6 +58,10 @@ function App() {
           <Route path="/stokist/create" exact>
             <Sidebar/>
             <RegStokist/>
+          </Route>
+          <Route path="/player/list" exact>
+            <Sidebar/>
+           <ListPlayer/>
           </Route>
           
         </Switch>

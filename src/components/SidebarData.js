@@ -72,6 +72,28 @@ export const SidebarData = [
     ]
   },
   {
+    title: 'Player',
+    // path: '',
+    icon: <IoIcons.IoIosPaper />,
+    iconClosed: <RiIcons.RiArrowDownSFill />,
+    iconOpened: <RiIcons.RiArrowUpSFill />,
+
+    subNav: [
+      {
+        title: 'List Player',
+        path: '/player/list',
+        icon: <AiIcons.AiOutlineBars />,
+        cName: 'sub-nav'
+      },
+      {
+        title: 'Add Player ',
+        path: '/stokist/create',
+        icon: <IoIcons.IoIosPaper />,
+        cName: 'sub-nav'
+      },
+    ]
+  },
+  {
     title: 'Adjust Points',
     path: '/products',
     icon: <FaIcons.FaCartPlus />,
