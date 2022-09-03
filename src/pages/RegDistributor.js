@@ -4,11 +4,85 @@ import "./RegDis.css";
 import axios from "axios";
 import { getCookie } from "../utils/auth";
 import Calendar from "react-calendar";
-import 'react-calendar/dist/Calendar.css';
-const RegDistributor = () => {
-    const [value, onChange] = useState(new Date());
+import "react-calendar/dist/Calendar.css";
 
-   console.log(value)
+
+const RegDistributor = () => {
+  const [value, onChanage] = useState(new Date());
+
+  const [user, setUser] = useState({
+    email: "",
+    password: "",
+    verifyPassword: "",
+    userRole: "Distributor",
+    commPercent: 0,
+    bossId: 0,
+    fullName: "",
+    phNo: 0,
+    buttonText: "Submit",
+  });
+
+  const {
+    email,
+    password,
+    verifyPassword,
+    userRole,
+    commPercent,
+    bossID,
+    fullName,
+    phNo,
+    buttonText,
+  } = user;
+
+  const handleChange = (name) => (e) => {
+    console.log(e.target.value);
+    setUser({
+      ...user,
+      [name]: e.target.value,
+    });
+  };
+
+  const onHandleSubmit = async (e) => {
+    e.preventDefault();
+
+    if(password!==verifyPassword)
+    {
+      alert("Passwords don't match(password and verify Password)");
+      return;
+    }
+    setUser({ ...user, buttonText: "Submitting...." });
+    try {
+      const res = await axios.post(
+        `https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/createuser`,
+        {
+          email,
+          password,
+          userRole,
+          commPercent,
+          bossID,
+          fullName,
+          phone:phNo,
+          dateOfbirth:value
+        }
+      );
+
+      console.log("Submited:...............", res);
+      setUser({
+        ...user,
+        buttonText: "Submit",
+    
+      });
+    } catch (error) {
+      console.log("Error:", error);
+      setUser({
+        ...user,
+        buttonText: "Submit",
+      });
+    }
+  }
+  
+  // console.log(value)
+
   return (
     <Container>
       <Row>
@@ -18,38 +92,44 @@ const RegDistributor = () => {
           className="m-auto mt-5  shadow-lg"
         >
           <Card.Header className="text-muted font-weight-bold">
-            Register new User
+            Register new Distributor
           </Card.Header>
           <Card.Body>
             <h4 className="text-muted text-center">Login Info</h4>
-            <Form onSubmit="">
+            <Form onSubmit={onHandleSubmit}>
               <Form.Group controlId="formBasicPassword" className="pb-2">
                 <Form.Label className="text-muted font-weight-bold">
                   Email
                 </Form.Label>
-                <Form.Control type="email" required />
+                <Form.Control
+                  type="email"
+                  onChange={handleChange("email")}
+                  required
+                  value={email}
+                />
               </Form.Group>
               <Form.Group controlId="formBasicPassword" className="pb-2">
                 <Form.Label className="text-muted font-weight-bold">
                   Password
                 </Form.Label>
-                <Form.Control type="password" required />
+                <Form.Control
+                  type="password"
+                  onChange={handleChange("password")}
+                  value={password}
+                  required
+                />
               </Form.Group>
 
               <Form.Group controlId="formBasicPassword">
                 <Form.Label className="text-muted font-weight-bold">
                   Verify Password
                 </Form.Label>
-                <Form.Control type="password" required />
-              </Form.Group>
-
-              <Form.Group>
-                <Form.Label className="text-muted font-weight-bold pt-2">
-                  Admin
-                </Form.Label>
-                <Form.Control as="select" className="disable" disabled>
-                  <option>Administrator</option>
-                </Form.Control>
+                <Form.Control
+                  type="password"
+                  onChange={handleChange("verifyPassword")}
+                  value={verifyPassword}
+                  required
+                />
               </Form.Group>
 
               <Form.Group>
@@ -64,13 +144,23 @@ const RegDistributor = () => {
                 <Form.Label className="text-muted font-weight-bold pt-3">
                   Commision percentage(%)
                 </Form.Label>
-                <Form.Control type="number" required />
+                <Form.Control
+                  type="number"
+                  onChange={handleChange("commPercent")}
+                  value={commPercent}
+                  required
+                />
               </Form.Group>
               <Form.Group>
                 <Form.Label className="text-muted font-weight-bold pt-3">
-                  Payout percentage(%)
+                  Boss Id
                 </Form.Label>
-                <Form.Control type="number" required />
+                <Form.Control
+                  type="text"
+                  onChange={handleChange("bossID")}
+                  value={bossID}
+                  required
+                />
               </Form.Group>
               <br />
               <br />
@@ -81,33 +171,45 @@ const RegDistributor = () => {
                 <Form.Label className="text-muted font-weight-bold pt-3">
                   Full Name
                 </Form.Label>
-                <Form.Control type="text" required />
+                <Form.Control
+                  type="text"
+                  onChange={handleChange("fullName")}
+                  value={fullName}
+                  required
+                />
               </Form.Group>
               <Form.Group>
                 <Form.Label className="text-muted font-weight-bold pt-3">
                   Phone Number
                 </Form.Label>
-                <Form.Control type="number" required />
+                <Form.Control
+                  type="number"
+                  onChange={handleChange("phNo")}
+                  value={phNo}
+                  required
+                />
               </Form.Group>
               <Form.Label className="text-muted font-weight-bold pt-3 pb-3">
                 Date Of Birth
-                </Form.Label>
-              <Calendar onChange={onChange} value={value}/>
-              
-            
-              <Button
-                size="sm"
+              </Form.Label>
+              <br />
+              <input value={value} disabled className="mb-3" />
+              <Calendar onChange={onChanage} value={value} />
+
+              <button
+                
                 className="float-right mt-4 btn btnChange"
                 type="submit"
               >
-                {"Hello"}
-              </Button>
+                {buttonText}
+              </button>
             </Form>
           </Card.Body>
         </Card>
       </Row>
     </Container>
   );
-};
+}
+
 
 export default RegDistributor;
