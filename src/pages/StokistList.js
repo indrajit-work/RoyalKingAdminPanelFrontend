@@ -98,10 +98,10 @@ const ListDistributor = () => {
                 ))
               )}
             </MDBTable>
-          </MDBCol>
+          {/* </MDBCol>
         </MDBRow>
       </div>
-    </MDBContainer>
+    </MDBContainer> */}
   );
 };
 
