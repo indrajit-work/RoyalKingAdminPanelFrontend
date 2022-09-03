@@ -70,7 +70,6 @@ const ListPlayer = () => {
                   <th scope=" col "> User Role </th>
                   <th scope=" col ">Email </th>
                   <th scope=" col "> Name </th>
-                  <th scope=" col ">Registered On </th>
                   <th scope=" col ">Balance</th>
                   <th scope=" col "> Status </th>
                 </tr>
