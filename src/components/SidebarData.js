@@ -87,7 +87,7 @@ export const SidebarData = [
       },
       {
         title: 'Add Player ',
-        path: '/stokist/create',
+        path: '/player/create',
         icon: <IoIcons.IoIosPaper />,
         cName: 'sub-nav'
       },

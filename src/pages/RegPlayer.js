@@ -5,16 +5,16 @@ import axios from "axios";
 import { getCookie } from "../utils/auth";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-
-
-const RegDistributor = () => {
+import * as AiIcons from "react-icons/ai";
+import "./Icon.css"
+const RegPlayer = () => {
   const [value, onChanage] = useState(new Date());
 
   const [user, setUser] = useState({
     email: "",
     password: "",
     verifyPassword: "",
-    userRole: "Distributor",
+    userRole: "PLAYER",
     commPercent: 0,
     bossId: 0,
     fullName: "",
@@ -50,6 +50,11 @@ const RegDistributor = () => {
       alert("Passwords don't match(password and verify Password)");
       return;
     }
+    if(phNo.length!==10)
+    {
+        alert("Invalid Phone number")
+        return;
+    }
     setUser({ ...user, buttonText: "Submitting...." });
     try {
       const res = await axios.post(
@@ -68,10 +73,10 @@ const RegDistributor = () => {
 
       console.log("Submited:...............", res);
       setUser({
-        ...user,
         email:"",
-        password:" ",
+        password:"",
         verifyPassword:"",
+        userRole,
         commPercent:"",
         bossID:"",
         fullName:"",
@@ -87,6 +92,14 @@ const RegDistributor = () => {
       });
     }
   }
+
+const[showCal,setShowCal]=useState(false)
+
+  //showing cal on clicking icon
+
+  const calHandler=()=>{
+        setShowCal(true)
+  }
   
   // console.log(value)
 
@@ -99,7 +112,7 @@ const RegDistributor = () => {
           className="m-auto mt-5  shadow-lg"
         >
           <Card.Header className="text-muted font-weight-bold">
-            Register new Distributor
+            Register new Player
           </Card.Header>
           <Card.Body>
             <h4 className="text-muted text-center">Login Info</h4>
@@ -144,7 +157,7 @@ const RegDistributor = () => {
                   Role
                 </Form.Label>
                 <Form.Control as="select" className="disable" disabled>
-                  <option>Distributor</option>
+                  <option>PLAYER</option>
                 </Form.Control>
               </Form.Group>
               <Form.Group>
@@ -201,7 +214,8 @@ const RegDistributor = () => {
               </Form.Label>
               <br />
               <input value={value} disabled className="mb-3" />
-              <Calendar onChange={onChanage} value={value} />
+          <span className="iconStyle"><AiIcons.AiFillSchedule  onClick={calHandler} /> </span>
+             { showCal && <Calendar onChange={onChanage} value={value} />}
 
               <button
                 
@@ -219,4 +233,4 @@ const RegDistributor = () => {
 }
 
 
-export default RegDistributor;
+export default RegPlayer;

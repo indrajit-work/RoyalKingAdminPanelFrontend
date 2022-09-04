@@ -10,6 +10,7 @@ import StokistList from "./pages/StokistList";
 import RegStokist from "./pages/RegStokist";
 import PlayerList from "./pages/PlayerList";
 import ListPlayer from "./pages/ListPlayers";
+import RegPlayer from "./pages/RegPlayer";
 function App() {
   return (
     <>
@@ -54,10 +55,13 @@ function App() {
             <StokistList/>
 
           </Route>
-  
           <Route path="/stokist/create" exact>
             <Sidebar/>
             <RegStokist/>
+          </Route>
+          <Route path="/player/create" exact>
+            <Sidebar/>
+            <RegPlayer/>
           </Route>
           <Route path="/player/list" exact>
             <Sidebar/>
