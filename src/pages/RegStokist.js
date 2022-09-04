@@ -14,7 +14,7 @@ const RegStokist = () => {
     email: "",
     password: "",
     verifyPassword: "",
-    userRole: "PLAYER",
+    userRole: "STOKIST",
     commPercent: 0,
     bossId: 0,
     fullName: "",
