@@ -120,7 +120,7 @@ export const SidebarData = [
   },
   {
     title: 'Turn over',
-    path: '/messages',
+    path: '/turnover',
     icon: <FaIcons.FaEnvelopeOpenText />,
 
   },

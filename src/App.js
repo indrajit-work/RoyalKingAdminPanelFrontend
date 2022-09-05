@@ -11,6 +11,7 @@ import RegStokist from "./pages/RegStokist";
 import PlayerList from "./pages/PlayerList";
 import ListPlayer from "./pages/ListPlayers";
 import RegPlayer from "./pages/RegPlayer";
+import Turnover from "./pages/Turnover";
 function App() {
   return (
     <>
@@ -66,6 +67,12 @@ function App() {
           <Route path="/player/list" exact>
             <Sidebar/>
            <ListPlayer/>
+          </Route>
+
+          <Route path="/turnover" exact>
+            <Sidebar/>
+            <Turnover/>
+
           </Route>
           
         </Switch>

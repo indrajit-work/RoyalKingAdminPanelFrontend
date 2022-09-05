@@ -53,9 +53,12 @@ import { isAuth } from "../utils/auth";
           buttonText: "Login",
           msg: res.data.msg,
         });
-        authenticate(res, () => {
-         return history.push("/");
-        });
+        if(res.data.login){
+          authenticate(res, () => {
+            return history.push("/");
+         });
+        }
+        
       } catch (error) {
         console.log("Error:", error);
         setRegState({
