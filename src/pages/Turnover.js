@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
 import {
   Card,
   Container,
@@ -13,13 +15,36 @@ import "react-calendar/dist/Calendar.css";
 import * as AiIcons from "react-icons/ai";
 import "./Icon.css";
 import "./Turnover.css";
-const Turnover = () => {
+import {
+  MDBTable,
+  MDBTableHead,
+  MDBTableBody,
+  MDBRow,
+  MDBCol,
+  MDBContainer,
+  MDBBtn,
+  MDBBtnGroup,
+} from "mdb-react-ui-kit";
+
+import { fetchAdmin } from "../utils/fetchAdmins";
+
+
+
+
+const Turnover = (props) => {
+  const[getAdmin,setAdmins]=useState( );
   const [value, onChanage] = useState(new Date());
 const[eVal,eOnChange]=useState(new Date());
   const [showCal, setShowCal] = useState(false);
 const[showCalEnd,setShowCalEnd]=useState();
   //showing cal on clicking icon
 
+
+
+  //admins state
+
+//const{admins}=getAdmin
+  
   const calHandler = () => {
     setShowCal(true);
   };
@@ -27,7 +52,30 @@ const[showCalEnd,setShowCalEnd]=useState();
   const calHandlerend=()=>{
     setShowCalEnd(true);
   }
+
+
+
+
+
+  //..........................................................................................
+
+  const dataSuper=[]
+  
+ useEffect(()=>{
+  getAd();
+ },[])
+
+
+const getAd=async ()=>{
+  return  await  axios.post("https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/getsuperadmin",{
+    userRole:"ADMIN"
+}).then((res)=> setAdmins(res.data))
+.catch((err)=>console.log(err))
+}
+
+ console.log("........",getAdmin)
   return (
+    <>
     <Container>
       <Card className="mt-4 w-100 shadow-lg">
         <Card.Header>
@@ -51,15 +99,7 @@ const[showCalEnd,setShowCalEnd]=useState();
               </FloatingLabel>
             </Col>
             <Col md>
-            <span><label className="pl-3 text-muted">Start Date:</label></span>
-            <input value={value} disabled className="mb-3 ml-5" />
-              <span className="iconStyle">
-                <AiIcons.AiFillSchedule onClick={calHandler} />
-              </span>
-              {showCal && <Calendar onChange={onChanage} value={value} />}
-            </Col>
-            <Col md>
-            <span><label className="pr-2 text-muted">End Date:</label></span>
+            <span><label className="pr-2 text-muted ml-5">Start Date:</label></span>
             <input value={value} disabled className="mb-3" />
               <span className="iconStyle">
                 <AiIcons.AiFillSchedule onClick={calHandlerend} />
@@ -70,6 +110,100 @@ const[showCalEnd,setShowCalEnd]=useState();
         </Card.Body>
       </Card>
     </Container>
+
+    <MDBContainer>
+      <div style={{ marginTop: "80px" }}>
+      
+    <MDBRow>
+    <MDBCol size="12">
+      <MDBTable>
+        <MDBTableHead dark>
+          <tr>
+            <th scope=" col "> User Role </th>
+            <th scope=" col ">Games played </th>
+            <th scope=" col "> win </th>
+            <th scope=" col ">Commission percent(%)</th>
+            <th scope=" col "> Net </th>
+          </tr>
+        </MDBTableHead>
+
+        {false ? (
+          <MDBTableBody className="align-center mb-8">
+            <tr>
+              <td colspan={8} className=" text-center mb-8">
+                {" "}
+                No Data Found{" "}
+              </td>
+            </tr>
+          </MDBTableBody>
+        ) 
+        : (
+         // dataSuper.players.Items.map((item, index) => (
+            <MDBTableBody >
+              <tr>
+                <td> SuperAdmin </td>
+                <td> 0</td>
+                <td>0</td>
+                <td> 0 </td>
+                <td> 0 </td>
+              </tr>
+            </MDBTableBody>
+          )
+        }
+      </MDBTable>
+    </MDBCol>
+  </MDBRow>
+ </div>
+</MDBContainer>
+
+
+<MDBContainer>
+      <div style={{ marginTop: "80px" }}>
+      
+    <MDBRow>
+    <MDBCol size="12">
+      <MDBTable>
+        <MDBTableHead dark>
+          <tr>
+            <th scope="col">User Id</th>
+            <th scope=" col "> User Role </th>
+            <th scope=" col ">Games played </th>
+            <th scope=" col "> win </th>
+            <th scope=" col ">Commission percent(%)</th>
+            <th scope=" col "> Net </th>
+          </tr>
+        </MDBTableHead>
+
+        {! getAdmin? (
+          <MDBTableBody className="align-center mb-8">
+            <tr>
+              <td colspan={8} className=" text-center mb-8">
+                {" "}
+                No Data Found{" "}
+              </td>
+            </tr>
+          </MDBTableBody>
+        ) 
+        : (
+          getAdmin.admins.Items.map((item, index) => (
+            <MDBTableBody key={index}>
+              <tr>
+                <td> {item.userID} </td>
+                <td> <Link to="#"><Button variant="secondary" size="sm">{item.fullName}</Button></Link> </td>
+                <td> 0</td>
+                <td>0</td>
+                <td> 0 </td>
+                <td> 0 </td>
+              </tr>
+            </MDBTableBody>
+          ))
+        )}
+      </MDBTable>
+    </MDBCol>
+  </MDBRow>
+ </div>
+</MDBContainer>
+</>
   );
 };
 
