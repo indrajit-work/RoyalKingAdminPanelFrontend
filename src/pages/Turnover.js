@@ -1,6 +1,7 @@
 import React, { useState ,useEffect} from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import AdminStokist from "./AdminStokist";
 import {
   Card,
   Container,
@@ -34,9 +35,10 @@ import { fetchAdmin } from "../utils/fetchAdmins";
 const Turnover = (props) => {
   const[getAdmin,setAdmins]=useState( );
   const [value, onChanage] = useState(new Date());
-const[eVal,eOnChange]=useState(new Date());
+  const [endValue, eonChanage] = useState(new Date());
   const [showCal, setShowCal] = useState(false);
-const[showCalEnd,setShowCalEnd]=useState();
+  const [showCalEnd,setshowCalEnd]=useState(false);
+const [type,setType]=useState();
   //showing cal on clicking icon
 
 
@@ -46,14 +48,13 @@ const[showCalEnd,setShowCalEnd]=useState();
 //const{admins}=getAdmin
   
   const calHandler = () => {
-    setShowCal(true);
+    setShowCal(!showCal);
   };
+//console.log("...",value)
 
-  const calHandlerend=()=>{
-    setShowCalEnd(true);
-  }
-
-
+const EndHandler=()=>{
+  setshowCalEnd(!showCalEnd)
+}
 
 
 
@@ -73,9 +74,33 @@ const getAd=async ()=>{
 .catch((err)=>console.log(err))
 }
 
- console.log("........",getAdmin)
+//game selecter
+
+const gameTypeHandler=(e)=>{
+  //console.log(e.target.value);
+  setType(e.target.value);
+}
+
+
+
+const getGameData=async ()=>{
+
+  try{
+   const res=await  axios.post("https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/getgames",{
+      createTime:value,
+      gameType:type
+    })
+    console.log("Response",res)
+  }catch(err){
+    console.log("Error in game details",err);
+  }
+}
+if(getAdmin)
+ <AdminStokist adminInfo={getAdmin.admins.Items}/>
+ 
   return (
     <>
+    
     <Container>
       <Card className="mt-4 w-100 shadow-lg">
         <Card.Header>
@@ -88,23 +113,36 @@ const getAd=async ()=>{
           <Row className="g-2">
             <Col md>
               <FloatingLabel controlId="floatingSelectGrid">
-                <Form.Select aria-label="Floating label select example">
+                <Form.Select onChange={gameTypeHandler} aria-label="Floating label select example">
                   <option>All</option>
-                  <option value="1">Cards 16</option>
-                  <option value="2">Cards 52</option>
-                  <option value="3">jeetoJoker</option>
-                  <option value="4">doubleChance</option>
-                  <option value="5">signleChance</option>
+                  <option value="cards16">Cards 16</option>
+                  <option value="cards52">Cards 52</option>
+                  <option value="jeetoJoker">jeetoJoker</option>
+                  <option value="doubleChance">doubleChance</option>
+                  <option value="singleChance">signleChance</option>
                 </Form.Select>
               </FloatingLabel>
             </Col>
             <Col md>
             <span><label className="pr-2 text-muted ml-5">Start Date:</label></span>
+            <input value={value} disabled className="mb-3 ml-3" />
+              <span className="iconStyle">
+                <AiIcons.AiFillSchedule onClick={calHandler} />
+              </span>
+              {showCal && <Calendar onChange={onChanage} value={value} />}
+            </Col>
+            <Col md>
+            <span><label className="pr-2 text-muted ml-5">End Date:</label></span>
             <input value={value} disabled className="mb-3" />
               <span className="iconStyle">
-                <AiIcons.AiFillSchedule onClick={calHandlerend} />
+                <AiIcons.AiFillSchedule onClick={EndHandler} />
               </span>
-              {showCalEnd && <Calendar onChange={eOnChange} value={eVal} />}
+              {showCalEnd && <Calendar onChange={eonChanage} value={endValue} />}
+            </Col>
+            
+            <Col md>
+              
+              <Button variant="secondary" type="submit" onClick={getGameData} >Search</Button>
             </Col>
           </Row>
         </Card.Body>
@@ -189,7 +227,7 @@ const getAd=async ()=>{
             <MDBTableBody key={index}>
               <tr>
                 <td> {item.userID} </td>
-                <td> <Link to="#"><Button variant="secondary" size="sm">{item.fullName}</Button></Link> </td>
+                <td> <Link to={`/admin/stokist/${item.userID}/${item.commPercent}`}><Button variant="secondary" size="sm">{item.fullName} Admin</Button></Link> </td>
                 <td> 0</td>
                 <td>0</td>
                 <td> 0 </td>

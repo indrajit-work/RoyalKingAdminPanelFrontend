@@ -12,6 +12,7 @@ import PlayerList from "./pages/PlayerList";
 import ListPlayer from "./pages/ListPlayers";
 import RegPlayer from "./pages/RegPlayer";
 import Turnover from "./pages/Turnover";
+import AdminStokist from "./pages/AdminStokist";
 function App() {
   return (
     <>
@@ -73,6 +74,10 @@ function App() {
             <Sidebar/>
             <Turnover/>
 
+          </Route>
+          <Route path="/admin/stokist/:userID/:commPercent" exact>
+            <Sidebar/>
+            <AdminStokist/>
           </Route>
           
         </Switch>
