@@ -5,7 +5,8 @@ import axios from "axios";
 import { getCookie } from "../utils/auth";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-
+import * as AiIcons from "react-icons/ai";
+import "./Icon.css"
 
 const RegDistributor = () => {
   const [value, onChanage] = useState(new Date());
@@ -87,6 +88,16 @@ const RegDistributor = () => {
       });
     }
   }
+
+
+  const[showCal,setShowCal]=useState(false)
+
+  //showing cal on clicking icon
+
+  const calHandler=()=>{
+        setShowCal(!showCal)
+  }
+  
   
   // console.log(value)
 
@@ -201,7 +212,8 @@ const RegDistributor = () => {
               </Form.Label>
               <br />
               <input value={value} disabled className="mb-3" />
-              <Calendar onChange={onChanage} value={value} />
+              <span className="iconStyle"><AiIcons.AiFillSchedule  onClick={calHandler} /> </span>
+             { showCal && <Calendar onChange={onChanage} value={value} />}
 
               <button
                 

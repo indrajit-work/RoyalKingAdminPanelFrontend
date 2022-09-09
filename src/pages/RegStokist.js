@@ -98,7 +98,7 @@ const[showCal,setShowCal]=useState(false)
   //showing cal on clicking icon
 
   const calHandler=()=>{
-        setShowCal(true)
+        setShowCal(!showCal)
   }
   
   // console.log(value)

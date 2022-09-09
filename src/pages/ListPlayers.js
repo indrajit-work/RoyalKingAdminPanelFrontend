@@ -54,6 +54,8 @@ const ListPlayer = () => {
 
 
   return (
+
+    
     <MDBContainer>
       <div style={{ marginTop: "80px" }}>
         <h1 className="text-center mb-5 text-muted"> Players </h1>
