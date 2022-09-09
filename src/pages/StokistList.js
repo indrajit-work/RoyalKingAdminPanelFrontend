@@ -22,8 +22,10 @@ const ListDistributor = () => {
 
   const loadUserData = async () => {
     return await axios
-      .get(
-        `https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/getallusers`
+      .post(
+        `https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/getplayers`,{
+          userRole:"STOKIST"
+        }
       )
       .then((response) => {
         setData(response.data);
@@ -84,7 +86,7 @@ const ListDistributor = () => {
                   </tr>
                 </MDBTableBody>
               ) : (
-                data.users.map((item, index) => (
+                data.players.Items.map((item, index) => (
                   <MDBTableBody key={index}>
                     <tr>
                       <td> {item.userID} </td>
