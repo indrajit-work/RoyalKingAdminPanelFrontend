@@ -14,9 +14,9 @@ import {
 } from "mdb-react-ui-kit";
 
 import { Button } from "react-bootstrap";
-const AdminStokist = () => {
+const StokistPlayers = () => {
   
- const[stokist,setSTokist]=useState();
+ const[player,setPlayer]=useState();
 //   useEffect(() => {
 //     loadUserData();
 //   }, []);
@@ -27,8 +27,8 @@ const AdminStokist = () => {
 //fteching params
 
 const params=useParams();
-const adminUserID=params.userID;
-const adminCommPer=params.commPercent
+const StokistUserId=params.userID;
+const StokistcommPer=params.commPercent
 
 useEffect(()=>{
  getSt()
@@ -38,13 +38,13 @@ useEffect(()=>{
   
   const getSt = async()=>{
     return  await  axios.post("https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/fetchstokists",{
-      userRole:"STOKIST",
-      bossID:adminUserID
-  }).then((res)=> setSTokist(res.data))
+      userRole:"PLAYER",
+      bossID:StokistUserId
+  }).then((res)=> setPlayer(res.data))
   .catch((err)=>console.log(err))
   }
   //console.log("data:", data.users);
-console.log("......",stokist)
+console.log("......",player)
 
 
 
@@ -54,7 +54,7 @@ console.log("......",stokist)
     <>
     <MDBContainer>
       <div style={{ marginTop: "80px" }}>
-        <h1 className="text-center mb-5 text-muted"> Administator </h1>
+        <h1 className="text-center mb-5 text-muted"> Stokist </h1>
   
      {/* <input className="mb-2" placeholder="search..."  value={filterVal} onInput={(e)=>handleFilter(e)}/> */}
     
@@ -73,12 +73,12 @@ console.log("......",stokist)
                 </tr>
               </MDBTableHead>
                  
-                  <MDBTableBody key={adminUserID}>
+                  <MDBTableBody key={StokistUserId}>
                     <tr>
-                      <td> {adminUserID} </td>
+                      <td> {StokistUserId} </td>
                       <td> 0 </td>
                       <td> 0 </td>
-                      <td>{adminCommPer}</td>
+                      <td>{StokistcommPer}</td>
                       <td> 0 </td>
                       
                     </tr>
@@ -93,7 +93,7 @@ console.log("......",stokist)
 
     <MDBContainer>
       <div style={{ marginTop: "80px" }}>
-      <h1 className="text-center mb-5 text-muted"> Stokist {} </h1>
+      <h1 className="text-center mb-5 text-muted"> Players {} </h1>
     <MDBRow>
     <MDBCol size="12">
       <MDBTable>
@@ -108,7 +108,7 @@ console.log("......",stokist)
           </tr>
         </MDBTableHead>
 
-        {! stokist? (
+        {! player? (
           <MDBTableBody className="align-center mb-8">
             <tr>
               <td colspan={8} className=" text-center mb-8">
@@ -119,11 +119,11 @@ console.log("......",stokist)
           </MDBTableBody>
         ) 
         : (
-          stokist.stokists.Items.map((item, index) => (
+          player.stokists.Items.map((item, index) => (
             <MDBTableBody key={index}>
               <tr>
                 <td> {item.userID} </td>
-                <td> <Link to={`stokist/player/${item.userID}/${item.commPercent}`}><Button variant="secondary" size="sm">{item.fullName} (Stokist)</Button></Link> </td>
+                <td> <Link to={`#`}><Button variant="secondary" size="sm">{item.fullName} (Stokist)</Button></Link> </td>
                 <td> 0</td>
                 <td>0</td>
                 <td> 0 </td>
@@ -141,4 +141,4 @@ console.log("......",stokist)
   );
 };
 
-export default AdminStokist;
+export default StokistPlayers;

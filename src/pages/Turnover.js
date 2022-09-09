@@ -227,7 +227,7 @@ if(getAdmin)
             <MDBTableBody key={index}>
               <tr>
                 <td> {item.userID} </td>
-                <td> <Link to={`/admin/stokist/${item.userID}/${item.commPercent}`}><Button variant="secondary" size="sm">{item.fullName} Admin</Button></Link> </td>
+                <td> <Link to={`/admin/stokist/${item.userID}/${item.commPercent}`}><Button variant="secondary" size="sm">{item.fullName} ( Admin)</Button></Link> </td>
                 <td> 0</td>
                 <td>0</td>
                 <td> 0 </td>
