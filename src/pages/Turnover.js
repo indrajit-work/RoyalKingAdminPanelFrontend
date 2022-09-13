@@ -1,7 +1,6 @@
 import React, { useState ,useEffect} from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import AdminStokist from "./AdminStokist";
 import {
   Card,
   Container,
@@ -39,10 +38,25 @@ const Turnover = (props) => {
   const [showCal, setShowCal] = useState(false);
   const [showCalEnd,setshowCalEnd]=useState(false);
 const [type,setType]=useState();
+const[btnText,setbtn]=useState({
+  btn:"Search"
+});
+
+const [allGameData,setAllGameData]=useState({
+  played:0,
+  win:0,
+  commPercent:0,
+  net:0,
+  userID:0,
+})
+const {btn} =btnText
+const{win,played,commPercent,net,userID}=allGameData;
   //showing cal on clicking icon
 
 
-
+useEffect(()=>{
+  getAdminsData();
+},[])
   //admins state
 
 //const{admins}=getAdmin
@@ -60,14 +74,14 @@ const EndHandler=()=>{
 
   //..........................................................................................
 
-  const dataSuper=[]
+ 
   
- useEffect(()=>{
-  getAd();
- },[])
+console.log("TIMER",Date.parse(value));
+console.log("TIMERend",Date.parse(endValue));
 
+ 
 
-const getAd=async ()=>{
+const getAdminsData=async ()=>{
   return  await  axios.post("https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/getsuperadmin",{
     userRole:"ADMIN"
 }).then((res)=> setAdmins(res.data))
@@ -84,20 +98,31 @@ const gameTypeHandler=(e)=>{
 
 
 const getGameData=async ()=>{
-
+setbtn({
+  btn:"Searching"
+})
   try{
-   const res=await  axios.post("https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/getgames",{
-      createTime:value,
+   const res=await  axios.post("https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/getgamesbytype",{
+      startTime:value,
+      endTime:endValue,
       gameType:type
+    })
+    setAllGameData({
+      win:res.data.win,
+      played:res.data.played,
+      commPercent:res.data.superAdComm, //super Admins commission
+      net:res.data.net,
+      userID:res.data.userID
+    })
+    setbtn({
+      btn:"Search"
     })
     console.log("Response",res)
   }catch(err){
     console.log("Error in game details",err);
   }
 }
-if(getAdmin)
- <AdminStokist adminInfo={getAdmin.admins.Items}/>
- 
+
   return (
     <>
     
@@ -133,7 +158,7 @@ if(getAdmin)
             </Col>
             <Col md>
             <span><label className="pr-2 text-muted ml-5">End Date:</label></span>
-            <input value={value} disabled className="mb-3" />
+            <input value={endValue} disabled className="mb-3" />
               <span className="iconStyle">
                 <AiIcons.AiFillSchedule onClick={EndHandler} />
               </span>
@@ -142,7 +167,7 @@ if(getAdmin)
             
             <Col md>
               
-              <Button variant="secondary" type="submit" onClick={getGameData} >Search</Button>
+              <Button variant="secondary" type="submit" onClick={getGameData} >{btn}</Button>
             </Col>
           </Row>
         </Card.Body>
@@ -176,18 +201,19 @@ if(getAdmin)
           </MDBTableBody>
         ) 
         : (
-         // dataSuper.players.Items.map((item, index) => (
+          // games.map((item, index) => (
             <MDBTableBody >
               <tr>
-                <td> SuperAdmin </td>
-                <td> 0</td>
-                <td>0</td>
-                <td> 0 </td>
-                <td> 0 </td>
+                <td> SuperAdmin</td>
+                <td>{played}</td>
+                <td>{win}</td>
+                <td> {commPercent}</td>
+                <td> {net} </td>
               </tr>
             </MDBTableBody>
-          )
-        }
+        // ))
+        // )}
+        )}
       </MDBTable>
     </MDBCol>
   </MDBRow>
@@ -227,10 +253,10 @@ if(getAdmin)
             <MDBTableBody key={index}>
               <tr>
                 <td> {item.userID} </td>
-                <td> <Link to={`/admin/stokist/${item.userID}/${item.commPercent}`}><Button variant="secondary" size="sm">{item.fullName} ( Admin)</Button></Link> </td>
+                <td> <Link to={`/admin/distributor/${item.userID}/${item.commPercent}`}><Button variant="secondary" size="sm">{item.fullName} ( Admin)</Button></Link> </td>
                 <td> 0</td>
                 <td>0</td>
-                <td> 0 </td>
+                <td> {item.commPercent}</td>
                 <td> 0 </td>
               </tr>
             </MDBTableBody>

@@ -11,9 +11,11 @@ import RegStokist from "./pages/RegStokist";
 import PlayerList from "./pages/PlayerList";
 import ListPlayer from "./pages/ListPlayers";
 import RegPlayer from "./pages/RegPlayer";
+import AdminDistributor from "./pages/AdminDistributor";
 import Turnover from "./pages/Turnover";
-import AdminStokist from "./pages/AdminStokist";
-import StokistPlayers from './pages/StokistPlayers'
+import DistributorStokist from "./pages/DistributorStokist";
+import StokistPlayer from "./pages/StokistPlayer";
+
 function App() {
   return (
     <>
@@ -76,14 +78,22 @@ function App() {
             <Turnover/>
 
           </Route>
-          <Route path="/admin/stokist/:userID/:commPercent" exact>
+
+          
+          <Route path="/admin/distributor/:userID/:commPercent" exact>
             <Sidebar/>
-            <AdminStokist/>
+            <AdminDistributor/>
+          </Route>
+
+          <Route path="/distributor/stokist/:userID/:commPercent" exact>
+            <Sidebar/>
+            <DistributorStokist/>
           </Route>
           <Route path="/stokist/player/:userID/:commPercent" exact>
             <Sidebar/>
-            <StokistPlayers/>
+            <StokistPlayer/>
           </Route>
+          
           
         </Switch>
     </>
