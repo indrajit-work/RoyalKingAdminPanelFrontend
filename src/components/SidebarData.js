@@ -114,8 +114,8 @@ export const SidebarData = [
       ]
   },
   {
-    title: 'Game history',
-    path: '/team',
+    title: 'Game Settings',
+    path: '/gamesettings',
     icon: <IoIcons.IoMdPeople />
   },
   {

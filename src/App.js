@@ -15,6 +15,7 @@ import AdminDistributor from "./pages/AdminDistributor";
 import Turnover from "./pages/Turnover";
 import DistributorStokist from "./pages/DistributorStokist";
 import StokistPlayer from "./pages/StokistPlayer";
+import GameSettings from "./pages/GameSettings";
 
 function App() {
   return (
@@ -93,6 +94,13 @@ function App() {
             <Sidebar/>
             <StokistPlayer/>
           </Route>
+
+          <Route path="/gamesettings" exact>
+            <Sidebar/>
+            <GameSettings/>
+            
+          </Route>
+          
           
           
         </Switch>
