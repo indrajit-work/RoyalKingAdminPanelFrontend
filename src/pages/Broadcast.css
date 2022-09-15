@@ -1,0 +1,8 @@
+.broadcastBtn{
+    background-color: rgb(223, 74, 47) !important;
+    border-color:rgb(223, 74, 47) !important ;
+}
+
+.broadcastBtn:hover{
+    background-color: rgb(245, 81, 52) !important;
+}

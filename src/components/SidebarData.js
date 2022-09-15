@@ -131,7 +131,7 @@ export const SidebarData = [
   },
   {
     title: 'Broadcast Message',
-    path: '/support',
+    path: '/broadcastMessage',
     icon: <FaIcons.FaEnvelopeOpenText />,
   }
 ];

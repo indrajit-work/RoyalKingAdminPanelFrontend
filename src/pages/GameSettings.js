@@ -15,17 +15,6 @@ import "react-calendar/dist/Calendar.css";
 import * as AiIcons from "react-icons/ai";
 import "./Icon.css";
 import "./Turnover.css";
-import {
-  MDBTable,
-  MDBTableHead,
-  MDBTableBody,
-  MDBRow,
-  MDBCol,
-  MDBContainer,
-  MDBBtn,
-  MDBBtnGroup,
-} from "mdb-react-ui-kit";
-
 
 const GameSettings = (props) => {
 
@@ -33,11 +22,11 @@ const[state,setState]=useState({
     gameType:"Payout settings",
     payoutPercent:0,
     payoutMod:"",
-    mutiplier:0,
+    multiplier:0,
     btnText:"Submit"
 })
 
-const {gameType,mutiplier,payoutPercent,payoutMod,btnText}=state
+const {gameType,multiplier,payoutPercent,payoutMod,btnText}=state
     const handleChange = (name) => (e) => {
         console.log(typeof(e.target.value));
         setState({
@@ -49,12 +38,19 @@ const {gameType,mutiplier,payoutPercent,payoutMod,btnText}=state
     
 
  const handleSubmit= async ()=>{
-    console.log("button clicked");
-    // if(gameType==="" || payoutPercent==="0" || payoutMod==="" || mutiplier===0)
-    // {
-    //     alert("all values are required");
-    //     return;
-    // }
+   
+
+    if(parseInt(payoutPercent)===0)
+    {
+      alert("Payout Percent cannot be zero")
+      return;
+    }
+ 
+    if( multiplier<1)
+    {
+        alert("select values in range 1-10");
+        return;
+    }
 
     setState({
         ...state,
@@ -67,13 +63,14 @@ const {gameType,mutiplier,payoutPercent,payoutMod,btnText}=state
           {
             gameType:gameType,
             payoutPercent:payoutPercent,
-         
+            multiplier:multiplier,
+            payoutMod:payoutMod
+
           },
         );
   
-        console.log("Settings:...............", res);
+        // console.log("Settings:...............", res);
         setState({
-          ...state,
           gameType:"Payout Settings",
           payoutPercent:0,
             payoutMod:"",

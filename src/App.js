@@ -16,6 +16,7 @@ import Turnover from "./pages/Turnover";
 import DistributorStokist from "./pages/DistributorStokist";
 import StokistPlayer from "./pages/StokistPlayer";
 import GameSettings from "./pages/GameSettings";
+import Broadcast from "./pages/Broadcast";
 
 function App() {
   return (
@@ -100,6 +101,13 @@ function App() {
             <GameSettings/>
             
           </Route>
+
+          <Route path="/broadcastMessage" exact>
+            <Sidebar/>
+            <Broadcast/>
+            
+          </Route>
+          
           
           
           

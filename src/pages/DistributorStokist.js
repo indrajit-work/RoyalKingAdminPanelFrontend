@@ -65,7 +65,7 @@ console.log(stokist)
               <MDBTableHead dark>
                 <tr>
                   <th scope="col">User Id</th>
-                  <th scope=" col "> Games Played  </th>
+                  <th scope=" col "> Played  </th>
                   <th scope=" col ">Games Won </th>
                   <th scope=" col "> Commission </th>
                   <th scope=" col ">Net</th>
@@ -101,7 +101,7 @@ console.log(stokist)
           <tr>
             <th scope="col">User Id</th>
             <th scope=" col "> User Role </th>
-            <th scope=" col ">Games played </th>
+            <th scope=" col ">Played </th>
             <th scope=" col "> win </th>
             <th scope=" col ">Commission percent(%)</th>
             <th scope=" col "> Net </th>
