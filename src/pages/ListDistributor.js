@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-
+import {Link} from 'react-router-dom' 
 import {
   MDBTable,
   MDBTableHead,
@@ -12,6 +12,7 @@ import {
   MDBBtnGroup,
 } from "mdb-react-ui-kit";
 
+import {Button} from 'react-bootstrap'
 const ListDistributor = () => {
   const [data, setData] = useState([]);
   const [value, setValue] = useState([]);
@@ -73,6 +74,7 @@ const ListDistributor = () => {
                   <th scope=" col "> Name </th>
                   <th scope=" col "> Balance </th>
                   <th scope=" col ">Registered On </th>
+                  <th scope=" col ">Modify Distributor </th>
                   <th scope=" col "> Status </th>
                 </tr>
               </MDBTableHead>
@@ -96,6 +98,7 @@ const ListDistributor = () => {
                       <td>{item.fullName}</td>
                       <td>{item.balance}</td>
                       <td> {item.registeredOn} </td>
+                      <td> <Link to={`/distributor/modify/${item.userID}`}><Button variant="secondary">edit</Button></Link></td>
                       <td> {item.userStatus} </td>
                     </tr>
                   </MDBTableBody>

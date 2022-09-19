@@ -9,8 +9,8 @@ import { authenticate } from "../utils/auth";
 import { isAuth } from "../utils/auth";
   const Login = () => {
     const [regState, setRegState] = useState({
-      username: "2",
-      password: "sdfsdfs",
+      username: "",
+      password: "",
       msg: "",
       success: "",
       buttonText: "Login",

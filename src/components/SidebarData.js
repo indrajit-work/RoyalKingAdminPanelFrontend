@@ -95,22 +95,35 @@ export const SidebarData = [
   },
   {
     title: 'Adjust Points',
-    path: '/products',
+    // path: '',
     icon: <FaIcons.FaCartPlus />,
     iconClosed: <RiIcons.RiArrowDownSFill />,
     iconOpened: <RiIcons.RiArrowUpSFill />,
     subNav: [
         {
-          title: 'Distributor',
-          path: '/reports/reports2',
+          title: 'Admin',
+          path: '/adjustpointsAdmin',
           icon: <IoIcons.IoIosPaper />,
           cName: 'sub-nav'
         },
         {
-          title: 'Stockist',
-          path: '/reports/reports3',
-          icon: <IoIcons.IoIosPaper />
-        }
+          title: 'Distributor',
+          path: '/adjustpointDistributor',
+          icon: <IoIcons.IoIosPaper />,
+          cName:'sub-nav'
+        },
+        {
+          title: 'Stokist',
+          path: '/adjustpointStokist',
+          icon: <IoIcons.IoIosPaper />,
+          cName: 'sub-nav'
+        },
+        {
+          title: 'Player',
+          path: '/adjustpointPlayers',
+          icon: <IoIcons.IoIosPaper />,
+          cName: 'sub-nav'
+        },
       ]
   },
   {

@@ -17,6 +17,11 @@ import DistributorStokist from "./pages/DistributorStokist";
 import StokistPlayer from "./pages/StokistPlayer";
 import GameSettings from "./pages/GameSettings";
 import Broadcast from "./pages/Broadcast";
+import AdjustPointsAdmin from "./pages/AdjustPointsAdmin";
+import AdjustDistributor from "./pages/AdjustDistributor";
+import AdjustStokist from "./pages/AdjustStokist";
+import AdjustPlayer from "./pages/AdjustPlayer";
+import ModifyPlayer from "./pages/ModifyPlayer";
 
 function App() {
   return (
@@ -108,7 +113,35 @@ function App() {
             
           </Route>
           
+          <Route path="/adjustpointsAdmin" exact>
+            <Sidebar/>
+            <AdjustPointsAdmin/>
+            
+          </Route>
           
+          <Route path="/adjustpointDistributor" exact>
+            <Sidebar/>
+            <AdjustDistributor/>
+            
+          </Route>
+
+          <Route path="/adjustpointStokist" exact>
+            <Sidebar/>
+            <AdjustStokist/>
+            
+          </Route>
+
+          <Route path="/adjustpointPlayers" exact>
+            <Sidebar/>
+            <AdjustPlayer/>
+            
+          </Route>
+
+          <Route path="/player/modify/:userID/:deviceID" exact>
+            <Sidebar/>
+            <ModifyPlayer/>
+            
+          </Route>
           
           
         </Switch>

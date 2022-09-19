@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-
+import { Link } from "react-router-dom";
 import {
   MDBTable,
   MDBTableHead,
@@ -12,6 +12,7 @@ import {
   MDBBtnGroup,
 } from "mdb-react-ui-kit";
 
+import { Button } from "react-bootstrap";
 const ListPlayer = () => {
   const [data, setData] = useState([]);
   const [value, setValue] = useState([]);
@@ -73,6 +74,7 @@ const ListPlayer = () => {
                   <th scope=" col ">Email </th>
                   <th scope=" col "> Name </th>
                   <th scope=" col ">Balance</th>
+                  <th scope=" col ">Modify Player</th>
                   <th scope=" col "> Status </th>
                 </tr>
               </MDBTableHead>
@@ -82,7 +84,7 @@ const ListPlayer = () => {
                   <tr>
                     <td colspan={8} className=" text-center mb-8">
                       {" "}
-                      No Data Found{" "}
+                     Loading Players...{" "}
                     </td>
                   </tr>
                 </MDBTableBody>
@@ -95,6 +97,7 @@ const ListPlayer = () => {
                       <td> {item.email} </td>
                       <td>{item.fullName}</td>
                       <td> {item.balance} </td>
+                      <td> <Link to={`/player/modify/${item.userID}/${item.deviceID}`}><Button variant="secondary">edit </Button></Link></td>
                       <td> {item.userStatus} </td>
                     </tr>
                   </MDBTableBody>
