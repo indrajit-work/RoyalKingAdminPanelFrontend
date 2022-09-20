@@ -22,6 +22,8 @@ import AdjustDistributor from "./pages/AdjustDistributor";
 import AdjustStokist from "./pages/AdjustStokist";
 import AdjustPlayer from "./pages/AdjustPlayer";
 import ModifyPlayer from "./pages/ModifyPlayer";
+import ModifyDistributor from "./pages/ModifyDistributor";
+import ModifyStokist from "./pages/ModifyStokist";
 
 function App() {
   return (
@@ -140,6 +142,16 @@ function App() {
           <Route path="/player/modify/:userID/:deviceID" exact>
             <Sidebar/>
             <ModifyPlayer/>
+            
+          </Route>
+          <Route path="/distributor/modify/:userID/:deviceID" exact>
+            <Sidebar/>
+            <ModifyDistributor/>
+            
+          </Route>
+          <Route path="/stokist/modify/:userID/:deviceID" exact>
+            <Sidebar/>
+            <ModifyStokist/>
             
           </Route>
           

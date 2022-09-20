@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import { Card, Form, Button, Row, Container, Alert } from "react-bootstrap";
 import "./RegDis.css";
 import axios from "axios";
@@ -10,7 +10,7 @@ import "./Icon.css"
 
 const RegDistributor = () => {
   const [value, onChanage] = useState(new Date());
-
+const[admins,setAdmins]=useState()
   const [user, setUser] = useState({
     email: "",
     password: "",
@@ -35,6 +35,21 @@ const RegDistributor = () => {
     buttonText,
   } = user;
 
+
+
+  useEffect(()=>{
+    getAdmins()
+  },[])
+  
+    const getAdmins = async () => {
+      const res =  await axios.post(
+        "https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/getbyrole",
+        {
+          userRole: "ADMIN",
+        }
+      );
+      setAdmins(res.data.adminsAll);
+      }
   const handleChange = (name) => (e) => {
     console.log(e.target.value);
     setUser({
@@ -173,12 +188,22 @@ const RegDistributor = () => {
                 <Form.Label className="text-muted font-weight-bold pt-3">
                   Boss Id
                 </Form.Label>
-                <Form.Control
-                  type="text"
-                  onChange={handleChange("bossID")}
-                  value={bossID}
-                  required
-                />
+                <Form.Select onChange={handleChange("bossID")}  aria-label="Floating label select example">
+                <option>Select below...</option>
+                    {!admins? (
+                      <option>No data...</option>
+                    ) : (
+                        admins.map((item, index) => (
+                        <option value={item.userID}>
+                          {item.fullName}
+                          
+                          <span >(UserID:{item.userID})</span>
+                        </option>
+                      ))
+                    )}
+                    
+                    
+                  </Form.Select>
               </Form.Group>
               <br />
               <br />

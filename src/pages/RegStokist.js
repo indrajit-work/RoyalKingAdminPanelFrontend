@@ -6,10 +6,11 @@ import { getCookie } from "../utils/auth";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import * as AiIcons from "react-icons/ai";
+import { useEffect } from "react";
 import "./Icon.css"
 const RegStokist = () => {
   const [value, onChanage] = useState(new Date());
-
+  const[admins,setAdmins]=useState();
   const [user, setUser] = useState({
     email: "",
     password: "",
@@ -41,6 +42,23 @@ const RegStokist = () => {
       [name]: e.target.value,
     });
   };
+
+
+
+
+  useEffect(()=>{
+    getAdmins()
+  },[])
+  
+    const getAdmins = async () => {
+      const res =  await axios.post(
+        "https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/getbyrole",
+        {
+          userRole: "Distributor",
+        }
+      );
+      setAdmins(res.data.adminsAll);
+      }
 
   const onHandleSubmit = async (e) => {
     e.preventDefault();
@@ -175,12 +193,22 @@ const[showCal,setShowCal]=useState(false)
                 <Form.Label className="text-muted font-weight-bold pt-3">
                   Boss Id
                 </Form.Label>
-                <Form.Control
-                  type="text"
-                  onChange={handleChange("bossID")}
-                  value={bossID}
-                  required
-                />
+                <Form.Select onChange={handleChange("bossID")}  aria-label="Floating label select example">
+                <option>Select below...</option>
+                    {!admins? (
+                      <option>No data...</option>
+                    ) : (
+                        admins.map((item, index) => (
+                        <option value={item.userID}>
+                          {item.fullName}
+                          
+                          <span >(UserID:{item.userID})</span>
+                        </option>
+                      ))
+                    )}
+                    
+                    
+                  </Form.Select>
               </Form.Group>
               <br />
               <br />

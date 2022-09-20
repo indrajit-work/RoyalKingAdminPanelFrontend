@@ -76,6 +76,7 @@ const ListDistributor = () => {
                   <th scope=" col "> Modify Stokist </th>
                   <th scope=" col ">Registered On </th>
                   <th scope=" col "> Status </th>
+                  <th scope=" col "> Blocked </th>
                 </tr>
               </MDBTableHead>
 
@@ -97,9 +98,11 @@ const ListDistributor = () => {
                       <td> {item.email} </td>
                       <td>{item.fullName}</td>
                       <td>{item.balance}</td>
-                      <td> <Link to={`/stokist/modify/${item.userID}`}><Button variant="secondary">edit</Button></Link></td>
+                      <td> <Link to={`/stokist/modify/${item.userID}/${item.deviceID}`}><Button variant="secondary">edit</Button></Link></td>
                       <td> {item.registeredOn} </td>
                       <td> {item.userStatus} </td>
+                      <td> {item.blocked} </td>
+                      
                     </tr>
                   </MDBTableBody>
                 ))
