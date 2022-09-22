@@ -138,6 +138,11 @@ export const SidebarData = [
 
   },
   {
+    title: 'Game History',
+    path: '/gameHistory',
+    icon: <IoIcons.IoIosPaper />
+  },
+  {
     title: 'Clean Game data',
     path: '/support',
     icon: <IoIcons.IoMdHelpCircle />

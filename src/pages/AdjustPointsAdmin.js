@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import{getCookie} from '../utils/auth'
+import{getCookie, getRole} from '../utils/auth'
 import {
   Card,
   Container,
@@ -11,7 +11,11 @@ import {
   Row,
   FloatingLabel,
 } from "react-bootstrap";
-import { useInsertionEffect } from "react";
+
+import ShowTable from "../components/ShowTable";
+
+
+
 const AdjustPointsAdmin = () => {
   const [admins, setAdmins] = useState();
 const[transaction,setTransaction]=useState({
@@ -20,10 +24,10 @@ const[transaction,setTransaction]=useState({
   senderID:0,
   typeTrans:"",
   comment:"",
-  btnText:"Submit"
+  btnText:"Submit",
 });
 
-const{amt,receiverID,typeTrans,comment,senderID,btnText}=transaction;
+const{amt,receiverID,typeTrans,comment,senderID,btnText,userRoleSender,userRolereceiver}=transaction;
 
 
 //current user
@@ -31,6 +35,9 @@ const{amt,receiverID,typeTrans,comment,senderID,btnText}=transaction;
 const loggedUser=getCookie("token");
 console.log("logeed in",loggedUser);
 
+
+const userRole=getRole(loggedUser);
+console.log("ROLE",userRole)
   useEffect(() => {
     getAdmins();
   }, []);
@@ -79,7 +86,8 @@ console.log("logeed in",loggedUser);
             setTransaction({
               ...transaction,
               receiverID:parseInt(loggedUser),
-              senderID:parseInt(tempID)
+              senderID:parseInt(tempID),
+             
             })
         }
 try{
@@ -87,7 +95,8 @@ try{
     receiverID:receiverID,
     senderID:senderID,
     amount:parseInt(amt),
-    comment:comment
+    comment:comment,
+
 })
 
 setTransaction({
@@ -184,6 +193,8 @@ console.log("............",res)
 
         <br />
       </Container>
+
+      <ShowTable role="ADMIN"/>
     </>
   );
 };

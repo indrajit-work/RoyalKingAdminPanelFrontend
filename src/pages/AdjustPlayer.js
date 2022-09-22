@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import{getCookie} from '../utils/auth'
+import{getCookie,getRole} from '../utils/auth'
 import {
   Card,
   Container,
@@ -20,16 +20,21 @@ const[transaction,setTransaction]=useState({
   senderID:0,
   typeTrans:"",
   comment:"",
-  btnText:"Submit"
+  btnText:"Submit",
+  userRolereceiver:"PLAYER",
+  userRoleSender:""
 });
 
-const{amt,receiverID,typeTrans,comment,senderID,btnText}=transaction;
+const{amt,receiverID,typeTrans,comment,senderID,btnText,userRoleSender,userRolereceiver}=transaction;
 
 
 //current user
 
 const loggedUser=getCookie("token");
 console.log("logeed in",loggedUser);
+const userRole=getRole(loggedUser);
+console.log("ROLE",userRole)
+
 
   useEffect(() => {
     getAdmins();
@@ -81,13 +86,20 @@ console.log("logeed in",loggedUser);
               receiverID:parseInt(loggedUser),
               senderID:parseInt(tempID)
             })
+        }else{
+          setTransaction({
+            ...transaction,
+            userRoleSender:userRole
+          })
         }
 try{
   const res=await axios.post("https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/pointstransfer",{
     receiverID:receiverID,
     senderID:senderID,
     amount:parseInt(amt),
-    comment:comment
+    comment:comment,
+    userRoleSender,
+    userRolereceiver
 })
 
 setTransaction({

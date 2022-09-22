@@ -24,6 +24,8 @@ import AdjustPlayer from "./pages/AdjustPlayer";
 import ModifyPlayer from "./pages/ModifyPlayer";
 import ModifyDistributor from "./pages/ModifyDistributor";
 import ModifyStokist from "./pages/ModifyStokist";
+import Gamehistory from "./pages/Gamehistory";
+import TicketHistoryById from "./pages/TicketHistoryById";
 
 function App() {
   return (
@@ -154,7 +156,16 @@ function App() {
             <ModifyStokist/>
             
           </Route>
-          
+          <Route path="/gameHistory" exact>
+            <Sidebar/>
+            <Gamehistory/>
+            
+          </Route>
+          <Route path="/tickethistory/:id" exact>
+            <Sidebar/>
+           <TicketHistoryById/>
+            
+          </Route>
           
         </Switch>
     </>

@@ -23,9 +23,11 @@ const ListPlayer = () => {
 
   const loadUserData = async () => {
     return await axios
-      .post(`https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/getplayers`,{
-            userRole:"PLAYER"
-          }
+      .post(
+        `https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/getplayers`,
+        {
+          userRole: "PLAYER",
+        }
       )
       .then((response) => {
         setData(response.data);
@@ -35,35 +37,27 @@ const ListPlayer = () => {
   };
   console.log("data:", data.users);
 
-
-
-
   const handleFilter = (e) => {
-    console.log(e.target.value)
+    console.log(e.target.value);
     if (e.target.value === "") {
       setData(value);
-
     } else {
-      const filterResult = data.users.filter((item) =>item.fullName.includes(e.target.value)
-    );
+      const filterResult = data.users.filter((item) =>
+        item.fullName.includes(e.target.value)
+      );
       setData(filterResult);
       // console.log("Result",filterResult)
     }
     setFilterVal(e.target.value);
   };
 
-
-
   return (
-
-    
     <MDBContainer>
       <div style={{ marginTop: "80px" }}>
         <h1 className="text-center mb-5 text-muted"> Players </h1>
-  
-     {/* <input className="mb-2" placeholder="search..."  value={filterVal} onInput={(e)=>handleFilter(e)}/> */}
-    
-       
+
+        {/* <input className="mb-2" placeholder="search..."  value={filterVal} onInput={(e)=>handleFilter(e)}/> */}
+
         <MDBRow>
           <MDBCol size="12">
             <MDBTable>
@@ -85,7 +79,7 @@ const ListPlayer = () => {
                   <tr>
                     <td colspan={8} className=" text-center mb-8">
                       {" "}
-                     Loading Players...{" "}
+                      Loading Players...{" "}
                     </td>
                   </tr>
                 </MDBTableBody>
@@ -98,7 +92,14 @@ const ListPlayer = () => {
                       <td> {item.email} </td>
                       <td>{item.fullName}</td>
                       <td> {item.balance} </td>
-                      <td> <Link to={`/player/modify/${item.userID}/${item.deviceID}`}><Button variant="secondary">edit </Button></Link></td>
+                      <td>
+                        {" "}
+                        <Link
+                          to={`/player/modify/${item.userID}/${item.deviceID}`}
+                        >
+                          <Button variant="secondary">edit </Button>
+                        </Link>
+                      </td>
                       <td> {item.userStatus} </td>
                       <td> {item.blocked} </td>
                     </tr>
