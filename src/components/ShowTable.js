@@ -17,16 +17,20 @@ import { Button } from "react-bootstrap";
 const ShowTable = (props) => {
   const [data, setData] = useState([]);
   const [value, setValue] = useState([]);
-  const [filterVal, setFilterVal] = useState();
+  
 
 const{role}=props;
 
   const bossID=getCookie("token");
  console.log(bossID)
+
+ useEffect(()=>{
+  loadUserData();
+ },[])
   const loadUserData = async () => {
 
 
-    return await axios
+   const res= await axios
       .post(
         `https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/gettransactions`,
         {
@@ -34,13 +38,12 @@ const{role}=props;
           bossID:bossID
         }
       )
-      .then((response) => {
-        setData(response.data);
-        setValue(response.data);
-      })
-      .catch((err) => console.error("Erroror", err));
-  };
-  console.log("data:", data.users);
+     
+        setData(res.data.users);
+
+      }
+
+console.log(data)
 
  
 
@@ -66,17 +69,17 @@ const{role}=props;
                 </tr>
               </MDBTableHead>
 
-              {data.length === 0 ? (
+              {!data? (
                 <MDBTableBody className="align-center mb-8">
                   <tr>
                     <td colspan={8} className=" text-center mb-8">
                       {" "}
-                      Loading Players...{" "}
+                      Loading Transactions...{" "}
                     </td>
                   </tr>
                 </MDBTableBody>
               ) : (
-                data.players.Items.map((item, index) => (
+                data.map((item, index) => (
                   <MDBTableBody key={index}>
                     <tr>
                       <td> {item.transactionID} </td>

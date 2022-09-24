@@ -138,7 +138,7 @@ export const SidebarData = [
 
   },
   {
-    title: 'Game History',
+    title: 'Ticket History',
     path: '/gameHistory',
     icon: <IoIcons.IoIosPaper />
   },

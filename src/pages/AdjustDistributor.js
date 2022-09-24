@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import{getCookie,getRole} from '../utils/auth'
+import ShowTable from "../components/ShowTable";
 import {
   Card,
   Container,
@@ -198,6 +199,7 @@ console.log("ROLE",userRole)
 
         <br />
       </Container>
+      <ShowTable />
     </>
   );
 };

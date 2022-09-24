@@ -12,6 +12,7 @@ import {
   Row,
   FloatingLabel,
 } from "react-bootstrap";
+import ShowTable from "../components/ShowTable";
 
 
 const AdjustStokist = () => {
@@ -191,6 +192,7 @@ console.log("ROLE",userRole)
 
         <br />
       </Container>
+      <ShowTable/>
     </>
   );
 };

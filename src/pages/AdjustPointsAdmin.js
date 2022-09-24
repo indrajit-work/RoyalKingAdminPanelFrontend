@@ -36,8 +36,8 @@ const loggedUser=getCookie("token");
 console.log("logeed in",loggedUser);
 
 
-const userRole=getRole(loggedUser);
-console.log("ROLE",userRole)
+// const userRole=getRole(loggedUser);
+// console.log("ROLE",userRole)
   useEffect(() => {
     getAdmins();
   }, []);
@@ -194,7 +194,7 @@ console.log("............",res)
         <br />
       </Container>
 
-      <ShowTable role="ADMIN"/>
+      <ShowTable />
     </>
   );
 };

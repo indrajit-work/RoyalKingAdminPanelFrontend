@@ -161,7 +161,7 @@ function App() {
             <Gamehistory/>
             
           </Route>
-          <Route path="/tickethistory/:id" exact>
+          <Route path="/tickethistory/:id/:type/:value/:endValue" exact>
             <Sidebar/>
            <TicketHistoryById/>
             

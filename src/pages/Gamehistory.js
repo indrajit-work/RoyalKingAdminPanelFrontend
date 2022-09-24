@@ -164,7 +164,7 @@ setbtn({
             <Col md>
             <Form.Group>
                 <Form.Label className="text-muted font-weight-bold ">
-                  Admin
+                  Players
                 </Form.Label>
                 <Form.Select  onChange={userIdHandler} aria-label="Floating label select example">
                 <option>Select below...</option>
@@ -227,7 +227,7 @@ setbtn({
                 <td> {id}</td>
                 <td>{played}</td>
                 <td>{win}</td>
-              <td><Link to={`/tickethistory/${id}`}><Button variant="outline-secondary" size="sm">More Info</Button></Link></td>
+              <td><Link to={`/tickethistory/${id}/${type}/${value}/${endValue}`}><Button variant="outline-secondary" size="sm">More Info</Button></Link></td>
               </tr>
             </MDBTableBody>
         // ))
