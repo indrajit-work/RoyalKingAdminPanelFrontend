@@ -33,8 +33,17 @@ const TicketHistoryById = () => {
 
   const [show, setShow] = useState(false);
 
+
+
+  //temp state of bets
+  const[bet,setBet]=useState();
+
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleShow = (betDetails) => {
+    setShow(true);
+    // setBet(betDetails)
+    // console.log(betDetails)
+  }
 
   const params = useParams();
   const userID = params.id;
@@ -46,6 +55,7 @@ const TicketHistoryById = () => {
   useEffect(() => {
     getTicketHistory();
   }, []);
+
 
   const getTicketHistory = async () => {
     try {
@@ -85,7 +95,10 @@ const TicketHistoryById = () => {
                     <th scope=" col "> played </th>
                     <th scope=" col "> win </th>
                     <th scope=" col "> Last Action </th>
+                    <th scope=" col "> Ticket Id </th>
+                    <th scope=" col "> User Id </th>
                     <th scope=" col "> Bets Details</th>
+
                     {/* <th scope=" col "></th>
             <th scope=" col ">  </th> */}
                   </tr>
@@ -111,10 +124,15 @@ const TicketHistoryById = () => {
                         <td>{item.played}</td>
                         <td>{item.win}</td>
                         <td>{item.lastAction}</td>
+                        <td>{item.ticketID}</td>
+                        <td>{item.userID}</td>
                         <td>
                           <Button
                             variant="outline-secondary"
-                            onClick={handleShow}
+                            onClick={(item)=>{
+                              setBet(item.bets)
+                              handleShow()
+                            }}
                             size="sm"
                           >
                             Bets Info
@@ -149,7 +167,7 @@ const TicketHistoryById = () => {
                   </tr>
                 </MDBTableHead>
 
-                {true ? (
+                {!ticket ? (
                   <MDBTableBody className="align-center mb-8">
                     <tr>
                       <td colspan={8} className=" text-center mb-8">

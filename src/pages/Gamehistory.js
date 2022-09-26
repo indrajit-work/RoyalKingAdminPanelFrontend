@@ -130,12 +130,11 @@ setbtn({
         </Card.Header>
         <Card.Body>
           <Card.Title className="text-muted">Ticket History</Card.Title>
-          <br />
-
+            <br/>
           <Row className="g-2">
             <Col md>
               <FloatingLabel controlId="floatingSelectGrid">
-                <Form.Select onChange={gameTypeHandler} aria-label="Floating label select example">
+                <Form.Select onChange={gameTypeHandler} className="mb-3" aria-label="Floating label select example">
                   <option>Select from below...</option>
                   <option value="cards16">Cards 16</option>
                   <option value="cards52">Cards 52</option>
@@ -161,16 +160,18 @@ setbtn({
               </span>
               {showCalEnd && <Calendar onChange={eonChanage} value={endValue} />}
             </Col>
-            <Col md>
-            <Form.Group>
+            {/* <Col md> */}
+            <Form.Group >
                 <Form.Label className="text-muted font-weight-bold ">
                   Players
                 </Form.Label>
-                <Form.Select  onChange={userIdHandler} aria-label="Floating label select example">
+                <Form.Select   className="w-50" onChange={userIdHandler} aria-label="Floating label select example">
                 <option>Select below...</option>
+                <option value={"0"}>All</option>
                     {!getAdmin? (
                       <option>No data...</option>
                     ) : (
+                      
                         getAdmin.map((item, index) => (
                         <option value={item.userID}>
                           {item.fullName}
@@ -183,7 +184,7 @@ setbtn({
                     
                   </Form.Select>
               </Form.Group>
-            </Col>
+            {/* </Col> */}
             <Col md>
               
               <Button variant="secondary"  className="ml-3 mt-4" type="submit" onClick={getGameData} >{btn}</Button>
