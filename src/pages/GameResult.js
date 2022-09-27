@@ -93,14 +93,12 @@ setbtn({
   btn:"Searching"
 })
   try{
-   const res=await  axios.post("https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/getgameresult",{
+   const res=await  axios.post("https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/getgameresultv2",{
       startTime:value,
       endTime:endValue,
       gameType:type,
     })
-    setAllGameData({
-     gameHsitory:res.data.history
-    })
+    setAllGameData(res.data.history)
     setbtn({
       btn:"Search"
     })
@@ -174,6 +172,7 @@ setbtn({
             <th scope=" col ">Draw Time</th>
             <th scope=" col "> Game Type </th>
             <th scope=" col "> Result </th>
+            <th scope=" col "> Create Time </th>
             {/* <th scope=" col "></th>
             <th scope=" col ">  </th> */}
           </tr>
@@ -190,13 +189,14 @@ setbtn({
           </MDBTableBody>
         ) 
         : (
-            allGameData.history.map((item, index) => (
+            allGameData.map((item, index) => (
             <MDBTableBody >
               <tr>
-                <td> </td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td> {item.gameID}</td>
+                <td>{item.drawTime}</td>
+                <td>{item.gameType}</td>
+                <td> {item.result}</td>
+                <td>{item.createTime}</td>
               </tr>
             </MDBTableBody>
         ))
