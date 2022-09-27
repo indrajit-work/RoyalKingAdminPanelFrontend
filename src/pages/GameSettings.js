@@ -36,6 +36,51 @@ const {gameType,multiplier,payoutPercent,payoutMod,btnText}=state
         });
       };
     
+const handleSubmitMultiplier= async ()=>{
+  if( multiplier<1)
+  {
+      alert("select values in range 1-10");
+      return;
+  }
+
+  setState({
+      ...state,
+      btnText:"Submitting",
+  })
+ console.log(state)
+  try {
+      const res = await axios.post(
+        `https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/multiplier`,
+        {
+          gameType:gameType,
+       
+         multiplier:multiplier,
+        
+
+        },
+      );
+console.log("Multiplier",res)
+      // console.log("Settings:...............", res);
+      setState({
+        gameType:"Payout Settings",
+        payoutPercent:0,
+          payoutMod:"",
+        mutiplier:0,
+        btnText: "Submited",
+
+      });
+     
+    } catch (error) {
+      console.log("Error:", error);
+      setState({
+        ...state,
+        buttonText: "Submit",
+       
+      });
+    }
+}
+
+
 
  const handleSubmit= async ()=>{
    
@@ -46,11 +91,11 @@ const {gameType,multiplier,payoutPercent,payoutMod,btnText}=state
       return;
     }
  
-    if( multiplier<1)
-    {
-        alert("select values in range 1-10");
-        return;
-    }
+    // if( multiplier<1)
+    // {
+    //     alert("select values in range 1-10");
+    //     return;
+    // }
 
     setState({
         ...state,
@@ -63,7 +108,7 @@ const {gameType,multiplier,payoutPercent,payoutMod,btnText}=state
           {
             gameType:gameType,
             payoutPercent:payoutPercent,
-            multiplier:multiplier,
+          //  multiplier:multiplier,
             payoutMod:payoutMod
 
           },
@@ -106,6 +151,7 @@ const {gameType,multiplier,payoutPercent,payoutMod,btnText}=state
               <Col md>
                 <FloatingLabel controlId="floatingSelectGrid">
                   <Form.Select onChange={handleChange("gameType")}  aria-label="Floating label select example">
+                    <option>Select below...</option>
                     <option value="cards16">Cards 16</option>
                     <option value="cards52">Cards 52</option>
                     <option value="jeetoJoker">jeetoJoker</option>
@@ -140,6 +186,7 @@ const {gameType,multiplier,payoutPercent,payoutMod,btnText}=state
                     placeholder="Enter values from -100 to 100"
                   />
                 </FloatingLabel>
+               
               </Col>
               <Col md> </Col>
               <h4 className="text-muted ml-4 mt-3 p-2 ">Payout Mode<small className="text-muted">(Select only one)</small></h4>
@@ -150,6 +197,7 @@ const {gameType,multiplier,payoutPercent,payoutMod,btnText}=state
               </Form>
              
             </Row>
+            <Button variant="secondary" className="float-right mr-4" onSubmit={handleSubmit}>Submit</Button>
           </Card.Body>
         </Card>
 
@@ -176,7 +224,7 @@ const {gameType,multiplier,payoutPercent,payoutMod,btnText}=state
               </Col>
 
               <Col md>
-              <Button className="float-right mr-4" onClick={handleSubmit} variant="secondary" size="lg">{btnText}</Button>
+              <Button className="float-right mr-4" onClick={handleSubmitMultiplier} variant="secondary" >{btnText}</Button>
               </Col>
             </Row>
           </Card.Body>
