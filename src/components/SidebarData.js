@@ -143,8 +143,8 @@ export const SidebarData = [
     icon: <IoIcons.IoIosPaper />
   },
   {
-    title: 'Clean Game data',
-    path: '/support',
+    title: 'Game Result',
+    path: '/gameResult',
     icon: <IoIcons.IoMdHelpCircle />
   },
   {

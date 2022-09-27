@@ -1,6 +1,7 @@
 import React, { useState ,useEffect} from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import './GameResult.css'
 import {
   Card,
   Container,
@@ -31,7 +32,7 @@ import {
 
 
 
-const Gamehistory = (props) => {
+const GameResult = (props) => {
   const[getAdmin,setAdmins]=useState( );
   const [value, onChanage] = useState(new Date());
   const [endValue, eonChanage] = useState(new Date());
@@ -42,19 +43,15 @@ const[btnText,setbtn]=useState({
   btn:"Search"
 });
 const[id,setId]=useState("0");
-const [allGameData,setAllGameData]=useState({
-  played:0,
-  win:0,
- 
-})
+const [allGameData,setAllGameData]=useState()
 const {btn} =btnText
-const{win,played,commPercent,net,userID}=allGameData;
+// const{win,played,commPercent,net,userID}=allGameData;
   //showing cal on clicking icon
 
 
-useEffect(()=>{
-  getAdminsData();
-},[])
+// useEffect(()=>{
+//   getAdminsData();
+// },[])
   //admins state
 
 //const{admins}=getAdmin
@@ -80,12 +77,7 @@ console.log(endValue)
 
  
 
-const getAdminsData=async ()=>{
-  return  await  axios.post("https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/getbyrole",{
-    userRole:"PLAYER"
-}).then((res)=> setAdmins(res.data.adminsAll))
-.catch((err)=>console.log(err))
-}
+
 
 //game selecter
 
@@ -101,15 +93,13 @@ setbtn({
   btn:"Searching"
 })
   try{
-   const res=await  axios.post("https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/gettickethistory",{
+   const res=await  axios.post("https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/getgameresult",{
       startTime:value,
       endTime:endValue,
       gameType:type,
-      userID:id
     })
     setAllGameData({
-      win:res.data.win,
-      played:res.data.played,
+     gameHsitory:res.data.history
     })
     setbtn({
       btn:"Search"
@@ -129,7 +119,7 @@ setbtn({
           <h4 className="text-center">Welcome Administrator</h4>
         </Card.Header>
         <Card.Body>
-          <Card.Title className="text-muted">Ticket History</Card.Title>
+          <Card.Title className="text-muted">Game Result</Card.Title>
             <br/>
           <Row className="g-2">
             <Col md>
@@ -161,34 +151,12 @@ setbtn({
               {showCalEnd && <Calendar onChange={eonChanage} value={endValue} />}
             </Col>
             {/* <Col md> */}
-            <Form.Group >
-                <Form.Label className="text-muted font-weight-bold ">
-                  Players
-                </Form.Label>
-                <Form.Select   className="w-50" onChange={userIdHandler} aria-label="Floating label select example">
-                <option>Select below...</option>
-                <option value={"0"}>All</option>
-                    {!getAdmin? (
-                      <option>No data...</option>
-                    ) : (
-                      
-                        getAdmin.map((item, index) => (
-                        <option value={item.userID}>
-                          {item.fullName}
-                          
-                          <span >(userID:{item.userID})</span>
-                        </option>
-                      ))
-                    )}
-                    
-                    
-                  </Form.Select>
-              </Form.Group>
+            
             {/* </Col> */}
-            <Col md>
+            
               
-              <Button variant="secondary"  className="ml-3 mt-4" type="submit" onClick={getGameData} >{btn}</Button>
-            </Col>
+              <Button variant="secondary"  className="ml-3 mt-4 submitBTN" type="submit" onClick={getGameData} >{btn}</Button>
+         
           </Row>
         </Card.Body>
       </Card>
@@ -202,10 +170,10 @@ setbtn({
       <MDBTable>
         <MDBTableHead dark>
           <tr>
-            <th scope=" col "> User id</th>
-            <th scope=" col ">Played </th>
-            <th scope=" col "> win </th>
-            <th scope=" col "> Details </th>
+            <th scope=" col "> Game id</th>
+            <th scope=" col ">Draw Time</th>
+            <th scope=" col "> Game Type </th>
+            <th scope=" col "> Result </th>
             {/* <th scope=" col "></th>
             <th scope=" col ">  </th> */}
           </tr>
@@ -222,18 +190,18 @@ setbtn({
           </MDBTableBody>
         ) 
         : (
-          // games.map((item, index) => (
+            allGameData.history.map((item, index) => (
             <MDBTableBody >
               <tr>
-                <td> {id}</td>
-                <td>{played}</td>
-                <td>{win}</td>
-              <td><Link to={`/tickethistory/${id}/${type}/${value}/${endValue}`}><Button variant="outline-secondary" size="sm">More Info</Button></Link></td>
+                <td> </td>
+                <td></td>
+                <td></td>
+                <td></td>
               </tr>
             </MDBTableBody>
-        // ))
-        // )}
+        ))
         )}
+ 
       </MDBTable>
     </MDBCol>
   </MDBRow>
@@ -245,4 +213,4 @@ setbtn({
   );
 };
 
-export default Gamehistory;
+export default GameResult;

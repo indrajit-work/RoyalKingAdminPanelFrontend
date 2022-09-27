@@ -26,6 +26,7 @@ import ModifyDistributor from "./pages/ModifyDistributor";
 import ModifyStokist from "./pages/ModifyStokist";
 import Gamehistory from "./pages/Gamehistory";
 import TicketHistoryById from "./pages/TicketHistoryById";
+import GameResult from "./pages/GameResult";
 
 function App() {
   return (
@@ -164,6 +165,11 @@ function App() {
           <Route path="/tickethistory/:id/:type/:value/:endValue" exact>
             <Sidebar/>
            <TicketHistoryById/>
+            
+          </Route>
+          <Route path="/gameResult" exact>
+            <Sidebar/>
+           <GameResult/>
             
           </Route>
           

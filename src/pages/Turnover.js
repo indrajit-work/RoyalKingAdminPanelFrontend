@@ -139,7 +139,7 @@ setbtn({
             <Col md>
               <FloatingLabel controlId="floatingSelectGrid">
                 <Form.Select onChange={gameTypeHandler} aria-label="Floating label select example">
-                  <option>All</option>
+                  <option>Select from below</option>
                   <option value="cards16">Cards 16</option>
                   <option value="cards52">Cards 52</option>
                   <option value="jeetoJoker">jeetoJoker</option>
