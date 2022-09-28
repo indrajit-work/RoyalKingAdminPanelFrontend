@@ -138,7 +138,7 @@ setbtn({
           <Row className="g-2">
             <Col md>
               <FloatingLabel controlId="floatingSelectGrid">
-                <Form.Select onChange={gameTypeHandler} aria-label="Floating label select example">
+                <Form.Select onChange={gameTypeHandler} className="mt-3" aria-label="Floating label select example">
                   <option>Select from below</option>
                   <option value="cards16">Cards 16</option>
                   <option value="cards52">Cards 52</option>
@@ -149,16 +149,16 @@ setbtn({
               </FloatingLabel>
             </Col>
             <Col md>
-            <span><label className="pr-2 text-muted ml-5">Start Date:</label></span>
-            <input value={value} disabled className="mb-3 ml-3" />
+            <span><label className="pl-3 text-muted ml-5">Start Date:</label></span>
+            <input value={value} disabled className="mb-3 ml-5" />
               <span className="iconStyle">
                 <AiIcons.AiFillSchedule onClick={calHandler} />
               </span>
               {showCal && <Calendar onChange={onChanage} value={value} />}
             </Col>
             <Col md>
-            <span><label className="pr-2 text-muted ml-5">End Date:</label></span>
-            <input value={endValue} disabled className="mb-3" />
+            <span><label className="pl-3 text-muted ml-5">End Date:</label></span>
+            <input value={endValue} disabled className="mb-3 ml-5" />
               <span className="iconStyle">
                 <AiIcons.AiFillSchedule onClick={EndHandler} />
               </span>
@@ -167,7 +167,7 @@ setbtn({
             
             <Col md>
               
-              <Button variant="secondary" type="submit" onClick={getGameData} >{btn}</Button>
+              <Button variant="secondary" type="submit"  className=" ml-5" onClick={getGameData} >{btn}</Button>
             </Col>
           </Row>
         </Card.Body>

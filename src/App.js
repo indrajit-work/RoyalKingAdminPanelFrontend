@@ -27,6 +27,9 @@ import ModifyStokist from "./pages/ModifyStokist";
 import Gamehistory from "./pages/Gamehistory";
 import TicketHistoryById from "./pages/TicketHistoryById";
 import GameResult from "./pages/GameResult";
+import RegAdmin from "./pages/RegAdmin";
+import ListAdmin from "./pages/ListAdmin";
+import AdminModify from "./pages/AdminModify";
 
 function App() {
   return (
@@ -170,6 +173,23 @@ function App() {
           <Route path="/gameResult" exact>
             <Sidebar/>
            <GameResult/>
+            
+          </Route>
+          <Route path="/regAdmin" exact>
+            <Sidebar/>
+           <RegAdmin/>
+            
+          </Route>
+          <Route path="/listAdmin" exact>
+            <Sidebar/>
+           <ListAdmin/>
+            
+          </Route>
+
+
+          <Route path="/admin/modify/:userID/:deviceID" exact>
+            <Sidebar/>
+           <AdminModify/>
             
           </Route>
           

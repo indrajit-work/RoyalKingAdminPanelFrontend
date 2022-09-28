@@ -28,6 +28,27 @@ export const SidebarData = [
     ]
   },
   {
+    title: 'Admin',
+    // path: '',
+    icon: <FaIcons.FaCartPlus />,
+    iconClosed: <RiIcons.RiArrowDownSFill />,
+    iconOpened: <RiIcons.RiArrowUpSFill />,
+    subNav: [
+        {
+          title: 'Add Admin',
+          path: '/regAdmin',
+          icon: <IoIcons.IoIosPaper />,
+          cName: 'sub-nav'
+        },
+        {
+          title: ' List Admin',
+          path: '/listAdmin',
+          icon: <AiIcons.AiOutlineBars />,
+          cName:'sub-nav'
+        },
+    ]
+    },
+  {
     title: 'Distributor',
     // path: '',
     icon: <IoIcons.IoIosPaper />,

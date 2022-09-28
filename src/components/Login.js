@@ -1,5 +1,5 @@
 import React from "react";
-import profile from "../images/man.png";
+import profile from "../images/royalKing.png";
 import "./Login.css";
 import axios from "axios";
 import {useState, useEffect } from "react";

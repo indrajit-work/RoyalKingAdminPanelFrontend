@@ -9,6 +9,7 @@ import SubMenu from "./SubMenu";
 import { IconContext } from "react-icons/lib";
 import { logout } from "../utils/auth";
 import "./Sidebar.css"
+import {   BsBoxArrowInLeft } from "react-icons/bs";
 const Nav = styled.div`
   background: #15171c;
   height: 60px;
@@ -62,11 +63,11 @@ const Sidebar = () => {
             </Link>
           </h4>
         </Nav>
-
+       
         <SidebarNav sidebar={sidebar}>
           <SidebarWrap>
-            <NavIcon to="#">
-              <AiIcons.AiOutlineClose onClick={showSidebar} />
+            <NavIcon to="#" className="logo">
+              <BsBoxArrowInLeft onClick={showSidebar} />
             </NavIcon>
             {SidebarData.map((item, index) => {
               return <SubMenu item={item} key={index} />;
