@@ -13,7 +13,7 @@ import {
 } from "react-bootstrap";
 import "./RegDis.css";
 import axios from "axios";
-import { getCookie } from "../utils/auth";
+import { getCookie,getEmail } from "../utils/auth";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import * as AiIcons from "react-icons/ai";
@@ -57,8 +57,18 @@ const ModifyDistributor = () => {
 
   useEffect(() => {
     getAdmins();
+    getEmailOptional()
   }, []);
 
+  const getEmailOptional=async ()=>{
+    const optionalEMail=await getEmail(parseInt(userID));
+    setUser({
+      ...user,
+      email:optionalEMail
+    })
+    console.log(email);
+}
+  
   const getAdmins = async () => {
     const res = await axios.post(
       "https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/getbyrole",
@@ -114,6 +124,7 @@ const ModifyDistributor = () => {
           fullName,
           phone: phNo,
           dateOfbirth: value,
+          blocked:status
         }
       );
 

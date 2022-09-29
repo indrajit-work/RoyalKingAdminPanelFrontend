@@ -11,9 +11,10 @@ import {
   Alert,
   Col,
 } from "react-bootstrap";
+
 import "./RegDis.css";
 import axios from "axios";
-import { getCookie } from "../utils/auth";
+import { getCookie,getRole,getEmail } from "../utils/auth";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import * as AiIcons from "react-icons/ai";
@@ -52,6 +53,19 @@ const AdminModify = () => {
   const params = useParams();
   const userID = params.userID;
   const deviceID = params.deviceID;
+
+useEffect(()=>{
+  getEmailOptional();
+})
+
+  const getEmailOptional=async ()=>{
+    const optionalEMail=await getEmail(parseInt(userID));
+    setUser({
+      ...user,
+      email:optionalEMail
+    })
+    console.log(email);
+}
 
   //geting admins
 
@@ -127,6 +141,7 @@ const AdminModify = () => {
           fullName,
           phone: phNo,
           dateOfbirth: value,
+          blocked:status
         }
       );
 

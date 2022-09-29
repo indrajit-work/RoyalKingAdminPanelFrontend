@@ -12,7 +12,7 @@ import {
 } from "react-bootstrap";
 import "./RegDis.css";
 import axios from "axios";
-import { getCookie } from "../utils/auth";
+import { getCookie,getRole,getEmail } from "../utils/auth";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import * as AiIcons from "react-icons/ai";
@@ -48,16 +48,28 @@ const ModifyPlayer = () => {
     resetDevice,
   } = user;
 
+
+
   const params = useParams();
   const userID = params.userID;
   const deviceID = params.deviceID;
+
 
   //geting admins
 
   useEffect(() => {
     getAdmins();
+    getEmailOptional();
   }, []);
 
+  const getEmailOptional=async ()=>{
+      const optionalEMail=await getEmail(parseInt(userID));
+      setUser({
+        ...user,
+        email:optionalEMail
+      })
+      console.log(email);
+  }
   const getAdmins = async () => {
     const res = await axios.post(
       "https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/getbyrole",
@@ -96,6 +108,7 @@ const ModifyPlayer = () => {
   const { status, btnText } = block;
 
   const handleBlockReset = (e) => {
+
     if (status === "no") {
       setBlock({
         ...block,
@@ -104,7 +117,7 @@ const ModifyPlayer = () => {
       });
     }
 
-    if (status === "Yes") {
+    if (status ==="Yes") {
       setBlock({
         ...block,
         status: "no",
@@ -139,6 +152,7 @@ const ModifyPlayer = () => {
           phone: phNo,
           dateOfbirth: value,
           resetDevice,
+          blocked:status
         }
       );
 

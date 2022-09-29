@@ -45,6 +45,15 @@ export const setCookie = (key, value) => {
       })
       return await  res.data.userRole
   }
+
+
+  export const getEmail=async (userID)=>{
+    const res=await axios.post("https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/getrole",{
+      userID:userID
+
+    })
+    return await  res.data.email
+}
   //access user info from localStorage
   export const isAuth = () => {
     const cookieChecked = getCookie("token");
