@@ -17,7 +17,7 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import * as AiIcons from "react-icons/ai";
 import "./Icon.css";
-
+import './Modify.css'
 const ModifyPlayer = () => {
   const [value, onChanage] = useState(new Date());
   const [admins, setAdmins] = useState();
@@ -176,7 +176,7 @@ const ModifyPlayer = () => {
   return (
     <Container>
       <Row>
-        <Card className="mt-4 w-100 shadow-lg">
+        <Card className="mt-4 cardWidth shadow-lg">
           <Card.Header className="text-muted font-weight-bold">
             <h4>Modify Player</h4>
           </Card.Header>

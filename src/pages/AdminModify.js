@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import './Modify.css'
 import {
   Card,
   Form,
@@ -163,7 +164,7 @@ const AdminModify = () => {
   return (
     <Container>
       <Row>
-        <Card className="mt-4 w-100 shadow-lg">
+        <Card className="mt-4  cardWidth shadow-lg">
           <Card.Header className="text-muted font-weight-bold">
             <h4>Modify Administrator</h4>
           </Card.Header>
