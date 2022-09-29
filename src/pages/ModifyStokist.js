@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import {
   Card,
@@ -18,10 +18,9 @@ import "react-calendar/dist/Calendar.css";
 import * as AiIcons from "react-icons/ai";
 import "./Icon.css";
 
-
 const ModifyStokist = () => {
   const [value, onChanage] = useState(new Date());
-const[admins,setAdmins]=useState();
+  const [admins, setAdmins] = useState();
 
   const [user, setUser] = useState({
     email: "",
@@ -33,7 +32,7 @@ const[admins,setAdmins]=useState();
     fullName: "",
     phNo: 0,
     buttonText: "Submit",
-    resetDevice:false
+    resetDevice: false,
   });
 
   const {
@@ -47,43 +46,39 @@ const[admins,setAdmins]=useState();
     fullName,
     phNo,
     buttonText,
-    resetDevice
+    resetDevice,
   } = user;
 
   const params = useParams();
   const userID = params.userID;
   const deviceID = params.deviceID;
 
+  //geting admins
 
-
-//geting admins
-
-
-useEffect(()=>{
-  getAdmins()
-},[])
+  useEffect(() => {
+    getAdmins();
+  }, []);
 
   const getAdmins = async () => {
-    const res =  await axios.post(
+    const res = await axios.post(
       "https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/getbyrole",
       {
         userRole: "Distributor",
       }
     );
     setAdmins(res.data.adminsAll);
-    }
+  };
 
-//reset device handler
-const handleDeviceReset=(e)=>{
-  console.log("rset")
-  e.target.value=""
-  setUser({
-    ...user,
-    resetDevice:true,
-    deviceID:""
-  })
-  
-}
+  //reset device handler
+  const handleDeviceReset = (e) => {
+    console.log("rset");
+    e.target.value = "";
+    setUser({
+      ...user,
+      resetDevice: true,
+      deviceID: "",
+    });
+  };
 
   const handleChange = (name) => (e) => {
     console.log(e.target.value);
@@ -91,6 +86,32 @@ const handleDeviceReset=(e)=>{
       ...user,
       [name]: e.target.value,
     });
+  };
+
+  //handle block ....................................
+  const [block, setBlock] = useState({
+    status: "no",
+    btnText: "block",
+  });
+
+  const { status, btnText } = block;
+
+  const handleBlockReset = (e) => {
+    if (status === "no") {
+      setBlock({
+        ...block,
+        status: "Yes",
+        btnText: "Unblock",
+      });
+    }
+
+    if (status === "Yes") {
+      setBlock({
+        ...block,
+        status: "no",
+        btnText: "block",
+      });
+    }
   };
 
   const onHandleSubmit = async (e) => {
@@ -106,7 +127,6 @@ const handleDeviceReset=(e)=>{
     }
     setUser({ ...user, buttonText: "Submitting...." });
 
-
     try {
       const res = await axios.post(
         `https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/modifyuser`,
@@ -119,7 +139,7 @@ const handleDeviceReset=(e)=>{
           fullName,
           phone: phNo,
           dateOfbirth: value,
-          resetDevice
+          resetDevice,
         }
       );
 
@@ -219,28 +239,30 @@ const handleDeviceReset=(e)=>{
                 />
               </Form.Group>
               <Form.Label className="text-muted font-weight-bold pt-3">
-                  Device ID
-                </Form.Label>
+                Device ID
+              </Form.Label>
               <InputGroup className>
-                {! resetDevice?
-                <Form.Control
-                  placeholder="Recipient's username"
-                  value={deviceID}
-                  disabled
-                  aria-label="Recipient's username"
-                  aria-describedby="basic-addon2"
-                />
-                :
-                <Form.Control
-                placeholder="Reset Done"
-                value={""}
-                disabled
-                aria-label="Recipient's username"
-                aria-describedby="basic-addon2"
-              />
-}
+                {!resetDevice ? (
+                  <Form.Control
+                    placeholder="Recipient's username"
+                    value={deviceID}
+                    disabled
+                    aria-label="Recipient's username"
+                    aria-describedby="basic-addon2"
+                  />
+                ) : (
+                  <Form.Control
+                    placeholder="Reset Done"
+                    value={""}
+                    disabled
+                    aria-label="Recipient's username"
+                    aria-describedby="basic-addon2"
+                  />
+                )}
                 <InputGroup.Text id="basic-addon2">
-                  <Button variant="secondary" onClick={handleDeviceReset}>Reset</Button>
+                  <Button variant="secondary" onClick={handleDeviceReset}>
+                    Reset
+                  </Button>
                 </InputGroup.Text>
               </InputGroup>
 
@@ -248,23 +270,52 @@ const handleDeviceReset=(e)=>{
                 <Form.Label className="text-muted font-weight-bold pt-3">
                   Boss Id
                 </Form.Label>
-                <Form.Select onChange={handleChange("bossID")}  aria-label="Floating label select example">
-                <option>Select below...</option>
-                    {!admins? (
-                      <option>No data...</option>
-                    ) : (
-                        admins.map((item, index) => (
-                        <option value={item.userID}>
-                          {item.fullName}
-                          
-                          <span >(userID:{item.userID})</span>
-                        </option>
-                      ))
-                    )}
-                    
-                    
-                  </Form.Select>
+                <Form.Select
+                  onChange={handleChange("bossID")}
+                  aria-label="Floating label select example"
+                >
+                  <option>Select below...</option>
+                  {!admins ? (
+                    <option>No data...</option>
+                  ) : (
+                    admins.map((item, index) => (
+                      <option value={item.userID}>
+                        {item.fullName}
+
+                        <span>(userID:{item.userID})</span>
+                      </option>
+                    ))
+                  )}
+                </Form.Select>
               </Form.Group>
+              <Form.Label className="text-muted font-weight-bold pt-3">
+                Block Status
+              </Form.Label>
+              <InputGroup className>
+                {true ? (
+                  <Form.Control
+                    placeholder="Recipient's username"
+                    value={status}
+                    disabled
+                    aria-label="Recipient's username"
+                    aria-describedby="basic-addon2"
+                  />
+                ) : (
+                  <Form.Control
+                    placeholder="Reset Done"
+                    value={""}
+                    disabled
+                    aria-label="Recipient's username"
+                    aria-describedby="basic-addon2"
+                  />
+                )}
+                <InputGroup.Text id="basic-addon2">
+                  <Button variant="secondary" onClick={handleBlockReset}>
+                    {btnText}
+                  </Button>
+                </InputGroup.Text>
+              </InputGroup>
+
               <br />
               <br />
               <hr style={{ color: "black" }} />

@@ -172,7 +172,7 @@ setbtn({
             <th scope=" col ">Draw Time</th>
             <th scope=" col "> Game Type </th>
             <th scope=" col "> Result </th>
-            <th scope=" col "> Create Time </th>
+        
             {/* <th scope=" col "></th>
             <th scope=" col ">  </th> */}
           </tr>
@@ -196,7 +196,7 @@ setbtn({
                 <td>{item.drawTime}</td>
                 <td>{item.gameType}</td>
                 <td> {item.result}</td>
-                <td>{item.createTime}</td>
+            
               </tr>
             </MDBTableBody>
         ))
