@@ -50,7 +50,7 @@ const [allGameData,setAllGameData]=useState({
   userID:0,
 })
 const {btn} =btnText
-const{win,played,commPercent,net,userID}=allGameData;
+const{win,played,commPercent,net,userID,adminNet}=allGameData;
   //showing cal on clicking icon
 
 
@@ -97,22 +97,28 @@ const gameTypeHandler=(e)=>{
 
 
 
+
+
 const getGameData=async ()=>{
 setbtn({
   btn:"Searching"
 })
+console.log("Checking......",getAdmin.admins.Items[0].userID)
   try{
    const res=await  axios.post("https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/getgamesbytype",{
       startTime:value,
       endTime:endValue,
-      gameType:type
+      gameType:type,
+      userID: getAdmin.admins.Items[0].userID,
+      commPercent: getAdmin.admins.Items[0].commPercent
     })
     setAllGameData({
       win:res.data.win,
       played:res.data.played,
       commPercent:res.data.superAdComm, //super Admins commission
       net:res.data.net,
-      userID:res.data.userID
+      userID:res.data.userID,
+      adminNet:res.data.adminNet
     })
     setbtn({
       btn:"Search"
@@ -140,6 +146,7 @@ setbtn({
               <FloatingLabel controlId="floatingSelectGrid">
                 <Form.Select onChange={gameTypeHandler} className="mt-3" aria-label="Floating label select example">
                   <option>Select from below</option>
+                  <option value="all">ALL</option>
                   <option value="cards16">Cards 16</option>
                   <option value="cards52">Cards 52</option>
                   <option value="jeetoJoker">jeetoJoker</option>
@@ -254,10 +261,10 @@ setbtn({
               <tr>
                 <td> {item.userID} </td>
                 <td> <Link to={`/admin/distributor/${item.userID}/${item.commPercent}`}><Button variant="secondary" size="sm">{item.fullName} ( Admin)</Button></Link> </td>
-                <td> 0</td>
-                <td>0</td>
+                <td> {win}</td>
+                <td>{played}</td>
                 <td> {item.commPercent}</td>
-                <td> 0 </td>
+                <td> {adminNet} </td>
               </tr>
             </MDBTableBody>
           ))
