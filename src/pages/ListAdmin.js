@@ -104,7 +104,7 @@ const ListAdmin = () => {
                   <tr>
                     <td colspan={8} className=" text-center mb-8">
                       {" "}
-                      No Data Found{" "}
+                      Loading admins...{" "}
                     </td>
                   </tr>
                 </MDBTableBody>
