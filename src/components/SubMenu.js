@@ -9,7 +9,7 @@ const SidebarLink = styled(Link)`
   align-items: center;
   padding: 10px;
   list-style: none;
-  height: 52px;
+  height: 39px;
   text-decoration: none;
   font-size: 12px;
   &:hover {
