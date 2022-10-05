@@ -25,6 +25,7 @@ const SidebarLabel = styled.span`
   margin-left: 16px;
 `;
 
+
 const DropdownLink = styled(Link)`
   background: #414757;
   height: 50px;
@@ -43,13 +44,16 @@ const DropdownLink = styled(Link)`
 
 const SubMenu = ({ item ,showSide,showSideBar}) => {
   const [subnav, setSubnav] = useState(false);
+// const[showSide,setShowSide]=useState(true);
 
+// const showingSide=()=>setShowSide(!showSide)
   const showSubnav = () => setSubnav(!subnav);
 
   return (
     <>
+  
       <SidebarLink to={item.path} onClick={item.subNav && showSubnav}>
-        <div>
+        <div onClick={showSideBar}>
           {item.icon}
           <SidebarLabel onClick={showSideBar}>{item.title}</SidebarLabel>
         </div>
@@ -61,6 +65,7 @@ const SubMenu = ({ item ,showSide,showSideBar}) => {
             : null}
         </div>
       </SidebarLink>
+ 
       {subnav &&
         item.subNav.map((item, index) => {
           return (
