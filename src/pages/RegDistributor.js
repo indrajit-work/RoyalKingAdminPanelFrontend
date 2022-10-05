@@ -137,7 +137,7 @@ const[admins,setAdmins]=useState()
                 <Form.Control
                   type="email"
                   onChange={handleChange("email")}
-                  required
+                
                   value={email}
                 />
               </Form.Group>

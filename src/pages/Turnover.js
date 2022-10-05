@@ -261,10 +261,10 @@ console.log("Checking......",getAdmin.admins.Items[0].userID)
               <tr>
                 <td> {item.userID} </td>
                 <td> <Link to={`/admin/distributor/${item.userID}/${item.commPercent}`}><Button variant="secondary" size="sm">{item.fullName} ( Admin)</Button></Link> </td>
-                <td> {win}</td>
-                <td>{played}</td>
+                <td> {index===1?played:0}</td>
+                <td>{index===1?win:0}</td>
                 <td> {item.commPercent}</td>
-                <td> {adminNet} </td>
+                <td> {index===1?adminNet:0} </td>
               </tr>
             </MDBTableBody>
           ))

@@ -13,7 +13,7 @@ const RegAdmin = () => {
   const [value, onChanage] = useState(new Date());
 const[admins,setAdmins]=useState()
   const [user, setUser] = useState({
-    email: "",
+    email: " ",
     password: "",
     verifyPassword: "",
     userRole: "ADMIN",
@@ -144,7 +144,7 @@ useEffect(()=>{
                 <Form.Control
                   type="email"
                   onChange={handleChange("email")}
-                  required
+               
                   value={email}
                 />
               </Form.Group>

@@ -141,7 +141,7 @@ const[showCal,setShowCal]=useState(false)
                 <Form.Control
                   type="email"
                   onChange={handleChange("email")}
-                  required
+              
                   value={email}
                 />
               </Form.Group>
