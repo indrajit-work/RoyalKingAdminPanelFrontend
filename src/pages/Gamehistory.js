@@ -33,7 +33,9 @@ import {
 
 const Gamehistory = (props) => {
   const[getAdmin,setAdmins]=useState( );
-  const [value, onChanage] = useState(new Date());
+  const date=new Date();
+  date.setHours(0,0,0,0)
+  const [value, onChanage] = useState(date);
   const [endValue, eonChanage] = useState(new Date());
   const [showCal, setShowCal] = useState(false);
   const [showCalEnd,setshowCalEnd]=useState(false);

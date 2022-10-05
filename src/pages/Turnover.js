@@ -32,8 +32,12 @@ import { fetchAdmin } from "../utils/fetchAdmins";
 
 
 const Turnover = (props) => {
+  const date=new Date();
+  date.setHours(0,0,0,0)
+  const date2=new Date();
+
   const[getAdmin,setAdmins]=useState( );
-  const [value, onChanage] = useState(new Date());
+  const [value, onChanage] = useState(date);
   const [endValue, eonChanage] = useState(new Date());
   const [showCal, setShowCal] = useState(false);
   const [showCalEnd,setshowCalEnd]=useState(false);
