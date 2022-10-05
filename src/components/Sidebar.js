@@ -36,7 +36,7 @@ const SidebarNav = styled.nav`
   position: fixed;
   top: 0;
   left: ${({ sidebar }) => (sidebar ? "0" : "-100%")};
-  transition: 350ms;
+  transition: 250ms;
   z-index: 10;
   opacity: 0.95;
 `;
@@ -50,6 +50,10 @@ const Sidebar = () => {
   const history = useHistory();
   const showSidebar = () => setSidebar(!sidebar);
 
+const hideSideBar=()=>{
+  setSidebar(false)
+}
+  
   return (
     <>
       <IconContext.Provider value={{ color: "#fff" }}>
@@ -70,7 +74,7 @@ const Sidebar = () => {
               <BsBoxArrowInLeft onClick={showSidebar} />
             </NavIcon>
             {SidebarData.map((item, index) => {
-              return <SubMenu item={item} key={index} />;
+              return <SubMenu showSide={hideSideBar} showSideBar={showSidebar} item={item} key={index} />;
             })}
           </SidebarWrap>
         </SidebarNav>
