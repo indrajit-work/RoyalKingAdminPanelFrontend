@@ -69,8 +69,8 @@ const TicketHistoryById = () => {
         }
       );
       setTicket(res.data.ticketHistory);
-
-      console.log("Response", res);
+       
+      console.log("Response", res.data.ticketHistory);
     } catch (err) {
       console.log("Error in game details", err);
     }
@@ -167,7 +167,7 @@ const TicketHistoryById = () => {
                   </tr>
                 </MDBTableHead>
 
-                {!ticket ? (
+                {!ticket  ? (
                   <MDBTableBody className="align-center mb-8">
                     <tr>
                       <td colspan={8} className=" text-center mb-8">
@@ -180,9 +180,9 @@ const TicketHistoryById = () => {
                   ticket.map((item, index) => (
                     <MDBTableBody>
                       <tr>
-                        <td>{item.createTime}</td>
-                        <td>{item.ticketStatus}</td>
-                        <td>{item.played}</td>
+                        <td>{item.bets[0].betOn}</td>
+                       <td>{item.bets[0].betValue}</td>
+                        <td>{item.bets[0].winAmount}</td> 
                         
                       </tr>
                     </MDBTableBody>
