@@ -36,8 +36,10 @@ const GameResult = (props) => {
   const[getAdmin,setAdmins]=useState( );
   const date=new Date();
   date.setHours(0,0,0,0)
+  const date2=new Date();
+  date2.setHours(23,59,59,59)
   const [value, onChanage] = useState(date);
-  const [endValue, eonChanage] = useState(new Date());
+  const [endValue, eonChanage] = useState(date2);
   const [showCal, setShowCal] = useState(false);
   const [showCalEnd,setshowCalEnd]=useState(false);
 const [type,setType]=useState();
