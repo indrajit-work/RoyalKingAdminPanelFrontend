@@ -7,12 +7,15 @@ import { Redirect, useHistory } from "react-router-dom";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import * as AiIcons from "react-icons/ai";
+import {TiTick, TiTimes} from "react-icons/ti";
 import "./Icon.css"
 
 const RegAdmin = () => {
   const [value, onChanage] = useState(new Date());
-const[admins,setAdmins]=useState()
+  const[admins,setAdmins]=useState()
+  const [usernameIsvalid, setUsernameIsvalid] = useState(null)
   const [user, setUser] = useState({
+    userName: "",
     email: " ",
     password: "",
     verifyPassword: "",
@@ -23,8 +26,10 @@ const[admins,setAdmins]=useState()
     phNo: 0,
     buttonText: "Submit",
   });
+  const [userNameList, setUserNameList] = useState([])
 
   const {
+    userName,
     email,
     password,
     verifyPassword,
@@ -55,10 +60,33 @@ useEffect(()=>{
     getSUPERADMIN(history);
 },[])
 
+  // fetch all the users data from DB and store the username in state
+  const fetchuserList = async () => {
+    await fetch('https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/getallusers')
+      .then(res => res.json())
+      .then(data => {
+            data.users.map(user => (
+                setUserNameList((prev) => [...prev, user?.userName])
+            ))
+        })
+  }
 
+  useEffect(() => {
+    fetchuserList()
+  }, [])
+// console.log(userNameList)
+
+const usernameCheckHandler = (input) => {
+  setUsernameIsvalid(true)
+        
+  if(userNameList.includes(input)){
+      setUsernameIsvalid(false)
+      console.log('wrong')
+  }
+  setUser({...user, userName: input})
+}
 
   const handleChange = (name) => (e) => {
-    console.log(e.target.value);
     setUser({
       ...user,
       [name]: e.target.value,
@@ -78,6 +106,7 @@ useEffect(()=>{
       const res = await axios.post(
         `https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/createuser`,
         {
+          userName,
           email,
           password,
           userRole,
@@ -92,8 +121,9 @@ useEffect(()=>{
       console.log("Submited:...............", res);
       setUser({
         ...user,
+        userName: "",
         email:"",
-        password:" ",
+        password:"",
         verifyPassword:"",
         commPercent:"",
         bossID:"",
@@ -137,6 +167,30 @@ useEffect(()=>{
           <Card.Body>
             <h4 className="text-muted text-center">Login Info</h4>
             <Form onSubmit={onHandleSubmit}>
+                {/* username */}
+              <Form.Group controlId="formBasicPassword" className="pb-2" style={{position: 'relative'}}>
+                <Form.Label className="text-muted font-weight-bold">
+                userName
+                </Form.Label>
+                <Form.Control
+                  type="text"
+                  onChange={(e) => usernameCheckHandler(e.target.value)}
+                  autocomplete='off'
+                  required
+                  value={userName}
+                />
+                {!usernameIsvalid && userName.length !== 0 && 
+                <>
+                  <TiTimes style={{color: 'red', position: 'absolute', right: '1%', top: '37.5%'}} />
+                  <p style={{color: 'red', fontSize: '12px', fontWeight: '500'}}><span style={{fontWeight: 'bold'}}>{userName}</span> is already taken</p>
+                </>}
+                {usernameIsvalid && userName.length > 0 && 
+                <>
+                  <TiTick style={{color: 'green', position: 'absolute', right: '1%', top: '37.5%'}} />
+                  <p style={{color: 'green', fontSize: '12px', fontWeight: '500'}}><span style={{fontWeight: 'bold'}}>{userName}</span> is available</p>
+                </>}
+              </Form.Group>
+
               <Form.Group controlId="formBasicPassword" className="pb-2">
                 <Form.Label className="text-muted font-weight-bold">
                   Email
@@ -237,7 +291,7 @@ useEffect(()=>{
              { showCal && <Calendar onChange={onChanage} value={value} />}
 
               <button
-                
+                disabled={!usernameIsvalid}
                 className="float-right mt-4 btn btnChange"
                 type="submit"
               >

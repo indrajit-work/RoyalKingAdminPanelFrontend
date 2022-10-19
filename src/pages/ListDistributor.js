@@ -17,6 +17,7 @@ const ListDistributor = () => {
   const [data, setData] = useState([]);
   const [value, setValue] = useState([]);
   const [filterVal, setFilterVal] = useState();
+
   useEffect(() => {
     loadUserData();
   }, []);
@@ -34,9 +35,8 @@ const ListDistributor = () => {
       })
       .catch((err) => console.error("Erroror", err));
   };
-  console.log("data:", data.users);
-
-
+  // console.log("data:", data);
+  // console.log("value:", value);
 
 
   const handleFilter = (e) => {

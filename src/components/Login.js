@@ -9,14 +9,14 @@ import { authenticate } from "../utils/auth";
 import { isAuth } from "../utils/auth";
   const Login = () => {
     const [regState, setRegState] = useState({
-      username: "",
+      userName: "",
       password: "",
       msg: "",
       success: "",
       buttonText: "Login",
     });
   
-    const { buttonText, success, password, msg, username } = regState;
+    const { buttonText, success, password, msg, userName } = regState;
     const history = useHistory();
   
     useEffect(() => {
@@ -39,21 +39,22 @@ import { isAuth } from "../utils/auth";
   
       setRegState({ ...regState, buttonText: "Logging in...." });
       try {
+        console.log(userName, password);
         const res = await axios.post(
-          `https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin`,
+          `https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin?task=login`,
           {
-            userID: parseInt(username),
+            userName: userName,
             password: password,
-          },
-        );
+          })
+          console.log(res)
   
-        // console.log("Login:...............", res);
         setRegState({
           ...regState,
           buttonText: "Login",
           msg: res.data.msg,
         });
-        if(res.data.login){
+        if(res.data?.msg === 'Success'){
+          // console.log("success")
           authenticate(res, () => {
             return history.push("/");
          });
@@ -64,7 +65,7 @@ import { isAuth } from "../utils/auth";
         setRegState({
           ...regState,
           buttonText: "Login",
-          msg: error.response.data.msg,
+          msg: error.response?.data?.msg,
         });
       }
     };
@@ -87,10 +88,10 @@ import { isAuth } from "../utils/auth";
 
               <input
                 type="text"
-                placeholder="Enter Username..."
+                placeholder="Enter UserName..."
                 className="name inputLogin"
-                onChange={handleChange("username")}
-                value={username}
+                onChange={handleChange("userName")}
+                value={userName}
                 required
               />
             </div>
