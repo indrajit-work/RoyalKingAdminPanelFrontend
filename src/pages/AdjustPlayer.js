@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import{getCookie,getRole} from '../utils/auth'
+import { getCookie, getRole } from "../utils/auth";
 import ShowTable from "../components/ShowTable";
 import {
   Card,
@@ -14,109 +14,106 @@ import {
 } from "react-bootstrap";
 
 const AdjustPlayer = () => {
-  const [player, setPlayer] = useState();
-const[transaction,setTransaction]=useState({
-  receiverID:0,
-  amt:0,
-  senderID:0,
-  typeTrans:"",
-  comment:"",
-  btnText:"Submit",
-  userRolereceiver:"PLAYER",
-  userRoleSender:""
-});
+  const [players, setPlayers] = useState();
 
-const{amt,receiverID,typeTrans,comment,senderID,btnText,userRoleSender,userRolereceiver}=transaction;
+  const [senderID, setSenderID] = useState(0)
+  const [receiverID, setReceiverID] = useState(0)
+  const [amt, setAmt] = useState(0)
+  const [transactionType, setTransactionType] = useState("")
+  const [comment, setComment] = useState("")
 
+  const [selectedPlayer, setSelectedPlayer] = useState(0)
 
-//current user
+  // const [transaction, setTransaction] = useState({
+  //   receiverID: 0,
+  //   amt: 0,
+  //   senderID: 0,
+  //   typeTrans: "",
+  //   comment: "",
+  //   userRolereceiver: "PLAYER",
+  //   userRoleSender: "",
+  // });
 
-const loggedUser=getCookie("token");
-console.log("logeed in",loggedUser);
-const userRole=getRole(loggedUser);
-console.log("ROLE",userRole)
-
+  //current user
+  const loggedUser = getCookie("token");
+  // console.log("logeed in", loggedUser);
+  const userRole = getRole(loggedUser);
+  // console.log("ROLE", userRole);
 
   useEffect(() => {
     getAdmins();
   }, []);
 
   const getAdmins = async () => {
-    const res =  await axios.post(
+    const res = await axios.post(
       "https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/getbyrole",
       {
         userRole: "PLAYER",
       }
     );
-
- 
-    setPlayer(res.data.adminsAll);
+    console.log("getAdmins ",res.data)
+    setPlayers(res.data.adminsAll);
   };
-
 
   //sendinng transaction details to lamda
+  // const handleChange = (name) => (e) => {
+  //   setTransaction({
+  //     ...transaction,
+  //     [name]: e.target.value,
+  //   });
+  // };
 
-  const handleChange = (name) => (e) => {
-    console.log(e.target.value);
-    setTransaction({
-      ...transaction,
-      [name]: e.target.value,
-     
-    });
-  };
-
-
-    const Transaction=async ()=>{
-
-      if(parseInt(amt)<=0)
-      {
-        alert("Enter correct Amount")
-      }
-      if(typeTrans==="")
-        alert("Enter type of transfer(Adjust)");
-
-        setTransaction({
-          ...transaction,
-          btnText:"Submitting..."
-        })
-        if(typeTrans==="substract")
-        {
-          let tempID=parseInt(receiverID);
-            setTransaction({
-              ...transaction,
-              receiverID:parseInt(loggedUser),
-              senderID:parseInt(tempID)
-            })
-        }else{
-          setTransaction({
-            ...transaction,
-            userRoleSender:userRole
-          })
-        }
-try{
-  const res=await axios.post("https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/pointstransfer",{
-    receiverID:receiverID,
-    senderID:senderID,
-    amount:parseInt(amt),
-    comment:comment,
-    userRoleSender,
-    userRolereceiver
-})
-
-setTransaction({
-  ...transaction,
-  btnText:"Submitted"
-})
-console.log("............",res)
-}catch(err){
-  setTransaction({
-    ...transaction,
-    btnText:"Submit"
-  })
-  console.log("Error from stokist adjust points:",err)
-}
-    
+  const Transaction = async () => {
+    if (parseInt(amt) <= 0) {
+      alert("Enter correct Amount");
     }
+    if (transactionType === "") alert("Enter type of transfer(Adjust)");
+
+
+    if (transactionType === "substract") {
+      setSenderID(selectedPlayer)
+      setReceiverID(loggedUser)
+
+      // console.log(`loggedUser ${loggedUser} senderID ${senderID} ReceiverID ${receiverID} selectedPlayer ${selectedPlayer} - sub:`)
+    } else {
+      setSenderID(loggedUser)
+      setReceiverID(selectedPlayer)
+
+      // console.log(`loggedUser ${loggedUser} senderID ${senderID} ReceiverID ${receiverID} selectedPlayer ${selectedPlayer} - sub:`)
+    }
+
+    try {
+      const res = await axios.post(
+        "https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/pointstransfer",
+        {
+          loggedUser: loggedUser,
+          selectedPlayer: selectedPlayer,
+          transactionType: transactionType,
+          amount: parseInt(amt),
+          comment: comment
+        }
+      );
+
+      setSenderID(0)
+      setReceiverID(0)
+      setTransactionType("")
+      setAmt(0)
+      setComment("submitted")
+
+      // setTransaction({
+      //   ...transaction,
+      //   receiverID: 0,
+      //   amt: 0,
+      //   senderID: 0,
+      //   typeTrans: "",
+      //   comment: ""
+      // });
+      console.log("............", res.data);
+      console.log("loggedUser, senderID, ReceiverID, selectedPlayer", loggedUser, senderID, receiverID, selectedPlayer)
+    } catch (err) {
+      console.log("Error from stokist adjust points:", err);
+    }
+  };
 
   return (
     <>
@@ -131,20 +128,21 @@ console.log("............",res)
             <Row className="g-2">
               <Col md>
                 <FloatingLabel controlId="floatingSelectGrid">
-                  <Form.Select aria-label="Floating label select example" onChange={handleChange("receiverID")}>
+                  <Form.Select
+                    aria-label="Floating label select example"
+                    onChange={(e) => setSelectedPlayer(e.target.value)}
+                    value={selectedPlayer}
+                  >
                     <option>Select below...</option>
-                    {!player? (
+                    {!players ? (
                       <option>No data...</option>
                     ) : (
-                        player.map((item, index) => (
-                        <option value={item.userID}>
-                          {item.fullName}
-                          
-                          <span >(balance:{item.balance})</span>
+                      players.map((item, index) => (
+                        <option key={index} value={item.userID}>
+                          {item.fullName} (balance:{item.balance})
                         </option>
                       ))
                     )}
-                    
                   </Form.Select>
                 </FloatingLabel>
               </Col>
@@ -156,7 +154,8 @@ console.log("............",res)
                 <Form.Select
                   className="w-50"
                   aria-label="Floating label select example"
-                  onChange={handleChange("typeTrans")}
+                  onChange={(e) => setTransactionType(e.target.value)}
+                  value={transactionType}
                 >
                   <option>Select below...</option>
                   <option value="substract">Substract</option>
@@ -170,7 +169,7 @@ console.log("............",res)
                   controlId="floatingSelectGrid"
                   label="Enter Amount..."
                 >
-                  <Form.Control type="number"   onChange={handleChange("amt")}/>
+                  <Form.Control type="number" onChange={(e) => setAmt(e.target.value)} value={amt} />
                 </FloatingLabel>
               </Col>
               <Col md></Col>
@@ -185,11 +184,21 @@ console.log("............",res)
                   as="textarea"
                   placeholder="Leave a comment here(Optional)"
                   style={{ height: "80px" }}
-                  onChange={handleChange("comment")}
+                  onChange={(e) => setComment(e.target.value)}
+                  value={comment}
                 />
               </FloatingLabel>
-              <Col md>  <Button  onClick={Transaction} className=" ml-3 pt-1 mt-2" variant="secondary" size="md">{btnText}</Button></Col>
-           
+              <Col md>
+                {" "}
+                <Button
+                  onClick={Transaction}
+                  className=" ml-3 pt-1 mt-2"
+                  variant="secondary"
+                  size="md"
+                >
+                  Submit
+                </Button>
+              </Col>
             </Row>
           </Card.Body>
         </Card>

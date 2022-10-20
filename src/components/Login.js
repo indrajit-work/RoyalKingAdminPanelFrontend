@@ -24,7 +24,6 @@ import { isAuth } from "../utils/auth";
     }, []);
   
     const handleChange = (name) => (e) => {
-      console.log(e.target.value);
       setRegState({
         ...regState,
         [name]: e.target.value,
@@ -54,7 +53,6 @@ import { isAuth } from "../utils/auth";
           msg: res.data.msg,
         });
         if(res.data?.msg === 'Success'){
-          // console.log("success")
           authenticate(res, () => {
             return history.push("/");
          });

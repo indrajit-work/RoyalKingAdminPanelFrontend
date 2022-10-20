@@ -88,7 +88,6 @@ const ListAdmin = () => {
               <MDBTableHead dark>
                 <tr>
                   <th scope="col">User Id</th>
-                  <th scope=" col "> User Role </th>
                   <th scope=" col ">Email </th>
                   <th scope=" col "> Name </th>
                   <th scope=" col "> Balance </th>
@@ -96,6 +95,7 @@ const ListAdmin = () => {
                   <th scope=" col ">Modify Distributor </th>
                   <th scope=" col "> Status </th>
                   <th scope=" col "> Blocked </th>
+                  <th scope=" col "> Verified </th>
                 </tr>
               </MDBTableHead>
 
@@ -113,7 +113,6 @@ const ListAdmin = () => {
                   <MDBTableBody key={index}>
                     <tr>
                       <td> {item.userID} </td>
-                      <td> {item.userRole} </td>
                       <td> {item.email} </td>
                       <td>{item.fullName}</td>
                       <td>{item.balance}</td>
@@ -121,6 +120,7 @@ const ListAdmin = () => {
                       <td> <Link to={`/admin/modify/${item.userID}/${item.deviceID}`}><Button variant="secondary">edit</Button></Link></td>
                       <td> {item.userStatus} </td>
                       <td> {item.blocked} </td>
+                      <td> {item.verified} </td>
                     </tr>
                   </MDBTableBody>
                 ))

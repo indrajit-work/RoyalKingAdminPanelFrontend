@@ -84,6 +84,7 @@ console.log("ROLE",userRole)
         })
         if(typeTrans==="substract")
         {
+          
           let tempID=parseInt(receiverID);
             setTransaction({
               ...transaction,

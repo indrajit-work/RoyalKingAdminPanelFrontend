@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import{getCookie, getRole} from '../utils/auth'
+import { getCookie, getRole } from "../utils/auth";
 import {
   Card,
   Container,
@@ -14,46 +14,45 @@ import {
 
 import ShowTable from "../components/ShowTable";
 
-
-
 const AdjustPointsAdmin = () => {
   const [admins, setAdmins] = useState();
-const[transaction,setTransaction]=useState({
-  receiverID:0,
-  amt:0,
-  senderID:0,
-  typeTrans:"",
-  comment:"",
-  btnText:"Submit",
-});
+  const [transaction, setTransaction] = useState({
+    receiverID: 0,
+    amt: 0,
+    senderID: 0,
+    typeTrans: "",
+    comment: ""
+  });
 
-const{amt,receiverID,typeTrans,comment,senderID,btnText,userRoleSender,userRolereceiver}=transaction;
+  const {
+    amt,
+    receiverID,
+    typeTrans,
+    comment,
+    senderID,
+    userRoleSender,
+    userRolereceiver,
+  } = transaction;
 
+  //current user
+  const loggedUser = getCookie("token");
+  console.log("logeed in", loggedUser);
 
-//current user
-
-const loggedUser=getCookie("token");
-console.log("logeed in",loggedUser);
-
-
-// const userRole=getRole(loggedUser);
-// console.log("ROLE",userRole)
   useEffect(() => {
     getAdmins();
   }, []);
 
   const getAdmins = async () => {
-    const res =  await axios.post(
+    const res = await axios.post(
       "https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/getbyrole",
       {
         userRole: "ADMIN",
       }
     );
 
- 
     setAdmins(res.data.adminsAll);
   };
-
+  console.log(admins)
 
   //sendinng transaction details to lamda
 
@@ -62,57 +61,53 @@ console.log("logeed in",loggedUser);
     setTransaction({
       ...transaction,
       [name]: e.target.value,
-     
     });
   };
+  console.log("before", transaction)
 
-
-    const Transaction=async ()=>{
-
-      if(parseInt(amt)<=0)
-      {
-        alert("Enter correct Amount")
-      }
-      if(typeTrans==="")
-        alert("Enter type of transfer(Adjust)");
-
-        setTransaction({
-          ...transaction,
-          btnText:"Submitting..."
-        })
-        if(typeTrans==="substract")
-        {
-          let tempID=parseInt(receiverID);
-            setTransaction({
-              ...transaction,
-              receiverID:parseInt(loggedUser),
-              senderID:parseInt(tempID),
-             
-            })
-        }
-try{
-  const res=await axios.post("https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/pointstransfer",{
-    receiverID:receiverID,
-    senderID:senderID,
-    amount:parseInt(amt),
-    comment:comment,
-
-})
-
-setTransaction({
-  ...transaction,
-  btnText:"Submitted"
-})
-console.log("............",res)
-}catch(err){
-  setTransaction({
-    ...transaction,
-    btnText:"Submit"
-  })
-  console.log("Error from stokist adjust points:",err)
-}
-    
+  const Transaction = async () => {
+    if (parseInt(amt) <= 0) {
+      alert("Enter correct Amount");
     }
+
+    if (typeTrans === "") alert("Enter type of transfer(Adjust)");
+
+    if (typeTrans === "substract") {
+      let tempID = parseInt(receiverID);
+      setTransaction({
+        ...transaction,
+        receiverID: parseInt(loggedUser),
+        senderID: parseInt(tempID),
+      });
+    }
+
+    console.log("after sub: ", transaction)
+    
+    try {
+      const res = await axios.post(
+        "https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/pointstransfer",
+        {
+          receiverID: receiverID,
+          senderID: senderID,
+          amount: parseInt(amt),
+          comment: comment,
+        }
+      );
+
+    setTransaction({
+      ...transaction,
+      receiverID: 0,
+      amt: 0,
+      senderID: 0,
+      typeTrans: "",
+      comment: ""
+    })
+
+      console.log("............", res);
+    } catch (err) {
+      console.log("Error from stokist adjust points:", err);
+    }
+  };
 
   return (
     <>
@@ -127,20 +122,20 @@ console.log("............",res)
             <Row className="g-2">
               <Col md>
                 <FloatingLabel controlId="floatingSelectGrid">
-                  <Form.Select aria-label="Floating label select example" onChange={handleChange("receiverID")}>
+                  <Form.Select
+                    aria-label="Floating label select example"
+                    onChange={handleChange("receiverID")}
+                  >
                     <option>Select below...</option>
-                    {!admins? (
+                    {!admins ? (
                       <option>No data...</option>
                     ) : (
                       admins.map((item, index) => (
-                        <option value={item.userID}>
-                          {item.fullName}
-                          
-                          <span >(balance:{item.balance})</span>
+                        <option key={index} value={item.userID}>
+                          {item.fullName} (balance:{item.balance})
                         </option>
                       ))
                     )}
-                    
                   </Form.Select>
                 </FloatingLabel>
               </Col>
@@ -166,7 +161,7 @@ console.log("............",res)
                   controlId="floatingSelectGrid"
                   label="Enter Amount..."
                 >
-                  <Form.Control type="number"   onChange={handleChange("amt")}/>
+                  <Form.Control type="number" onChange={handleChange("amt")} />
                 </FloatingLabel>
               </Col>
               <Col md></Col>
@@ -184,8 +179,17 @@ console.log("............",res)
                   onChange={handleChange("comment")}
                 />
               </FloatingLabel>
-              <Col md>  <Button  onClick={Transaction} className=" ml-3 pt-1 mt-2" variant="secondary" size="md">{btnText}</Button></Col>
-           
+              <Col md>
+                {" "}
+                <Button
+                  onClick={Transaction}
+                  className=" ml-3 pt-1 mt-2"
+                  variant="secondary"
+                  size="md"
+                >
+                  Submit
+                </Button>
+              </Col>
             </Row>
           </Card.Body>
         </Card>
