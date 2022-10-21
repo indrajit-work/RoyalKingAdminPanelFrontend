@@ -20,9 +20,10 @@ const ShowTable = (props) => {
   
 
 const{role}=props;
+console.log(role)
 
   const bossID=getCookie("token");
-//  console.log(bossID)
+ console.log(bossID)
 
  useEffect(()=>{
   loadUserData();

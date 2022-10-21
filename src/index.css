@@ -15,3 +15,16 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.MuiDataGrid-virtualScrollerContent{
+  background: rgb(255, 255, 255);
+}
+
+.MuiDataGrid-columnHeaders{
+  background: #373737;
+  color: white;
+}
+
+.MuiSvgIcon-root path{
+  fill: #969696;
+}

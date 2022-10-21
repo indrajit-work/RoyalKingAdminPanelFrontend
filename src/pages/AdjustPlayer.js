@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { getCookie, getRole } from "../utils/auth";
-import ShowTable from "../components/ShowTable";
 import {
   Card,
   Container,
@@ -12,27 +11,18 @@ import {
   Row,
   FloatingLabel,
 } from "react-bootstrap";
+import TransactionTable from "../components/TransactionTable";
+
 
 const AdjustPlayer = () => {
   const [players, setPlayers] = useState();
 
-  const [senderID, setSenderID] = useState(0)
-  const [receiverID, setReceiverID] = useState(0)
+  // const [senderID, setSenderID] = useState(0)
+  // const [receiverID, setReceiverID] = useState(0)
   const [amt, setAmt] = useState(0)
   const [transactionType, setTransactionType] = useState("")
   const [comment, setComment] = useState("")
-
   const [selectedPlayer, setSelectedPlayer] = useState(0)
-
-  // const [transaction, setTransaction] = useState({
-  //   receiverID: 0,
-  //   amt: 0,
-  //   senderID: 0,
-  //   typeTrans: "",
-  //   comment: "",
-  //   userRolereceiver: "PLAYER",
-  //   userRoleSender: "",
-  // });
 
   //current user
   const loggedUser = getCookie("token");
@@ -55,32 +45,23 @@ const AdjustPlayer = () => {
     setPlayers(res.data.adminsAll);
   };
 
-  //sendinng transaction details to lamda
-  // const handleChange = (name) => (e) => {
-  //   setTransaction({
-  //     ...transaction,
-  //     [name]: e.target.value,
-  //   });
-  // };
-
   const Transaction = async () => {
     if (parseInt(amt) <= 0) {
       alert("Enter correct Amount");
     }
     if (transactionType === "") alert("Enter type of transfer(Adjust)");
 
-
-    if (transactionType === "substract") {
-      setSenderID(selectedPlayer)
-      setReceiverID(loggedUser)
-
-      // console.log(`loggedUser ${loggedUser} senderID ${senderID} ReceiverID ${receiverID} selectedPlayer ${selectedPlayer} - sub:`)
-    } else {
-      setSenderID(loggedUser)
-      setReceiverID(selectedPlayer)
+    // if (transactionType === "substract") {
+    //   setSenderID(selectedPlayer)
+    //   setReceiverID(loggedUser)
 
       // console.log(`loggedUser ${loggedUser} senderID ${senderID} ReceiverID ${receiverID} selectedPlayer ${selectedPlayer} - sub:`)
-    }
+    // } else {
+    //   setSenderID(loggedUser)
+    //   setReceiverID(selectedPlayer)
+
+      // console.log(`loggedUser ${loggedUser} senderID ${senderID} ReceiverID ${receiverID} selectedPlayer ${selectedPlayer} - sub:`)
+    // }
 
     try {
       const res = await axios.post(
@@ -94,22 +75,11 @@ const AdjustPlayer = () => {
         }
       );
 
-      setSenderID(0)
-      setReceiverID(0)
       setTransactionType("")
       setAmt(0)
-      setComment("submitted")
+      setComment("")
 
-      // setTransaction({
-      //   ...transaction,
-      //   receiverID: 0,
-      //   amt: 0,
-      //   senderID: 0,
-      //   typeTrans: "",
-      //   comment: ""
-      // });
       console.log("............", res.data);
-      console.log("loggedUser, senderID, ReceiverID, selectedPlayer", loggedUser, senderID, receiverID, selectedPlayer)
     } catch (err) {
       console.log("Error from stokist adjust points:", err);
     }
@@ -131,7 +101,6 @@ const AdjustPlayer = () => {
                   <Form.Select
                     aria-label="Floating label select example"
                     onChange={(e) => setSelectedPlayer(e.target.value)}
-                    value={selectedPlayer}
                   >
                     <option>Select below...</option>
                     {!players ? (
@@ -207,7 +176,7 @@ const AdjustPlayer = () => {
         <br />
       </Container>
 
-      <ShowTable />
+      <TransactionTable />
     </>
   );
 };

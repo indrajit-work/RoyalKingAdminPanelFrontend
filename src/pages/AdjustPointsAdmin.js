@@ -12,27 +12,14 @@ import {
   FloatingLabel,
 } from "react-bootstrap";
 
-import ShowTable from "../components/ShowTable";
+import TransactionTable from "../components/TransactionTable";
 
 const AdjustPointsAdmin = () => {
   const [admins, setAdmins] = useState();
-  const [transaction, setTransaction] = useState({
-    receiverID: 0,
-    amt: 0,
-    senderID: 0,
-    typeTrans: "",
-    comment: ""
-  });
-
-  const {
-    amt,
-    receiverID,
-    typeTrans,
-    comment,
-    senderID,
-    userRoleSender,
-    userRolereceiver,
-  } = transaction;
+  const [transactionType, setTransactionType] = useState("");
+  const [comment, setComment] = useState("")
+  const [selectedPlayer, setSelectedPlayer] = useState(0)
+  const [amt, setAmt] = useState(0)
 
   //current user
   const loggedUser = getCookie("token");
@@ -52,56 +39,26 @@ const AdjustPointsAdmin = () => {
 
     setAdmins(res.data.adminsAll);
   };
-  console.log(admins)
 
-  //sendinng transaction details to lamda
-
-  const handleChange = (name) => (e) => {
-    console.log(e.target.value);
-    setTransaction({
-      ...transaction,
-      [name]: e.target.value,
-    });
-  };
-  console.log("before", transaction)
 
   const Transaction = async () => {
     if (parseInt(amt) <= 0) {
       alert("Enter correct Amount");
     }
 
-    if (typeTrans === "") alert("Enter type of transfer(Adjust)");
-
-    if (typeTrans === "substract") {
-      let tempID = parseInt(receiverID);
-      setTransaction({
-        ...transaction,
-        receiverID: parseInt(loggedUser),
-        senderID: parseInt(tempID),
-      });
-    }
-
-    console.log("after sub: ", transaction)
+    if (transactionType === "") alert("Enter type of transfer(Adjust)");
     
     try {
       const res = await axios.post(
         "https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/pointstransfer",
         {
-          receiverID: receiverID,
-          senderID: senderID,
+          loggedUser: loggedUser,
+          selectedPlayer: selectedPlayer,
+          transactionType: transactionType,
           amount: parseInt(amt),
           comment: comment,
         }
       );
-
-    setTransaction({
-      ...transaction,
-      receiverID: 0,
-      amt: 0,
-      senderID: 0,
-      typeTrans: "",
-      comment: ""
-    })
 
       console.log("............", res);
     } catch (err) {
@@ -124,7 +81,7 @@ const AdjustPointsAdmin = () => {
                 <FloatingLabel controlId="floatingSelectGrid">
                   <Form.Select
                     aria-label="Floating label select example"
-                    onChange={handleChange("receiverID")}
+                    onChange={(e) => setSelectedPlayer(e.target.value)}
                   >
                     <option>Select below...</option>
                     {!admins ? (
@@ -147,7 +104,7 @@ const AdjustPointsAdmin = () => {
                 <Form.Select
                   className="w-50"
                   aria-label="Floating label select example"
-                  onChange={handleChange("typeTrans")}
+                  onChange={(e) => setTransactionType(e.target.value)}
                 >
                   <option>Select below...</option>
                   <option value="substract">Substract</option>
@@ -161,7 +118,7 @@ const AdjustPointsAdmin = () => {
                   controlId="floatingSelectGrid"
                   label="Enter Amount..."
                 >
-                  <Form.Control type="number" onChange={handleChange("amt")} />
+                  <Form.Control type="number" onChange={(e) => setAmt(e.target.value)} />
                 </FloatingLabel>
               </Col>
               <Col md></Col>
@@ -176,7 +133,7 @@ const AdjustPointsAdmin = () => {
                   as="textarea"
                   placeholder="Leave a comment here(Optional)"
                   style={{ height: "80px" }}
-                  onChange={handleChange("comment")}
+                  onChange={(e) => setComment(e.target.value)}
                 />
               </FloatingLabel>
               <Col md>
@@ -198,7 +155,7 @@ const AdjustPointsAdmin = () => {
         <br />
       </Container>
 
-      <ShowTable />
+      <TransactionTable loggedUser={loggedUser} />
     </>
   );
 };

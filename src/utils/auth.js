@@ -39,14 +39,17 @@ export const authenticate = (res, next) => {
 };
 
 export const getRole = async (userID) => {
-  const res = await axios.post(
-    "https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/getrole",
-    {
-      userID: userID
-    }
-  );
-  // console.log("res.data", res.data)
-  return res.data.userRole;
+  try {
+    const res = await axios.post(
+      "https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/getrole",
+      {
+        userID: userID
+      }
+    );
+    return await res.data.userRole
+  } catch (error) {
+    console.log(error)
+  }
 };
 
 export const getEmail = async (userID) => {

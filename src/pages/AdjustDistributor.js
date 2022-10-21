@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import{getCookie,getRole} from '../utils/auth'
-import ShowTable from "../components/ShowTable";
+import { getCookie, getRole } from "../utils/auth";
 import {
   Card,
   Container,
@@ -12,114 +11,69 @@ import {
   Row,
   FloatingLabel,
 } from "react-bootstrap";
-
+import TransactionTable from "../components/TransactionTable";
 
 const AdjustDistributor = () => {
-  const [distributor, setDistributor] = useState();
-const[transaction,setTransaction]=useState({
-  receiverID:0,
-  amt:0,
-  senderID:0,
-  typeTrans:"",
-  comment:"",
-  btnText:"Submit",
-  userRolereceiver:"Distributor",
-  userRoleSender:""
-});
+  const [distributors, setDistributors] = useState();
+  const [transactionType, setTransactionType] = useState("");
+  const [comment, setComment] = useState("")
+  const [selectedPlayer, setSelectedPlayer] = useState(0)
+  const [amt, setAmt] = useState(0)
 
-const{amt,receiverID,typeTrans,comment,senderID,btnText,userRolereceiver,userRoleSender}=transaction;
+  const [userRole, setUserRole] = useState("")
 
+  //current user
+  const loggedUser = getCookie("token");
+  console.log("logeed in", loggedUser);
+  // const userRole = getRole(loggedUser);
+  // console.log(userRole)
 
-//current user
+  (async () => {
+    const role = await getRole(loggedUser);
+    setUserRole(role)
+  })();
 
-const loggedUser=getCookie("token");
-console.log("logeed in",loggedUser);
-const userRole=getRole(loggedUser);
-console.log("ROLE",userRole)
+  console.log(userRole)
 
   useEffect(() => {
     getAdmins();
   }, []);
 
   const getAdmins = async () => {
-    const res =  await axios.post(
+    const res = await axios.post(
       "https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/getbyrole",
       {
         userRole: "Distributor",
       }
     );
 
- 
-    setDistributor(res.data.adminsAll);
+    setDistributors(res.data.adminsAll);
   };
 
-
-  //sendinng transaction details to lamda
-
-  const handleChange = (name) => (e) => {
-    console.log(e.target.value);
-    setTransaction({
-      ...transaction,
-      [name]: e.target.value,
-     
-    });
-  };
-
-
-    const Transaction=async ()=>{
-
-      if(parseInt(amt)<=0)
-      {
-        alert("Enter correct Amount")
-      }
-      if(typeTrans==="")
-        alert("Enter type of transfer(Adjust)");
-
-        setTransaction({
-            ...transaction,
-            btnText:"Submitting..."
-          })
-        if(typeTrans==="substract")
-        {
-          let tempID=parseInt(receiverID);
-          console.log("TEMOP",tempID)
-            setTransaction({
-              ...transaction,
-              receiverID:parseInt(loggedUser),
-              senderID:parseInt(tempID)
-            })
-          
-        }else{
-          setTransaction({
-            ...transaction,
-            userRoleSender:userRole
-          })
-        }
-
-        setTransaction({
-          ...transaction,
-          btnText:"Submiting..."
-        })
-        try{
-      const res=await axios.post("https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/pointstransfer",{
-          receiverID:receiverID,
-          senderID:senderID,
-          amount:parseInt(amt),
-          comment:comment,
-          userRoleSender,
-          userRolereceiver
-      })
-
-      setTransaction({
-        ...transaction,
-        btnText:"Submitted"
-      })
-      console.log("............",res)
+  const Transaction = async () => {
+    if (parseInt(amt) <= 0) {
+      alert("Enter correct Amount");
     }
-      catch(err){
-    console.log(err)
-  }
-}
+
+    if (transactionType === "") alert("Enter type of transfer(Adjust)");
+
+    try {
+      const res = await axios.post(
+        "https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/pointstransfer",
+        {
+          loggedUser: loggedUser,
+          selectedPlayer: selectedPlayer,
+          transactionType: transactionType,
+          amount: parseInt(amt),
+          comment: comment
+        }
+      );
+
+      console.log("............", res);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <>
       <Container>
@@ -128,25 +82,27 @@ console.log("ROLE",userRole)
             <h2 className="text-center text-muted">Adjust points</h2>
           </Card.Header>
           <Card.Body>
-            <Card.Title className="text-muted pb-2">Choose Distributor</Card.Title>
+            <Card.Title className="text-muted pb-2">
+              Choose Distributor
+            </Card.Title>
 
             <Row className="g-2">
               <Col md>
                 <FloatingLabel controlId="floatingSelectGrid">
-                  <Form.Select aria-label="Floating label select example" onChange={handleChange("receiverID")}>
+                  <Form.Select
+                    aria-label="Floating label select example"
+                    onChange={(e) => setSelectedPlayer(e.target.value)}
+                  >
                     <option>Select below...</option>
-                    {!distributor? (
+                    {!distributors ? (
                       <option>No data...</option>
                     ) : (
-                        distributor.map((item, index) => (
-                        <option value={item.userID}>
-                          {item.fullName}
-                          
-                          <span >(balance:{item.balance})</span>
+                      distributors.map((item, index) => (
+                        <option key={index} value={item.userID}>
+                          {item.fullName} (balance:{item.balance})
                         </option>
                       ))
                     )}
-                    
                   </Form.Select>
                 </FloatingLabel>
               </Col>
@@ -158,7 +114,7 @@ console.log("ROLE",userRole)
                 <Form.Select
                   className="w-50"
                   aria-label="Floating label select example"
-                  onChange={handleChange("typeTrans")}
+                  onChange={(e) => setTransactionType(e.target.value)}
                 >
                   <option>Select below...</option>
                   <option value="substract">Substract</option>
@@ -172,7 +128,7 @@ console.log("ROLE",userRole)
                   controlId="floatingSelectGrid"
                   label="Enter Amount..."
                 >
-                  <Form.Control type="number"   onChange={handleChange("amt")}/>
+                  <Form.Control type="number" onChange={(e) => setAmt(e.target.value)} />
                 </FloatingLabel>
               </Col>
               <Col md></Col>
@@ -187,11 +143,20 @@ console.log("ROLE",userRole)
                   as="textarea"
                   placeholder="Leave a comment here(Optional)"
                   style={{ height: "80px" }}
-                  onChange={handleChange("comment")}
+                  onChange={(e) => setComment(e.target.value)}
                 />
               </FloatingLabel>
-              <Col md>  <Button  onClick={Transaction} className=" ml-3 pt-1 mt-2" variant="secondary" size="md">{btnText}</Button></Col>
-           
+              <Col md>
+                {" "}
+                <Button
+                  onClick={Transaction}
+                  className=" ml-3 pt-1 mt-2"
+                  variant="secondary"
+                  size="md"
+                >
+                  Submit
+                </Button>
+              </Col>
             </Row>
           </Card.Body>
         </Card>
@@ -199,7 +164,8 @@ console.log("ROLE",userRole)
 
         <br />
       </Container>
-      <ShowTable />
+
+      <TransactionTable />
     </>
   );
 };
