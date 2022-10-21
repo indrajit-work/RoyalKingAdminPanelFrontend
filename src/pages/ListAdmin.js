@@ -75,61 +75,61 @@ const ListAdmin = () => {
 
 
   return (
-    <MDBContainer>
-      <div style={{ marginTop: "80px" }}>
-        <h1 className="text-center mb-5 text-muted"> Administrators </h1>
+    // <MDBContainer>
+    //   <div style={{ marginTop: "80px" }}>
+    //     <h1 className="text-center mb-5 text-muted"> Administrators </h1>
   
      {/* <input className="mb-2" placeholder="search..."  value={filterVal} onInput={(e)=>handleFilter(e)}/> */}
     
        
-        <MDBRow>
-          <MDBCol size="12">
-            <MDBTable>
-              <MDBTableHead dark>
-                <tr>
-                  <th scope="col">User Id</th>
-                  <th scope=" col ">Email </th>
-                  <th scope=" col "> Name </th>
-                  <th scope=" col "> Balance </th>
-                  <th scope=" col ">Registered On </th>
-                  <th scope=" col ">Modify Distributor </th>
-                  <th scope=" col "> Status </th>
-                  <th scope=" col "> Blocked </th>
-                  <th scope=" col "> Verified </th>
-                </tr>
-              </MDBTableHead>
+    //     <MDBRow>
+    //       <MDBCol size="12">
+    //         <MDBTable>
+    //           <MDBTableHead dark>
+    //             <tr>
+    //               <th scope="col">User Id</th>
+    //               <th scope=" col ">Email </th>
+    //               <th scope=" col "> Name </th>
+    //               <th scope=" col "> Balance </th>
+    //               <th scope=" col ">Registered On </th>
+    //               <th scope=" col ">Modify Distributor </th>
+    //               <th scope=" col "> Status </th>
+    //               <th scope=" col "> Blocked </th>
+    //               <th scope=" col "> Verified </th>
+    //             </tr>
+    //           </MDBTableHead>
 
-              {data.length === 0 ? (
-                <MDBTableBody className="align-center mb-8">
-                  <tr>
-                    <td colspan={8} className=" text-center mb-8">
-                      {" "}
-                      Loading admins...{" "}
-                    </td>
-                  </tr>
-                </MDBTableBody>
-              ) : (
-                data.players.Items.map((item, index) => (
-                  <MDBTableBody key={index}>
-                    <tr>
-                      <td> {item.userID} </td>
-                      <td> {item.email} </td>
-                      <td>{item.fullName}</td>
-                      <td>{item.balance}</td>
-                      <td> {item.registeredOn} </td>
-                      <td> <Link to={`/admin/modify/${item.userID}/${item.deviceID}`}><Button variant="secondary">edit</Button></Link></td>
-                      <td> {item.userStatus} </td>
-                      <td> {item.blocked} </td>
-                      <td> {item.verified} </td>
-                    </tr>
-                  </MDBTableBody>
-                ))
-              )}
-            </MDBTable>
-          </MDBCol>
-        </MDBRow>
-      </div>
-    </MDBContainer>
+    //           {data.length === 0 ? (
+    //             <MDBTableBody className="align-center mb-8">
+    //               <tr>
+    //                 <td colspan={8} className=" text-center mb-8">
+    //                   {" "}
+    //                   Loading admins...{" "}
+    //                 </td>
+    //               </tr>
+    //             </MDBTableBody>
+    //           ) : (
+    //             data.players.Items.map((item, index) => (
+    //               <MDBTableBody key={index}>
+    //                 <tr>
+    //                   <td> {item.userID} </td>
+    //                   <td> {item.email} </td>
+    //                   <td>{item.fullName}</td>
+    //                   <td>{item.balance}</td>
+    //                   <td> {item.registeredOn} </td>
+    //                   <td> <Link to={`/admin/modify/${item.userID}/${item.deviceID}`}><Button variant="secondary">edit</Button></Link></td>
+    //                   <td> {item.userStatus} </td>
+    //                   <td> {item.blocked} </td>
+    //                   <td> {item.verified} </td>
+    //                 </tr>
+    //               </MDBTableBody>
+    //             ))
+    //           )}
+    //         </MDBTable>
+    //       </MDBCol>
+    //     </MDBRow>
+    //   </div>
+    // </MDBContainer>
   );
 };
 
