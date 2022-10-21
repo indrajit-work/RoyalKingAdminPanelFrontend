@@ -5,17 +5,18 @@ import styled from "styled-components";
 import { getCookie } from "../utils/auth";
 
 const DataTable = styled.div`
-  width: 80vw;
+  width: 90vw;
   height: 800px;
   padding: 3rem;
   margin: 0 auto;
 `;
 
 const userColumns = [
-    { field: "id", headerName: "Transaction ID", width: 200 },
-    { field: "amount", headerName: "Amount", width: 130 },
-    // { field: "operation", headerName: "Operation", width: 200 },
-    { field: "transactionDateReadable", headerName: "Transaction Date", width: 250 },
+  { field: "id", headerName: "Transaction ID", width: 200 },
+  { field: "transactionDateReadable", headerName: "Transaction Date", width: 250 },
+    { field: "senderID", headerName: "Sender", width: 130 },
+    { field: "recieverID", headerName: "Receiver", width: 200 },
+    { field: "amount", headerName: "Amount", width: 200 },
     { field: "comment", headerName: "Comment", width: 300, sortable: false }
 ]
 
