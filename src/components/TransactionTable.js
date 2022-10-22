@@ -12,7 +12,7 @@ const DataTable = styled.div`
 `;
 
 const userColumns = [
-  { field: "id", headerName: "Transaction ID", width: 200 },
+  { field: "id", headerName: "Transaction ID", width: 200, sortingOrder: ['desc', 'asc'] },
   { field: "transactionDateReadable", headerName: "Transaction Date", width: 250 },
     { field: "senderID", headerName: "Sender", width: 130 },
     { field: "recieverID", headerName: "Receiver", width: 200 },
@@ -21,7 +21,15 @@ const userColumns = [
 ]
 
 const TransactionTable = ({loggedUser}) => {
-    const [transactionList, setTransactionList] = useState([])
+  const [transactionList, setTransactionList] = useState([])
+  const [pageSize, setPageSize] = useState(10)
+
+  const [sortModel, setSortModel] = useState([
+    {
+      field: 'id',
+      sort: 'desc',
+    },
+  ]);
 
   const bossID = getCookie("token");
 //   console.log(bossID)
@@ -61,9 +69,21 @@ const TransactionTable = ({loggedUser}) => {
         <DataGrid
           rows={transactionList}
           columns={userColumns}
-          pageSize={20}
-          rowsPerPageOptions={[5]}
+          rowsPerPageOptions={[10, 20, 30, 40, 50]}
+          pageSize={pageSize}
+          onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
           checkboxSelection={false}
+          // onSortModelChange={(model) => setSortModel(model)}
+          initialState={{
+            sorting: {
+              sortModel: [
+                {
+                  field: 'id',
+                  sort: 'desc',
+                },
+              ],
+            },
+          }}
         ></DataGrid>
       </DataTable>
     </div>

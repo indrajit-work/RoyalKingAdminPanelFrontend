@@ -115,6 +115,11 @@ export const SidebarData = [
     ]
   },
   {
+    title: 'Users List',
+    path: '/usersList',
+    icon: <FaIcons.FaEnvelopeOpenText />,
+  },
+  {
     title: 'Adjust Points',
     // path: '',
     icon: <FaIcons.FaCartPlus />,
@@ -172,5 +177,6 @@ export const SidebarData = [
     title: 'Broadcast Message',
     path: '/broadcastMessage',
     icon: <FaIcons.FaEnvelopeOpenText />,
-  }
+  },
+  
 ];

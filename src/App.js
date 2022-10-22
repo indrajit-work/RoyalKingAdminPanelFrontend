@@ -30,6 +30,7 @@ import GameResult from "./pages/GameResult";
 import RegAdmin from "./pages/RegAdmin";
 import ListAdmin from "./pages/ListAdmin";
 import AdminModify from "./pages/AdminModify";
+import UserTable from "./pages/UserTable";
 
 function App() {
   return (
@@ -56,6 +57,13 @@ function App() {
             <Dashboard/>
 
           </Route>
+
+          <Route path="/usersList" exact>
+            <Sidebar/>
+            <UserTable/>
+
+          </Route>
+
           <Route path="/profile/changepassword" exact>
             <Sidebar/>
             <ChangePassword/>

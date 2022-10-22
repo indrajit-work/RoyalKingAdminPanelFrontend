@@ -1,116 +1,99 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import {
-  MDBTable,
-  MDBTableHead,
-  MDBTableBody,
-  MDBRow,
-  MDBCol,
-  MDBContainer,
-  MDBBtn,
-  MDBBtnGroup,
-} from "mdb-react-ui-kit";
+import { DataGrid } from "@mui/x-data-grid";
+import styled from "styled-components";
+import { userColumns } from "../utils/TableDataSource";
 
-import { Button } from "react-bootstrap";
-const ListPlayer = () => {
-  const [data, setData] = useState([]);
-  const [value, setValue] = useState([]);
-  const [filterVal, setFilterVal] = useState();
+const DataTable = styled.div`
+  height: 400px;
+  padding: 0 3rem;
+  margin: 0 auto;
+`;
+
+const ModifyLink = styled.div`
+  background-color: steelblue;
+  color: #fff;
+  padding: 8px 2rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+  &:hover {
+    background-color: white;
+    color: steelblue;
+    border: 1px solid steelblue;
+  }
+`;
+
+const ListPlayer = ({userType}) => {
+  const [userList, setUserList] = useState([]);
+  const [pageSize, setPageSize] = useState(5);
+
+  const modifyColumn = [
+    {
+      field: "modify",
+      headerName: `Modify ${userType}`,
+      width: 170,
+      sortable: false,
+      filterable: false,
+      renderCell: (params) => {
+        return (
+          <Link
+            to={`/player/modify/${userList.userID}/${userList.deviceID}`}
+            style={{ textDecoration: "none" }}
+          >
+            <ModifyLink>Edit</ModifyLink>
+          </Link>
+        );
+      },
+    },
+  ];
+
   useEffect(() => {
     loadUserData();
   }, []);
 
   const loadUserData = async () => {
-    return await axios
-      .post(
+    try {
+      const res = await axios.post(
         `https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/getplayers`,
         {
           userRole: "PLAYER",
         }
-      )
-      .then((response) => {
-        setData(response.data);
-        setValue(response.data);
-      })
-      .catch((err) => console.error("Erroror", err));
-  };
-  console.log("data:", data.users);
-
-  const handleFilter = (e) => {
-    console.log(e.target.value);
-    if (e.target.value === "") {
-      setData(value);
-    } else {
-      const filterResult = data.users.filter((item) =>
-        item.fullName.includes(e.target.value)
       );
-      setData(filterResult);
-      // console.log("Result",filterResult)
+      setUserList(
+        res.data?.players?.Items?.map((user) => {
+          return {
+            ...user,
+            id: user.userID,
+          };
+        })
+      );
+
+      console.log("users: ", userList);
+    } catch (error) {
+      console.log(error);
     }
-    setFilterVal(e.target.value);
   };
 
   return (
-    <MDBContainer>
-      <div style={{ marginTop: "80px" }}>
-        <h1 className="text-center mb-5 text-muted"> Players </h1>
-
-        {/* <input className="mb-2" placeholder="search..."  value={filterVal} onInput={(e)=>handleFilter(e)}/> */}
-
-        <MDBRow>
-          <MDBCol size="12">
-            <MDBTable>
-              <MDBTableHead dark>
-                <tr>
-                  <th scope="col">User Id</th>
-                  <th scope=" col "> User Role </th>
-                  <th scope=" col ">Email </th>
-                  <th scope=" col "> Name </th>
-                  <th scope=" col ">Balance</th>
-                  <th scope=" col ">Modify Player</th>
-                  <th scope=" col "> Status </th>
-                  <th scope=" col "> Blocked </th>
-                </tr>
-              </MDBTableHead>
-
-              {data.length === 0 ? (
-                <MDBTableBody className="align-center mb-8">
-                  <tr>
-                    <td colspan={8} className=" text-center mb-8">
-                      {" "}
-                      Loading Players...{" "}
-                    </td>
-                  </tr>
-                </MDBTableBody>
-              ) : (
-                data.players.Items.map((item, index) => (
-                  <MDBTableBody key={index}>
-                    <tr>
-                      <td> {item.userID} </td>
-                      <td> {item.userRole} </td>
-                      <td> {item.email} </td>
-                      <td>{item.fullName}</td>
-                      <td> {item.balance} </td>
-                      <td>
-                        {" "}
-                        <Link
-                          to={`/player/modify/${item.userID}/${item.deviceID}`}
-                        >
-                          <Button variant="secondary">edit </Button>
-                        </Link>
-                      </td>
-                      <td> {item.userStatus} </td>
-                      <td> {item.blocked} </td>
-                    </tr>
-                  </MDBTableBody>
-                ))
-              )}
-            </MDBTable>
-          </MDBCol>
-        </MDBRow>
-      </div>
-    </MDBContainer>
+    <>
+      <h1 className="text-center my-5 text-muted">{userType}s</h1>
+      {userList?.length === 0 ? (
+        <p style={{ textAlign: "center" }}>Loading...</p>
+      ) : (
+        <DataTable>
+          <DataGrid
+            rows={userList}
+            columns={userColumns.concat(modifyColumn)}
+            rowsPerPageOptions={[5, 10, 20]}
+            pageSize={pageSize}
+            onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+            checkboxSelection={false}
+          ></DataGrid>
+        </DataTable>
+      )}
+    </>
   );
 };
 
