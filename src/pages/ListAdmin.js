@@ -7,7 +7,8 @@ import { getCookie, getRole } from "../utils/auth";
 import { userColumns } from "../utils/TableDataSource";
 
 const DataTable = styled.div`
-  height: 400px;
+  min-height: 500px;
+  height: 80vh;
   padding: 0 3rem;
   margin: 0 auto;
 `;
@@ -26,9 +27,10 @@ const ModifyLink = styled.div`
   }
 `;
 
-const ListAdmin = ({ userType }) => {
+const ListAdmin = ({ userType, loggedUser, loggedUserRole }) => {
   const [userList, setUserList] = useState([]);
-  const [pageSize, setPageSize] = useState(5)
+  const [pageSize, setPageSize] = useState(10)
+
   const history = useHistory();
 
   const modifyColumn = [
@@ -51,42 +53,73 @@ const ListAdmin = ({ userType }) => {
     },
   ];
 
-  useEffect(() => {
-    const getSUPERADMIN = async (hsitory) => {
-      const userID = getCookie("token");
-      const loggedRole = await getRole(parseInt(userID));
-      console.log("ROLE LOGGED IN", loggedRole);
-      if (loggedRole !== "SUPERADMIN") {
+  //current user
+  // useEffect(() => {
+  //   const getUserRole = async () => {
+  //     const loggedUser = getCookie("token");
+  //     const loggedUserRole = await getRole(parseInt(loggedUser));
+  //     console.log("logeed in", loggedUser);
+  //     console.log("ROLE", loggedUserRole);
+  //   }
+
+  //   getUserRole()
+  // }, [])
+
+  //current user
+  // const loggedUser = getCookie("token");
+  // console.log("logeed in", loggedUser);
+
+  // (async () => {
+  //   const role = await getRole(loggedUser);
+  //   setUserRole(role)
+  // })();
+
+  // console.log("ROLE LOGGED IN", userRole);
+
+  // useEffect(() => {
+    // const getSUPERADMIN = async (hsitory) => {
+    //   const userID = getCookie("token");
+
+      // if (loggedRole !== "SUPERADMIN") {
         // alert("UNAUTHORIZED ACCESS")
-        history.push("/distributor/list");
-      }
-    };
-    getSUPERADMIN(history);
+      //   history.push("/distributor/list");
+      // }
+    // };
+    // getSUPERADMIN(history);
+    // loadUserData();
+  // }, []);
+
+  useEffect(() => {
     loadUserData();
   }, []);
 
   const loadUserData = async () => {
     try {
       const res = await axios.post(
-        `https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/getplayers`,
+        `https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/usersunderme`,
         {
-          userRole: "ADMIN",
+          userID: loggedUser,
         }
       );
       setUserList(
-        res.data?.players?.Items?.map((user) => {
+        res.data?.userUnderMe.map((user) => {
+          console.log(user)
           return {
             ...user,
             id: user.userID,
           };
         })
       );
-
+      console.log("res.data: ", res.data.userUnderMe);
       console.log("users: ", userList);
     } catch (error) {
       console.log(error);
     }
   };
+
+  console.log(userList)
+  const adminList = userList.filter(user => user.userRole === 'ADMIN')
+  console.log(adminList);
 
   return (
     <>
@@ -96,7 +129,7 @@ const ListAdmin = ({ userType }) => {
         :
         <DataTable>
             <DataGrid
-            rows={userList}
+            rows={adminList}
             columns={userColumns.concat(modifyColumn)}
             rowsPerPageOptions={[5, 10, 20]}
             pageSize={pageSize}

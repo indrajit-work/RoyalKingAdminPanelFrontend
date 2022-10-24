@@ -6,7 +6,8 @@ import styled from "styled-components";
 import { userColumns } from "../utils/TableDataSource";
 
 const DataTable = styled.div`
-  height: 400px;
+  min-height: 500px;
+  height: 80vh;
   padding: 0 3rem;
   margin: 0 auto;
 `;
@@ -25,7 +26,7 @@ const ModifyLink = styled.div`
   }
 `;
 
-const ListPlayer = ({userType}) => {
+const ListPlayer = ({userType, loggedUser, loggedUserRole}) => {
   const [userList, setUserList] = useState([]);
   const [pageSize, setPageSize] = useState(5);
 
@@ -56,13 +57,13 @@ const ListPlayer = ({userType}) => {
   const loadUserData = async () => {
     try {
       const res = await axios.post(
-        `https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/getplayers`,
+        `https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/usersunderme`,
         {
-          userRole: "PLAYER",
+          userID: loggedUser,
         }
       );
       setUserList(
-        res.data?.players?.Items?.map((user) => {
+        res.data?.userUnderMe.map((user) => {
           return {
             ...user,
             id: user.userID,
@@ -76,6 +77,10 @@ const ListPlayer = ({userType}) => {
     }
   };
 
+  console.log(userList);
+  const playerList = userList.filter(user => user.userRole === 'PLAYER')
+  console.log(playerList);
+
   return (
     <>
       <h1 className="text-center my-5 text-muted">{userType}s</h1>
@@ -84,7 +89,7 @@ const ListPlayer = ({userType}) => {
       ) : (
         <DataTable>
           <DataGrid
-            rows={userList}
+            rows={playerList}
             columns={userColumns.concat(modifyColumn)}
             rowsPerPageOptions={[5, 10, 20]}
             pageSize={pageSize}

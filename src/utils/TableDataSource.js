@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import {ImBlocked} from 'react-icons/im'
+import {MdVerified} from 'react-icons/md'
 
 const BlockYes = styled.div`
     background-color: #c35557;
@@ -22,18 +22,27 @@ export const userColumns = [
     { field: "email", headerName: "Email", width: 280, sortable: false},
     { field: "fullName", headerName: "Name", width: 250, sortable: false},
     { field: "balance", headerName: "Balance", width: 140}, 
-    { field: "verified", headerName: "Verified", width: 120, sortable: false},
+    { field: "verified", headerName: "Verified", width: 120, sortable: false, 
+        renderCell : (params) => {
+            if (params.row.verified) {
+                return(
+                    <MdVerified style={{color: '#00b7ff', fontSize: '1.2rem'}} />
+                )
+                }else{
+                    return(
+                    <p></p>
+                )
+            }
+        }
+    },
     { field: "blocked", headerName: "Blocked", width: 120, sortable: false, 
         renderCell : (params) => {
-            console.log(params)
             if (params.row.blocked === 'yes') {
                 return(
                     <BlockYes>Yes</BlockYes>
-                    // <ImBlocked style={{color: 'red'}} title='yes' />
                     )
                 }else{
                     return(
-                    // <ImBlocked style={{color: 'grey'}} title='no' />
                     <BlockNo>No</BlockNo>
                 )
             }

@@ -58,7 +58,7 @@ function App() {
 
           </Route>
 
-          <Route path="/usersList" exact>
+          <Route path="/userManager" exact>
             <Sidebar/>
             <UserTable/>
 

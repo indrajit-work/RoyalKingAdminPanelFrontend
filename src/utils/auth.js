@@ -46,7 +46,7 @@ export const getRole = async (userID) => {
         userID: userID
       }
     );
-    return await res.data.userRole
+    return res.data.userRole
   } catch (error) {
     console.log(error)
   }

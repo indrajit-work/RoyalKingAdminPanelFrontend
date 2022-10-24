@@ -25,40 +25,77 @@ const Button = styled.button`
 const UserTable = () => {
   const roles = ["Admin", "Distributor", "Stokist", "Player"]
   const [userRole, setUserRole] = useState('')
+  const [loggedUserRole, setloggedUserRole] = useState('')
 
   //current user
+  // useEffect(() => {
+  //   const getUserRole = async () => {
+  //     const loggedUser = getCookie("token");
+  //     const loggedUserRole = await getRole(parseInt(loggedUser));
+  //     console.log("logeed in", loggedUser);
+  //     console.log("ROLE", loggedUserRole);
+  //   }
+
+  //   getUserRole()
+  // }, [])
+
   const loggedUser = getCookie("token");
   console.log("logeed in", loggedUser);
-  const loggedUserRole = getRole(loggedUser);
-  console.log("ROLE", loggedUserRole);
 
-  useEffect(async () => {
-    await getRole()
-  }, [])
+  (async () => {
+    const role = await getRole(loggedUser);
+    setloggedUserRole(role)
+  })();
+
+  console.log("loggedUser", loggedUser, "loggedUserRole", loggedUserRole)
   
 
   return (
     <>
       <ButtonContainer>
-        {roles.map((role, i) => (
+        {loggedUserRole === 'SUPERADMIN' && roles.map((role, i) => (
           <Button key={i} onClick={() => setUserRole(role)}>
             {role}
           </Button>
         ))}
+
+        {loggedUserRole === 'ADMIN' && roles.slice(1).map((role, i) => (
+          <Button key={i} onClick={() => setUserRole(role)}>
+            {role}
+          </Button>
+        ))}
+
+        {loggedUserRole === 'Distributor' && roles.slice(2).map((role, i) => (
+          <Button key={i} onClick={() => setUserRole(role)}>
+            {role}
+          </Button>
+        ))}
+
+        {loggedUserRole === 'STOKIST' && roles.slice(3).map((role, i) => (
+          <Button key={i} onClick={() => setUserRole(role)}>
+            {role}
+          </Button>
+        ))}
+
+        {/* {roles.map((role, i) => (
+          <Button key={i} onClick={() => setUserRole(role)}>
+            {role}
+          </Button>
+        ))} */}
       </ButtonContainer>
 
       <div>
         {userRole === "Admin" && (
-          <ListAdmin userType="Admin" />
+          <ListAdmin userType="ADMIN" loggedUser={loggedUser} loggedUserRole={loggedUserRole} />
         )}
         {userRole === "Distributor" && (
-          <ListDistributor  userType="Distributor" />
+          <ListDistributor  userType="Distributor" loggedUser={loggedUser} loggedUserRole={loggedUserRole} />
         )}
         {userRole === "Stokist" && (
-          <StokistList userType="Stokist" />
+          <StokistList userType="Stokist" loggedUser={loggedUser} loggedUserRole={loggedUserRole} />
         )}
         {userRole === "Player" && (
-          <ListPlayer userType="Player" />
+          <ListPlayer userType="Player" loggedUser={loggedUser} loggedUserRole={loggedUserRole} />
         )}
       </div>
     </>

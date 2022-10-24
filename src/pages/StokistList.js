@@ -6,7 +6,8 @@ import styled from "styled-components";
 import { userColumns } from "../utils/TableDataSource";
 
 const DataTable = styled.div`
-  height: 400px;
+  min-height: 500px;
+  height: 80vh;
   padding: 0 3rem;
   margin: 0 auto;
 `;
@@ -25,7 +26,7 @@ const ModifyLink = styled.div`
   }
 `;
 
-const ListDistributor = ({userType}) => {
+const ListDistributor = ({userType, loggedUser, loggedUserRole}) => {
   const [userList, setUserList] = useState([]);
   const [pageSize, setPageSize] = useState(5);
 
@@ -56,13 +57,13 @@ const ListDistributor = ({userType}) => {
   const loadUserData = async () => {
     try {
       const res = await axios.post(
-        `https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/getplayers`,
+        `https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/usersunderme`,
         {
-          userRole: "STOKIST",
+          userID: loggedUser,
         }
       );
       setUserList(
-        res.data?.players?.Items?.map((user) => {
+        res.data?.userUnderMe.map((user) => {
           return {
             ...user,
             id: user.userID,
@@ -71,10 +72,15 @@ const ListDistributor = ({userType}) => {
       );
 
       console.log("users: ", userList);
+     
     } catch (error) {
       console.log(error);
     }
   };
+
+  console.log(userList);
+  const stokistList = userList.filter(user => user.userRole === 'STOKIST')
+  console.log(stokistList);
 
   return (
     <>
@@ -84,7 +90,7 @@ const ListDistributor = ({userType}) => {
       ) : (
         <DataTable>
           <DataGrid
-            rows={userList}
+            rows={stokistList}
             columns={userColumns.concat(modifyColumn)}
             rowsPerPageOptions={[5, 10, 20]}
             pageSize={pageSize}
