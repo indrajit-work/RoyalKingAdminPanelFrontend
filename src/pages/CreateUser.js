@@ -1,35 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import './Modify.css'
-import {
-  Card,
-  Form,
-  Button,
-  Row,
-  InputGroup,
-  Container,
-  Alert,
-  Col,
-} from "react-bootstrap";
+import { Card, Form, Button, Row, Container, Alert } from "react-bootstrap";
 import "./RegDis.css";
 import axios from "axios";
-import { getCookie,getRole,getEmail } from "../utils/auth";
+import { getCookie, getRole } from "../utils/auth";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import * as AiIcons from "react-icons/ai";
 import "./Icon.css";
 import { TiTick, TiTimes } from "react-icons/ti";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'
 
-const ModifyStokist = () => {
+const CreateUser = () => {
   const [value, onChanage] = useState(new Date());
-  const [admins, setAdmins] = useState();
-  const [usernameIsvalid, setUsernameIsvalid] = useState(null)
-  const [userNameList, setUserNameList] = useState([])
-  const [loggedUserRole, setloggedUserRole] = useState('')
-
+  const [bossInfo, setBossInfo] = useState();
+  const [usernameIsvalid, setUsernameIsvalid] = useState(null);
   const [user, setUser] = useState({
     userName: "",
-    email: "",
     password: "",
     verifyPassword: "",
     userRole: "",
@@ -38,28 +25,22 @@ const ModifyStokist = () => {
     fullName: "",
     phNo: 0,
     buttonText: "Submit",
-    resetDevice: false,
   });
+  const [userNameList, setUserNameList] = useState([]);
+  const [loggedUserRole, setloggedUserRole] = useState('')
+  const roleList = ['Admin', 'Distributor', 'Stokist', 'Player']
 
   const {
     userName,
-    email,
     password,
     verifyPassword,
     userRole,
     commPercent,
-    dateOfbirth,
     bossID,
     fullName,
     phNo,
     buttonText,
-    resetDevice,
   } = user;
-
-  const params = useParams();
-  const userID = params.userID;
-  const deviceID = params.deviceID;
-
 
   const loggedUser = getCookie("token");
   console.log("logeed in", loggedUser);
@@ -71,84 +52,60 @@ const ModifyStokist = () => {
 
   console.log(loggedUserRole);
 
-  //geting admins
+  console.log(userRole)
+
   useEffect(() => {
-    getAdmins();
-    // getEmailOptional()
+    getBossInfo();
   }, []);
 
-
-
-//   const getEmailOptional=async ()=>{
-//     const optionalEMail=await getEmail(parseInt(userID));
-//     setUser({
-//       ...user,
-//       email:optionalEMail
-//     })
-//     console.log(email);
-// }
-  const getAdmins = async () => {
+  const getBossInfo = async () => {
     const res = await axios.post(
       "https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/getbyrole",
       {
-        userRole: "Distributor",
+        userRole: userRole,
       }
     );
-    setAdmins(res.data.adminsAll);
+    setBossInfo(res.data.adminsAll);
+  };
+  console.log(bossInfo)
+
+  // fetch all the users data from DB and store the username in state
+  const fetchuserList = async () => {
+    let userArr = []
+    await fetch(
+      "https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/getallusers"
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        data.users.map(user =>
+        // console.log([user?.userName])
+          setUserNameList((prev) => [...prev, user?.userName])
+        );
+      });
   };
 
-  //reset device handler
-  const handleDeviceReset = (e) => {
-    console.log("rset");
-    e.target.value = "";
-    setUser({
-      ...user,
-      resetDevice: true,
-      deviceID: "",
-    });
+  useEffect(() => {
+    fetchuserList();
+  }, []);
+//   console.log(userNameList)
+
+  const usernameCheckHandler = (input) => {
+    setUsernameIsvalid(true);
+
+    if (userNameList.includes(input)) {
+      setUsernameIsvalid(false);
+      console.log("wrong");
+    }
+    setUser({ ...user, userName: input });
   };
 
   const handleChange = (name) => (e) => {
+    console.log(e.target.value);
     setUser({
       ...user,
       [name]: e.target.value,
     });
   };
-
-  //handle block ....................................
-  const [block, setBlock] = useState({
-    status: "no",
-    btnText: "block",
-  });
-
-  const { status, btnText } = block;
-
-  const handleBlockReset = (e) => {
-    if (status === "no") {
-      setBlock({
-        ...block,
-        status: "Yes",
-        btnText: "Unblock",
-      });
-    }
-
-    if (status === "Yes") {
-      setBlock({
-        ...block,
-        status: "no",
-        btnText: "block",
-      });
-    }
-  };
-
-  const usernameCheckHandler = (input) => {
-    setUsernameIsvalid(true)
-          
-    if(userNameList.includes(input)){
-        setUsernameIsvalid(false)
-    }
-    setUser({...user, userName: input})
-  }
 
   const onHandleSubmit = async (e) => {
     e.preventDefault();
@@ -157,43 +114,36 @@ const ModifyStokist = () => {
       alert("Passwords don't match(password and verify Password)");
       return;
     }
-    if (phNo.length !== 10) {
-      alert("Invalid Phone number");
-      return;
-    }
     setUser({ ...user, buttonText: "Submitting...." });
-
     try {
       const res = await axios.post(
-        `https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/modifyuser`,
+        `https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/createuser`,
         {
           userName,
-          email,
-          userID,
           password,
+          userRole,
           commPercent,
           bossID,
           fullName,
           phone: phNo,
           dateOfbirth: value,
-          resetDevice,
-          blocked:status
         }
       );
 
       console.log("Submited:...............", res);
       setUser({
+        ...user,
         userName: "",
         email: "",
         password: "",
         verifyPassword: "",
-        userRole,
         commPercent: "",
         bossID: "",
         fullName: "",
         phNo: 0,
         buttonText: "Submited",
       });
+      toast.success("User added successfully")
     } catch (error) {
       console.log("Error:", error);
       setUser({
@@ -216,49 +166,80 @@ const ModifyStokist = () => {
   return (
     <Container>
       <Row>
-        <Card className="mt-4 cardWidth shadow-lg">
+        <Card
+          border="secondary"
+          style={{ width: "68rem" }}
+          className="m-auto mt-5  shadow-lg"
+        >
           <Card.Header className="text-muted font-weight-bold">
-            <h4>Modify Stokist</h4>
+            Register New User
           </Card.Header>
           <Card.Body>
             <h4 className="text-muted text-center">Login Info</h4>
             <Form onSubmit={onHandleSubmit}>
-
               {/* username */}
-              <Form.Group controlId="formBasicPassword" className="pb-2" style={{position: 'relative'}}>
+              <Form.Group
+                controlId="formBasicPassword"
+                className="pb-2"
+                style={{ position: "relative" }}
+              >
                 <Form.Label className="text-muted font-weight-bold">
-                userName
+                  userName
                 </Form.Label>
                 <Form.Control
                   type="text"
                   onChange={(e) => usernameCheckHandler(e.target.value)}
-                  autocomplete='off'
+                  autocomplete="off"
                   required
+                  name='userName'
                   value={userName}
                 />
-                {!usernameIsvalid && userName.length !== 0 && 
-                <>
-                  <TiTimes style={{color: 'red', position: 'absolute', right: '1%', top: '37.5%'}} />
-                  <p style={{color: 'red', fontSize: '12px', fontWeight: '500'}}><span style={{fontWeight: 'bold'}}>{userName}</span> is already taken</p>
-                </>}
-                {usernameIsvalid && userName.length > 0 && 
-                <>
-                  <TiTick style={{color: 'green', position: 'absolute', right: '1%', top: '37.5%'}} />
-                  <p style={{color: 'green', fontSize: '12px', fontWeight: '500'}}><span style={{fontWeight: 'bold'}}>{userName}</span> is available</p>
-                </>}
+                {!usernameIsvalid && userName.length !== 0 && (
+                  <>
+                    <TiTimes
+                      style={{
+                        color: "red",
+                        position: "absolute",
+                        right: "1%",
+                        top: "37.5%",
+                      }}
+                    />
+                    <p
+                      style={{
+                        color: "red",
+                        fontSize: "12px",
+                        fontWeight: "500",
+                      }}
+                    >
+                      <span style={{ fontWeight: "bold" }}>{userName}</span> is
+                      already taken
+                    </p>
+                  </>
+                )}
+                {usernameIsvalid && userName.length > 0 && (
+                  <>
+                    <TiTick
+                      style={{
+                        color: "green",
+                        position: "absolute",
+                        right: "1%",
+                        top: "37.5%",
+                      }}
+                    />
+                    <p
+                      style={{
+                        color: "green",
+                        fontSize: "12px",
+                        fontWeight: "500",
+                      }}
+                    >
+                      <span style={{ fontWeight: "bold" }}>{userName}</span> is
+                      available
+                    </p>
+                  </>
+                )}
               </Form.Group>
 
-              <Form.Group controlId="formBasicPassword" className="pb-2">
-                <Form.Label className="text-muted font-weight-bold">
-                  Email
-                </Form.Label>
-                <Form.Control
-                  type="email"
-                  onChange={handleChange("email")}
-                  required
-                  value={email}
-                />
-              </Form.Group>
               <Form.Group controlId="formBasicPassword" className="pb-2">
                 <Form.Label className="text-muted font-weight-bold">
                   Password
@@ -266,6 +247,7 @@ const ModifyStokist = () => {
                 <Form.Control
                   type="password"
                   onChange={handleChange("password")}
+                  name='password'
                   value={password}
                   required
                 />
@@ -278,6 +260,7 @@ const ModifyStokist = () => {
                 <Form.Control
                   type="password"
                   onChange={handleChange("verifyPassword")}
+                  name='verifyPassword'
                   value={verifyPassword}
                   required
                 />
@@ -287,10 +270,26 @@ const ModifyStokist = () => {
                 <Form.Label className="text-muted font-weight-bold pt-2">
                   Role
                 </Form.Label>
-                <Form.Control as="select" className="disable" disabled>
-                  <option>Stokist</option>
+                <Form.Control as="select" name='userRole'>
+                  <option value="" disabled selected>Select below...</option>
+                  {loggedUserRole === 'SUPERADMIN' && roleList.map((role, i) => (
+                    <option key={i} value={role}>{role}</option>
+                  ))}
+                  {loggedUserRole === 'ADMIN' && roleList.slice(1).map((role, i) => (
+                    <option key={i} value={role}>{role}</option>
+                  ))}
+                  {loggedUserRole === 'Distributor' && roleList.slice(2).map((role, i) => (
+                    <option key={i} value={role}>{role}</option>
+                  ))}
+                  {loggedUserRole === 'STOKIST' && roleList.slice(3).map((role, i) => (
+                    <option key={i} value={role}>{role}</option>
+                  ))}
+                  {loggedUserRole === 'PLAYER' && roleList.slice(4).map((role, i) => (
+                    <option key={i} value={role}>{role}</option>
+                  ))}
                 </Form.Control>
               </Form.Group>
+
               <Form.Group>
                 <Form.Label className="text-muted font-weight-bold pt-3">
                   Commision percentage(%)
@@ -298,89 +297,32 @@ const ModifyStokist = () => {
                 <Form.Control
                   type="number"
                   onChange={handleChange("commPercent")}
+                  name='commPercent'
                   value={commPercent}
                   required
                 />
               </Form.Group>
-              <Form.Label className="text-muted font-weight-bold pt-3">
-                Device ID
-              </Form.Label>
-              <InputGroup className>
-                {!resetDevice ? (
-                  <Form.Control
-                    placeholder="Recipient's username"
-                    value={deviceID}
-                    disabled
-                    aria-label="Recipient's username"
-                    aria-describedby="basic-addon2"
-                  />
-                ) : (
-                  <Form.Control
-                    placeholder="Reset Done"
-                    value={""}
-                    disabled
-                    aria-label="Recipient's username"
-                    aria-describedby="basic-addon2"
-                  />
-                )}
-                <InputGroup.Text id="basic-addon2">
-                  <Button variant="secondary" onClick={handleDeviceReset}>
-                    Reset
-                  </Button>
-                </InputGroup.Text>
-              </InputGroup>
-
               <Form.Group>
                 <Form.Label className="text-muted font-weight-bold pt-3">
                   Boss Id
                 </Form.Label>
                 <Form.Select
                   onChange={handleChange("bossID")}
+                  name='bossID'
                   aria-label="Floating label select example"
-                  value={bossID}
                 >
-                  <option>Select below...</option>
-                  {!admins ? (
+                  <option value="" disabled selected>Select below...</option>
+                  {!bossInfo ? (
                     <option>No data...</option>
                   ) : (
-                    admins.map((item, index) => (
-                      <option value={item.userID}>
-                        {item.fullName}
-
-                        <span>(userID:{item.userID})</span>
+                    bossInfo.map((item, index) => (
+                      <option key={index} value={item.userID}>
+                        {item.fullName} (UserID:{item.userID})
                       </option>
                     ))
                   )}
                 </Form.Select>
               </Form.Group>
-              <Form.Label className="text-muted font-weight-bold pt-3">
-                Block Status
-              </Form.Label>
-              <InputGroup className>
-                {true ? (
-                  <Form.Control
-                    placeholder="Recipient's username"
-                    value={status}
-                    disabled
-                    aria-label="Recipient's username"
-                    aria-describedby="basic-addon2"
-                  />
-                ) : (
-                  <Form.Control
-                    placeholder="Reset Done"
-                    value={""}
-                    disabled
-                    aria-label="Recipient's username"
-                    aria-describedby="basic-addon2"
-                  />
-                )}
-                <InputGroup.Text id="basic-addon2">
-                  <Button variant="secondary" onClick={handleBlockReset}>
-                    {btnText}
-                  </Button>
-                </InputGroup.Text>
-              </InputGroup>
-
               <br />
               <br />
               <hr style={{ color: "black" }} />
@@ -393,6 +335,7 @@ const ModifyStokist = () => {
                 <Form.Control
                   type="text"
                   onChange={handleChange("fullName")}
+                  name='fullName'
                   value={fullName}
                   required
                 />
@@ -404,7 +347,7 @@ const ModifyStokist = () => {
                 <Form.Control
                   type="number"
                   onChange={handleChange("phNo")}
-                  name="phNo"
+                  name='phNo'
                   value={phNo}
                   required
                 />
@@ -426,8 +369,9 @@ const ModifyStokist = () => {
           </Card.Body>
         </Card>
       </Row>
+      <ToastContainer />
     </Container>
   );
 };
 
-export default ModifyStokist;
+export default CreateUser;

@@ -7,7 +7,7 @@ import * as DiIcons from "react-icons/di";
 import { SidebarData } from "./SidebarData";
 import SubMenu from "./SubMenu";
 import { IconContext } from "react-icons/lib";
-import { logout } from "../utils/auth";
+import { getCookie, getRole, logout } from "../utils/auth";
 import "./Sidebar.css"
 import {   BsBoxArrowInLeft } from "react-icons/bs";
 const Nav = styled.div`
@@ -47,8 +47,19 @@ const SidebarWrap = styled.div`
 
 const Sidebar = () => {
   const [sidebar, setSidebar] = useState(true);
+  const [userRole, setUserRole] = useState('')
+
   const history = useHistory();
   const showSidebar = () => setSidebar(!sidebar);
+
+  //current user
+  const loggedUser = getCookie("token");
+  console.log("logeed in", loggedUser);
+
+  (async () => {
+    const role = await getRole(loggedUser);
+    setUserRole(role)
+  })();
 
 const hideSideBar=()=>{
   setSidebar(false)
@@ -73,7 +84,10 @@ const hideSideBar=()=>{
             <NavIcon to="#" className="logo">
               <BsBoxArrowInLeft onClick={showSidebar} />
             </NavIcon>
-            {SidebarData.map((item, index) => {
+            {userRole !== 'SUPERADMIN' && SidebarData.slice(0, 5).map((item, index) => {
+              return <SubMenu showSide={hideSideBar} showSideBar={showSidebar} item={item} key={index} />;
+            })}
+           {userRole === 'SUPERADMIN' && SidebarData.map((item, index) => {
               return <SubMenu showSide={hideSideBar} showSideBar={showSidebar} item={item} key={index} />;
             })}
           </SidebarWrap>

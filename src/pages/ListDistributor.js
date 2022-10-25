@@ -59,9 +59,9 @@ const ListDistributor = ({ userType, loggedUser, loggedUserRole }) => {
       console.log(error);
     }
   };
-  console.log(userList)
+  // console.log(userList)
   const distributorList = userList.filter(user => user.userRole === 'Distributor')
-  console.log(distributorList);
+  // console.log(distributorList);
 
   const modifyColumn = [
     {
@@ -72,12 +72,14 @@ const ListDistributor = ({ userType, loggedUser, loggedUserRole }) => {
       filterable: false,
       renderCell: (params) => {
         return (
-          <Link
-            to={`/distributor/modify/${userList.userID}/${userList.deviceID}`}
-            style={{ textDecoration: "none" }}
-          >
-            <ModifyLink>Edit</ModifyLink>
-          </Link>
+          distributorList.filter(distributor => distributor.userID === params.id).map((user) => (
+            <Link
+              to={`/editUser/${user.userID}/${user.deviceID ? user.deviceID : undefined}`}
+              style={{ textDecoration: "none" }}
+            >
+              <ModifyLink>Edit</ModifyLink>
+            </Link>
+          ))
         );
       },
     },

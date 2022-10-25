@@ -39,12 +39,14 @@ const ListDistributor = ({userType, loggedUser, loggedUserRole}) => {
       filterable: false,
       renderCell: (params) => {
         return (
-          <Link
-            to={`/stokist/modify/${userList.userID}/${userList.deviceID}`}
-            style={{ textDecoration: "none" }}
-          >
-            <ModifyLink>Edit</ModifyLink>
-          </Link>
+          stokistList.filter(stokist => stokist.userID === params.id).map((user) => (
+            <Link
+              to={`/editUser/${user.userID}/${user.deviceID ? user.deviceID : undefined}`}
+              style={{ textDecoration: "none" }}
+            >
+              <ModifyLink>Edit</ModifyLink>
+            </Link>
+          ))
         );
       },
     },

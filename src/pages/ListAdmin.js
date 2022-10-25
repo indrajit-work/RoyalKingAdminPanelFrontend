@@ -33,21 +33,25 @@ const ListAdmin = ({ userType, loggedUser, loggedUserRole }) => {
 
   const history = useHistory();
 
+  // console.log(userList)
+
   const modifyColumn = [
     {
       field: "modify",
       headerName: `Modify ${userType}`,
-      width: 170,
+      width: 370,
       sortable: false,
       filterable: false,
       renderCell: (params) => {
         return (
-          <Link
-            to={`/admin/modify/${userList.userID}/${userList.deviceID}`}
-            style={{ textDecoration: "none" }}
-          >
-            <ModifyLink>Edit</ModifyLink>
-          </Link>
+          adminList.filter(admin => admin.userID === params.id).map((user) => (
+            <Link
+              to={`/editUser/${user.userID}/${user.deviceID ? user.deviceID : undefined}`}
+              style={{ textDecoration: "none" }}
+            >
+              <ModifyLink>Edit</ModifyLink>
+            </Link>
+          ))
         );
       },
     },

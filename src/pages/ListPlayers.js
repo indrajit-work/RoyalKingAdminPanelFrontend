@@ -39,13 +39,15 @@ const ListPlayer = ({userType, loggedUser, loggedUserRole}) => {
       filterable: false,
       renderCell: (params) => {
         return (
-          <Link
-            to={`/player/modify/${userList.userID}/${userList.deviceID}`}
-            style={{ textDecoration: "none" }}
-          >
-            <ModifyLink>Edit</ModifyLink>
-          </Link>
-        );
+          playerList.filter(player => player.userID === params.id).map((user) => (
+            <Link
+              to={`/editUser/${user.userID}/${user.deviceID ? user.deviceID : undefined}`}
+              style={{ textDecoration: "none" }}
+            >
+              <ModifyLink>Edit</ModifyLink>
+            </Link>
+          ))
+        )
       },
     },
   ];

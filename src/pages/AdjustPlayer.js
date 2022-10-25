@@ -127,8 +127,8 @@ const AdjustPlayer = () => {
                   value={transactionType}
                 >
                   <option>Select below...</option>
-                  <option value="substract">Substract</option>
                   <option value="add">Add</option>
+                  <option value="substract">Substract</option>
                 </Form.Select>
               </FloatingLabel>
 

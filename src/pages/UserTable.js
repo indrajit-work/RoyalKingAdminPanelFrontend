@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import styled from 'styled-components'
 import ListAdmin from './ListAdmin'
 import ListDistributor from './ListDistributor'
 import ListPlayer from './ListPlayers'
 import StokistList from './StokistList'
 import { getCookie, getRole } from "../utils/auth";
+import { Link } from 'react-router-dom'
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -20,6 +21,19 @@ const Button = styled.button`
   padding: 10px;
   border: none;
   border-radius: 5px;
+`
+
+const AddLink = styled(Link)`
+  background-color: steelblue;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+  &:hover{
+    text-decoration: none;
+    color: white;
+  }
 `
 
 const UserTable = () => {
@@ -77,11 +91,12 @@ const UserTable = () => {
           </Button>
         ))}
 
-        {/* {roles.map((role, i) => (
-          <Button key={i} onClick={() => setUserRole(role)}>
-            {role}
-          </Button>
-        ))} */}
+        <AddLink to='/createUser'>Add User</AddLink>
+
+          {/* <Button style={{backgroundColor: '#850000'}}>
+            Add User
+          </Button> */}
+
       </ButtonContainer>
 
       <div>

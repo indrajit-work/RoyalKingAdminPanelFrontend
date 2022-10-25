@@ -174,5 +174,10 @@ export const SidebarData = [
     path: '/broadcastMessage',
     icon: <FaIcons.FaEnvelopeOpenText />,
   },
+  {
+    title: 'Clean Data',
+    path: '/cleanData',
+    icon: <FaIcons.FaEnvelopeOpenText />,
+  },
   
 ];

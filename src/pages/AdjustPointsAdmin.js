@@ -107,8 +107,8 @@ const AdjustPointsAdmin = () => {
                   onChange={(e) => setTransactionType(e.target.value)}
                 >
                   <option>Select below...</option>
-                  <option value="substract">Substract</option>
                   <option value="add">Add</option>
+                  <option value="substract">Substract</option>
                 </Form.Select>
               </FloatingLabel>
 

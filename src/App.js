@@ -31,6 +31,9 @@ import RegAdmin from "./pages/RegAdmin";
 import ListAdmin from "./pages/ListAdmin";
 import AdminModify from "./pages/AdminModify";
 import UserTable from "./pages/UserTable";
+import CreateUser from "./pages/CreateUser";
+import AddUser from "./pages/AddUser";
+import EditUser from "./pages/EditUser";
 
 function App() {
   return (
@@ -38,170 +41,153 @@ function App() {
       <Route path="/login" exact>
         <Login />
       </Route>
-   
-        <Switch>
+
+      <Switch>
         {/* <Sidebar/> */}
-         {/* {isAuth() && <Sidebar/>} */}
-          <Route path="/" exact>
+        {/* {isAuth() && <Sidebar/>} */}
+        <Route path="/" exact>
           <Redirect to="/dashboard" />
-       
-            
-          </Route>
-          <Route path="/dashboard" exact>
-            <Sidebar/>
-            <Dashboard/>
-          
-          </Route>
-          <Route path="/profile" exact>
-            <Sidebar/>
-            <Dashboard/>
+        </Route>
+        <Route path="/dashboard" exact>
+          <Sidebar />
+          <Dashboard />
+        </Route>
+        <Route path="/profile" exact>
+          <Sidebar />
+          <Dashboard />
+        </Route>
 
-          </Route>
+        <Route path="/userManager" exact>
+          <Sidebar />
+          <UserTable />
+        </Route>
 
-          <Route path="/userManager" exact>
-            <Sidebar/>
-            <UserTable/>
+        <Route path="/profile/changepassword" exact>
+          <Sidebar />
+          <ChangePassword />
+        </Route>
 
-          </Route>
+        <Route path="/createUser" exact>
+          <Sidebar />
+          <CreateUser />
+        </Route>
+        <Route path="/addUser" exact>
+          <Sidebar />
+          <AddUser />
+        </Route>
+        <Route path="/editUser/:userID/:deviceID" exact>
+          <Sidebar />
+          <EditUser />
+        </Route>
 
-          <Route path="/profile/changepassword" exact>
-            <Sidebar/>
-            <ChangePassword/>
-          </Route>
-          <Route path="/distributor/create" exact>
-            <Sidebar/>
-                <RegDistributor/>
-          
-          </Route>
-          <Route path="/distributor/list" exact>
-            <Sidebar/>
-            <ListDistributor/>
-
-          </Route>
-          <Route path="/stokist/list" exact>
-            <Sidebar/>
-            <StokistList/>
-
-          </Route>
-          <Route path="/stokist/create" exact>
+        <Route path="/distributor/list" exact>
+          <Sidebar />
+          <ListDistributor />
+        </Route>
+        <Route path="/stokist/list" exact>
+          <Sidebar />
+          <StokistList />
+        </Route>
+        {/* <Route path="/stokist/create" exact>
             <Sidebar/>
             <RegStokist/>
-          </Route>
-          <Route path="/player/create" exact>
+          </Route> */}
+        {/* <Route path="/player/create" exact>
             <Sidebar/>
             <RegPlayer/>
-          </Route>
-          <Route path="/player/list" exact>
-            <Sidebar/>
-           <ListPlayer/>
-          </Route>
+          </Route> */}
+        <Route path="/player/list" exact>
+          <Sidebar />
+          <ListPlayer />
+        </Route>
 
-          <Route path="/turnover" exact>
-            <Sidebar/>
-            <Turnover/>
+        <Route path="/turnover" exact>
+          <Sidebar />
+          <Turnover />
+        </Route>
 
-          </Route>
+        <Route path="/admin/distributor/:userID/:commPercent" exact>
+          <Sidebar />
+          <AdminDistributor />
+        </Route>
 
-          
-          <Route path="/admin/distributor/:userID/:commPercent" exact>
-            <Sidebar/>
-            <AdminDistributor/>
-          </Route>
+        <Route path="/distributor/stokist/:userID/:commPercent" exact>
+          <Sidebar />
+          <DistributorStokist />
+        </Route>
+        <Route path="/stokist/player/:userID/:commPercent" exact>
+          <Sidebar />
+          <StokistPlayer />
+        </Route>
 
-          <Route path="/distributor/stokist/:userID/:commPercent" exact>
-            <Sidebar/>
-            <DistributorStokist/>
-          </Route>
-          <Route path="/stokist/player/:userID/:commPercent" exact>
-            <Sidebar/>
-            <StokistPlayer/>
-          </Route>
+        <Route path="/gamesettings" exact>
+          <Sidebar />
+          <GameSettings />
+        </Route>
 
-          <Route path="/gamesettings" exact>
-            <Sidebar/>
-            <GameSettings/>
-            
-          </Route>
+        <Route path="/broadcastMessage" exact>
+          <Sidebar />
+          <Broadcast />
+        </Route>
 
-          <Route path="/broadcastMessage" exact>
-            <Sidebar/>
-            <Broadcast/>
-            
-          </Route>
-          
-          <Route path="/adjustpointsAdmin" exact>
-            <Sidebar/>
-            <AdjustPointsAdmin/>
-            
-          </Route>
-          
-          <Route path="/adjustpointDistributor" exact>
-            <Sidebar/>
-            <AdjustDistributor/>
-            
-          </Route>
+        <Route path="/adjustpointsAdmin" exact>
+          <Sidebar />
+          <AdjustPointsAdmin />
+        </Route>
 
-          <Route path="/adjustpointStokist" exact>
-            <Sidebar/>
-            <AdjustStokist/>
-            
-          </Route>
+        <Route path="/adjustpointDistributor" exact>
+          <Sidebar />
+          <AdjustDistributor />
+        </Route>
 
-          <Route path="/adjustpointPlayers" exact>
-            <Sidebar/>
-            <AdjustPlayer/>
-            
-          </Route>
+        <Route path="/adjustpointStokist" exact>
+          <Sidebar />
+          <AdjustStokist />
+        </Route>
 
-          <Route path="/player/modify/:userID/:deviceID" exact>
-            <Sidebar/>
-            <ModifyPlayer/>
-            
-          </Route>
-          <Route path="/distributor/modify/:userID/:deviceID" exact>
-            <Sidebar/>
-            <ModifyDistributor/>
-            
-          </Route>
-          <Route path="/stokist/modify/:userID/:deviceID" exact>
-            <Sidebar/>
-            <ModifyStokist/>
-            
-          </Route>
-          <Route path="/gameHistory" exact>
-            <Sidebar/>
-            <Gamehistory/>
-            
-          </Route>
-          <Route path="/tickethistory/:id/:type/:value/:endValue" exact>
-            <Sidebar/>
-           <TicketHistoryById/>
-            
-          </Route>
-          <Route path="/gameResult" exact>
-            <Sidebar/>
-           <GameResult/>
-            
-          </Route>
-          <Route path="/regAdmin" exact>
-            <Sidebar/>
-           <RegAdmin/>
-            
-          </Route>
-          <Route path="/listAdmin" exact>
-            <Sidebar/>
-           <ListAdmin/>
-            
-          </Route>
+        <Route path="/adjustpointPlayers" exact>
+          <Sidebar />
+          <AdjustPlayer />
+        </Route>
 
+        <Route path="/player/modify/:userID/:deviceID" exact>
+          <Sidebar />
+          <ModifyPlayer />
+        </Route>
+        <Route path="/distributor/modify/:userID/:deviceID" exact>
+          <Sidebar />
+          <ModifyDistributor />
+        </Route>
+        <Route path="/stokist/modify/:userID/:deviceID" exact>
+          <Sidebar />
+          <ModifyStokist />
+        </Route>
+        <Route path="/gameHistory" exact>
+          <Sidebar />
+          <Gamehistory />
+        </Route>
+        <Route path="/tickethistory/:id/:type/:value/:endValue" exact>
+          <Sidebar />
+          <TicketHistoryById />
+        </Route>
+        <Route path="/gameResult" exact>
+          <Sidebar />
+          <GameResult />
+        </Route>
+        <Route path="/regAdmin" exact>
+          <Sidebar />
+          <RegAdmin />
+        </Route>
+        <Route path="/listAdmin" exact>
+          <Sidebar />
+          <ListAdmin />
+        </Route>
 
-          <Route path="/admin/modify/:userID/:deviceID" exact>
-            <Sidebar/>
-           <AdminModify/>
-            
-          </Route>
-          
-        </Switch>
+        <Route path="/admin/modify/:userID/:deviceID" exact>
+          <Sidebar />
+          <AdminModify />
+        </Route>
+      </Switch>
     </>
   );
 }
