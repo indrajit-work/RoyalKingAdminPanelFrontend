@@ -21,7 +21,7 @@ const AddUser = () => {
     const [userNameList, setUserNameList] = useState([]);
     const [usernameIsvalid, setUsernameIsvalid] = useState(null);
 
-    const roleList = ['Admin', 'Distributor', 'Stokist', 'Player']
+    const roleList = ['ADMIN', 'Distributor', 'STOKIST', 'PLAYER']
 
     console.log(userRole, userName, password, fullName, commPercent, bossID, phNo)
 
@@ -121,32 +121,32 @@ const AddUser = () => {
         setPassword("");
         setFullName("");
         setVerifyPassword("");
-        // setUserRole(),
-        setBossID();
+        setBossID(null);
         setCommPercent("");
+        // setUserRole(""),
         setBossID("");
         setphNo("");
-        setDateOfbirth(null)
+        setDateOfbirth('dd-mm-yyyy')
     }
 
   return (
-    <>
-        <h4>Login Info</h4>
-        <form onSubmit={onHandleSubmit}>
-            <div>
-                <label>UserName</label>
+    <div className='form-container'>
+        <h2>Add New User</h2>
+        <form className='form' onSubmit={onHandleSubmit}>
+            <div className='input-control'>
+                <label className='input-label'>UserName</label>
                 <input type="text" name='userName' value={userName} onChange={(e) => usernameCheckHandler(e.target.value)}
                   autocomplete="off" required />
                 {!usernameIsvalid && userName.length !== 0 && (
                   <>
-                    <TiTimes
+                    {/* <TiTimes
                       style={{
                         color: "red",
                         position: "absolute",
                         right: "1%",
                         top: "37.5%",
                       }}
-                    />
+                    /> */}
                     <p
                       style={{
                         color: "red",
@@ -161,14 +161,14 @@ const AddUser = () => {
                 )}
                 {usernameIsvalid && userName.length > 0 && (
                   <>
-                    <TiTick
+                    {/* <TiTick
                       style={{
                         color: "green",
                         position: "absolute",
                         right: "1%",
                         top: "37.5%",
                       }}
-                    />
+                    /> */}
                     <p
                       style={{
                         color: "green",
@@ -182,20 +182,20 @@ const AddUser = () => {
                   </>
                 )}
             </div>
-            <div>
-                <label>Full Name</label>
+            <div className='input-control'>
+                <label className='input-label'>Full Name</label>
                 <input type="text" name='fullName' value={fullName} autocomplete="off" onChange={(e) => setFullName(e.target.value)} required />
             </div>
-            <div>
-                <label>Password</label>
+            <div className='input-control'>
+                <label className='input-label'>Password</label>
                 <input type="password" name='password' value={password} onChange={(e) => setPassword(e.target.value)} required />
             </div>
-            <div>
-                <label>Verify Password</label>
+            <div className='input-control'>
+                <label className='input-label'>Verify Password</label>
                 <input type="password" name='verifyPassword' value={verifyPassword} onChange={(e) => setVerifyPassword(e.target.value)} required />
             </div>
-            <div>
-                <label>User Role</label>
+            <div className='input-control'>
+                <label className='input-label'>User Role</label>
                 <select name="userRole" onChange={(e) => setUserRole(e.target.value)}>
 
                   <option value="" disabled selected>Select below...</option>
@@ -216,41 +216,41 @@ const AddUser = () => {
                   ))}
                 </select>
             </div>
-            <div>
-                <label>Boss</label>
+            <div className='input-control'>
+                <label className='input-label'>Boss ID</label>
                 <select name="bossID" onChange={(e) => setBossID(e.target.value)}>
                     <option value="" disabled selected>Select below...</option>
-                    {userRole === 'Admin' && superadminLists.map((role, i) => (
+                    {userRole === 'ADMIN' && superadminLists.map((role, i) => (
                         <option key={i} value={role.userID}>{role.fullName}({role.userID})</option>
                     ))}
                     {userRole === 'Distributor' && adminLists.map((role, i) => (
                         <option key={i} value={role.userID}>{role.fullName}({role.userID})</option>
                     ))}
-                    {userRole === 'Stokist' && distributorLists.map((role, i) => (
+                    {userRole === 'STOKIST' && distributorLists.map((role, i) => (
                         <option key={i} value={role.userID}>{role.fullName}({role.userID})</option>
                     ))}
-                    {userRole === 'Player' && stokistLists.map((role, i) => (
+                    {userRole === 'PLAYER' && stokistLists.map((role, i) => (
                         <option key={i} value={role.userID}>{role.fullName}({role.userID})</option>
                     ))}
                 </select>
             </div>
-            <div>
-                <label>Commision Percentage(%)</label>
+            <div className='input-control'>
+                <label className='input-label'>Commision Percentage(%)</label>
                 <input type="text" name='commPercent' value={commPercent} autocomplete="off" onChange={(e) => setCommPercent(e.target.value)} required />
             </div>
-            <div>
-                <label>Mobile Number</label>
+            <div className='input-control'>
+                <label className='input-label'>Mobile Number</label>
                 <input type="number" name='phNo' value={phNo} autocomplete="off" maxLength={10} onChange={(e) => setphNo(e.target.value)} />
             </div>
-            <div>
-                <label>Date of Birth</label>
+            <div className='input-control'>
+                <label className='input-label'>Date of Birth</label>
                 <input type="date" name='dateOfbirth' value={dateOfbirth} onChange={(e) => setDateOfbirth(e.target.value)} />
             </div>
 
-            <button>Submit</button>
+            <button className='button'>Submit</button>
         </form>
         <ToastContainer />
-    </>
+    </div>
   )
 }
 

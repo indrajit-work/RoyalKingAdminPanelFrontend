@@ -2,7 +2,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { getCookie } from "../utils/auth";
+import { getCookie, getRole } from "../utils/auth";
 
 const DataTable = styled.div`
   width: 90vw;
@@ -24,12 +24,7 @@ const TransactionTable = ({loggedUser}) => {
   const [transactionList, setTransactionList] = useState([])
   const [pageSize, setPageSize] = useState(10)
 
-  const [sortModel, setSortModel] = useState([
-    {
-      field: 'id',
-      sort: 'desc',
-    },
-  ]);
+  const [userRole, setUserRole] = useState('');
 
   const bossID = getCookie("token");
 //   console.log(bossID)
@@ -38,12 +33,23 @@ const TransactionTable = ({loggedUser}) => {
     loadUserData();
   }, []);
 
+    // current user
+  // const loggedUser = getCookie("token");
+  console.log("logeed in", loggedUser);
+
+  (async () => {
+    const role = await getRole(loggedUser);
+    setUserRole(role)
+  })();
+
+  console.log("ROLE LOGGED IN", userRole);
+
   const loadUserData = async () => {
     try {
         const res = await axios.post(
           `https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/gettransactions`,
           {
-            userRole: "ADMIN",
+            userRole: loggedUser,
             bossID: bossID,
           }
         );
@@ -61,7 +67,7 @@ const TransactionTable = ({loggedUser}) => {
     }
   };
 
-  console.log(setTransactionList)
+  // console.log(transactionList)
 
   return (
     <div>

@@ -11,6 +11,9 @@ const DataTable = styled.div`
   height: 80vh;
   padding: 0 3rem;
   margin: 0 auto;
+  @media (max-width: 768px) {
+    height: 300px;
+  }
 `;
 
 const ModifyLink = styled.div`

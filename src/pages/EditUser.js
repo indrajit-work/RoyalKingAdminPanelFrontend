@@ -17,18 +17,21 @@ const EditUser = () => {
     const [dateOfbirth, setDateOfbirth] = useState(null)
     const [resetDevice, setResetDevice] = useState(false)
     const [verified, setVerified] = useState(false)
-    const [blocked, setBlocked] = useState("no")
+    const [block, setBlock] = useState("no")
     const [loggedUserRole, setloggedUserRole] = useState('')
 
     const [userList, setUserList] = useState([])
     const [userNameList, setUserNameList] = useState([]);
     const [usernameIsvalid, setUsernameIsvalid] = useState(null);
 
-    const roleList = ['Admin', 'Distributor', 'Stokist', 'Player']
+    const [userInfo, setUserInfo] = useState({})
+
+    const roleList = ['ADMIN', 'Distributor', 'STOKIST', 'PLAYER']
 
     const params = useParams();
     const userID = params.userID;
     const deviceID = params.deviceID;
+    console.log(userID, deviceID);
 
     // get loggedin user id
     const loggedUser = getCookie("token");
@@ -71,9 +74,33 @@ const EditUser = () => {
     // const playerLists = userList.filter(user => user.userRole === 'PLAYER')
     // console.log(adminLists, distributorLists, stokistLists, playerLists)
 
+    const fetchUser = async () => {
+      console.log(userID)
+      try {
+        const res = await axios.get(
+          `https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/fetchuserbyid?userID=${userID}`
+        );
+        console.log(res.data.data)
+        setUserInfo(res.data.data)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    useEffect(() => {
+      fetchUser()
+    }, [])
+
+    console.log(userInfo)
+    
+
     //username check
     const usernameCheckHandler = (input) => {
         setUsernameIsvalid(true);
+
+        if(userInfo.userName === input){
+          setUsernameIsvalid(true);
+        }
 
         if (userNameList.includes(input)) {
             setUsernameIsvalid(false);
@@ -90,8 +117,20 @@ const EditUser = () => {
     };
 
     //handle block ....................................
-    const blockHandler = () => {
-      setBlocked("yes");
+    const blockHandler = async () => {
+      try {
+        const res = await axios.post(
+          `https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/blockuser`,
+          {
+            userID: userID,
+            block: "yes",
+          }
+        );
+        console.log(res.data)
+      } catch (error) {
+        console.log(error)
+      }
+      setBlock("yes");
     }
 
 
@@ -99,13 +138,9 @@ const EditUser = () => {
     const onHandleSubmit = async (e) => {
         e.preventDefault();
 
-        if(!usernameIsvalid){
-            return
-        }
-
         try {
             const res = await axios.post(
-              `https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/createuser`,
+              `https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/modifyuser`,
               {
                 userName,
                 password,
@@ -116,12 +151,12 @@ const EditUser = () => {
                 phone: phNo,
                 dateOfbirth,
                 verified,
-                blocked
+                block
               }
             );
             console.log("Submited:...............", res);
             reset()
-            toast.success("User added successfully")
+            toast.success("User edited successfully")
         } catch (error) {
             console.log("Error:", error);
             toast.error("Something went wrong")
@@ -133,32 +168,23 @@ const EditUser = () => {
         setPassword("");
         setFullName("");
         // setUserRole(),
-        setBossID();
+        setBossID(null);
         setCommPercent("");
         setBossID("");
         setphNo("");
         setDateOfbirth(null)
-        setBlocked("")
+        setBlock("")
     }
 
   return (
-    <>
-        <h4>Edit User Info</h4>
-        <form onSubmit={onHandleSubmit}>
-            <div>
-                <label>UserName</label>
-                <input type="text" name='userName' value={userName} onChange={(e) => usernameCheckHandler(e.target.value)}
-                  autocomplete="off" required />
-                {!usernameIsvalid && userName.length !== 0 && (
-                  <>
-                    <TiTimes
-                      style={{
-                        color: "red",
-                        position: "absolute",
-                        right: "1%",
-                        top: "37.5%",
-                      }}
-                    />
+    <div className='form-container'>
+        <h2>Edit User Info</h2>
+        <form className='form' onSubmit={onHandleSubmit} >
+            <div className='input-control'>
+              <label className='input-label'>UserName</label>
+              <input type="text" name='userName' defaultValue={userInfo.userName} onChange={(e) => usernameCheckHandler(e.target.value)}
+                autocomplete="off" required />
+              {!usernameIsvalid && userName.length !== 0 && userInfo.userName !== userName && (
                     <p
                       style={{
                         color: "red",
@@ -169,18 +195,19 @@ const EditUser = () => {
                       <span style={{ fontWeight: "bold" }}>{userName}</span> is
                       already taken
                     </p>
-                  </>
+                )}
+                {userName === userInfo.userName && (
+                   <p
+                   style={{
+                     color: "green",
+                     fontSize: "12px",
+                     fontWeight: "500",
+                   }}
+                 >
+                   <span style={{ fontWeight: "bold" }}>{userName}</span> is current username
+                 </p>
                 )}
                 {usernameIsvalid && userName.length > 0 && (
-                  <>
-                    <TiTick
-                      style={{
-                        color: "green",
-                        position: "absolute",
-                        right: "1%",
-                        top: "37.5%",
-                      }}
-                    />
                     <p
                       style={{
                         color: "green",
@@ -191,22 +218,21 @@ const EditUser = () => {
                       <span style={{ fontWeight: "bold" }}>{userName}</span> is
                       available
                     </p>
-                  </>
                 )}
             </div>
-            <div>
-                <label>Full Name</label>
-                <input type="text" name='fullName' value={fullName} onChange={(e) => setFullName(e.target.value)} required />
+            <div className='input-control'>
+                <label className='input-label'>Full Name</label>
+                <input type="text" name='fullName' defaultValue={userInfo.fullName} onChange={(e) => setFullName(e.target.value)} autocomplete="off" required />
             </div>
-            <div>
-                <label>Password</label>
-                <input type="password" name='password' value={password} onChange={(e) => setPassword(e.target.value)} required />
+            <div className='input-control'>
+                <label className='input-label'>Password</label>
+                <input type="password" name='password' defaultValue={userInfo.password} onChange={(e) => setPassword(e.target.value)} required />
             </div>
-            <div>
-                <label>User Role</label>
+            <div className='input-control'>
+                <label className='input-label'>User Role</label>
                 <select name="userRole" onChange={(e) => setUserRole(e.target.value)}>
 
-                  <option value="" disabled selected>Select below...</option>
+                  <option value="" disabled selected>{userInfo.userRole}</option>
                   {loggedUserRole === 'SUPERADMIN' && roleList.map((role, i) => (
                     <option key={i} value={role}>{role}</option>
                   ))}
@@ -224,41 +250,49 @@ const EditUser = () => {
                   ))}
                 </select>
             </div>
-            <div>
-                <label>Boss</label>
+            <div className='input-control'>
+                <label className='input-label'>Boss ID</label>
                 <select name="bossID" onChange={(e) => setBossID(e.target.value)}>
-                    <option value="" disabled selected>Select below...</option>
-                    {userRole === 'Admin' && superadminLists.map((role, i) => (
+                    <option value="" disabled selected>{userInfo.bossID}</option>
+                    {userRole === 'ADMIN' && superadminLists.map((role, i) => (
                         <option key={i} value={role.userID}>{role.fullName}({role.userID})</option>
                     ))}
                     {userRole === 'Distributor' && adminLists.map((role, i) => (
                         <option key={i} value={role.userID}>{role.fullName}({role.userID})</option>
                     ))}
-                    {userRole === 'Stokist' && distributorLists.map((role, i) => (
+                    {userRole === 'STOKIST' && distributorLists.map((role, i) => (
                         <option key={i} value={role.userID}>{role.fullName}({role.userID})</option>
                     ))}
-                    {userRole === 'Player' && stokistLists.map((role, i) => (
+                    {userRole === 'PLAYER' && stokistLists.map((role, i) => (
                         <option key={i} value={role.userID}>{role.fullName}({role.userID})</option>
                     ))}
                 </select>
             </div>
-            <div>
-                <label>Commision Percentage(%)</label>
-                <input type="text" name='commPercent' value={commPercent} onChange={(e) => setCommPercent(e.target.value)} required />
+            <div className='input-control'>
+                <label className='input-label'>Commision Percentage(%)</label>
+                <input type="text" name='commPercent' defaultValue={userInfo.commPercent} onChange={(e) => setCommPercent(e.target.value)} required />
             </div>
-            <div>
-                <label>Mobile Number</label>
-                <input type="number" name='phNo' value={phNo} onChange={(e) => setphNo(e.target.value)} />
+            <div className='input-control'>
+                <label className='input-label'>Mobile Number</label>
+                <input type="number" name='phNo' defaultValue={userInfo.phone} onChange={(e) => setphNo(e.target.value)} />
             </div>
-            <div>
-                <label>Date of Birth</label>
-                <input type="date" name='dateOfbirth' value={dateOfbirth} onChange={(e) => setDateOfbirth(e.target.value)} />
+            <div className='input-control'>
+                <label className='input-label'>Date of Birth</label>
+                <input type="date" name='dateOfbirth' defaultValue={userInfo.dateOfbirth} onChange={(e) => setDateOfbirth(e.target.value)} />
+            </div>
+            <div className='input-control single-input'>
+                <input type="text" name='block' value={userInfo.block} onChange={(e) => setBlock(e.target.value)} />
+                <button className='button' onClick={blockHandler}>{block === 'yes' ? "UnBlock" : "Block"}</button>
+            </div>
+            <div className='input-control single-input'>
+                <input type="text" name='verified' value={userInfo.verified} onChange={(e) => setVerified(e.target.value)} />
+                <button className='button'>{verified ? "Verified" : "Verify"}</button>
             </div>
 
-            <button>Edit</button>
+            <button className='button'>Edit</button>
         </form>
         <ToastContainer />
-    </>
+    </div>
   )
 }
 

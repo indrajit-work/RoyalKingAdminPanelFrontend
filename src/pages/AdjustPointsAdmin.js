@@ -11,7 +11,8 @@ import {
   Row,
   FloatingLabel,
 } from "react-bootstrap";
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'
 import TransactionTable from "../components/TransactionTable";
 
 const AdjustPointsAdmin = () => {
@@ -60,7 +61,8 @@ const AdjustPointsAdmin = () => {
         }
       );
 
-      console.log("............", res);
+      console.log("............", res.data);
+      toast.success(`Points ${transactionType === "add" ? 'added': 'deducted'} successfully`)
     } catch (err) {
       console.log("Error from stokist adjust points:", err);
     }
@@ -154,6 +156,7 @@ const AdjustPointsAdmin = () => {
 
         <br />
       </Container>
+      <ToastContainer />
 
       <TransactionTable loggedUser={loggedUser} />
     </>

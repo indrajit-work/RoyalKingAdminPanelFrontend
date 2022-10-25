@@ -1,4 +1,5 @@
 import { Route, Switch, Redirect, Router } from "react-router-dom";
+import './App.css'
 import { isAuth } from "./utils/auth";
 import Login from "./components/Login";
 import Sidebar from "./components/Sidebar";
@@ -34,6 +35,7 @@ import UserTable from "./pages/UserTable";
 import CreateUser from "./pages/CreateUser";
 import AddUser from "./pages/AddUser";
 import EditUser from "./pages/EditUser";
+import CleanData from "./pages/CleanData";
 
 function App() {
   return (
@@ -186,6 +188,11 @@ function App() {
         <Route path="/admin/modify/:userID/:deviceID" exact>
           <Sidebar />
           <AdminModify />
+        </Route>
+
+        <Route path="/cleanData" exact>
+          <Sidebar />
+          <CleanData />
         </Route>
       </Switch>
     </>

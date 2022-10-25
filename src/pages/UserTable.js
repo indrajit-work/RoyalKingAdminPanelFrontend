@@ -12,7 +12,11 @@ const ButtonContainer = styled.div`
   align-items: center;
   justify-content: center;
   gap: 1rem;
+  flex-wrap: wrap;
   margin: 2rem auto 0;
+  /* @media (max-width: 768px) {
+    flex-direction: column;
+  } */
 `
 
 const Button = styled.button`
@@ -91,7 +95,7 @@ const UserTable = () => {
           </Button>
         ))}
 
-        <AddLink to='/createUser'>Add User</AddLink>
+        <AddLink to='/addUser'>Add User</AddLink>
 
           {/* <Button style={{backgroundColor: '#850000'}}>
             Add User

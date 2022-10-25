@@ -61,9 +61,9 @@ const Sidebar = () => {
     setUserRole(role)
   })();
 
-const hideSideBar=()=>{
-  setSidebar(false)
-}
+// const hideSideBar=()=>{
+//   setSidebar(false)
+// }
   
   return (
     <>
@@ -85,10 +85,10 @@ const hideSideBar=()=>{
               <BsBoxArrowInLeft onClick={showSidebar} />
             </NavIcon>
             {userRole !== 'SUPERADMIN' && SidebarData.slice(0, 5).map((item, index) => {
-              return <SubMenu showSide={hideSideBar} showSideBar={showSidebar} item={item} key={index} />;
+              return <SubMenu  showSideBar={showSidebar} item={item} key={index} />;
             })}
            {userRole === 'SUPERADMIN' && SidebarData.map((item, index) => {
-              return <SubMenu showSide={hideSideBar} showSideBar={showSidebar} item={item} key={index} />;
+              return <SubMenu  showSideBar={showSidebar} item={item} key={index} />;
             })}
           </SidebarWrap>
         </SidebarNav>
