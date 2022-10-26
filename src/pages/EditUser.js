@@ -16,7 +16,7 @@ const EditUser = () => {
     const [phNo, setphNo] = useState('')
     const [dateOfbirth, setDateOfbirth] = useState('')
     const [resetDevice, setResetDevice] = useState('')
-    const [verified, setVerified] = useState(false)
+    const [verified, setVerified] = useState()
     const [block, setBlock] = useState("")
     const [loggedUserRole, setloggedUserRole] = useState('')
 
@@ -121,7 +121,7 @@ const EditUser = () => {
     };
 
     //handle block ....................................
-    const blockHandler = async () => {
+    const blockHandler = async (e) => {
       try {
         const res = await axios.post(
           `https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/blockuser`,
@@ -134,7 +134,7 @@ const EditUser = () => {
       } catch (error) {
         console.log(error)
       }
-      // setBlock("yes");
+      setBlock(e.target.value);
     }
 
 
@@ -154,7 +154,7 @@ const EditUser = () => {
                 "dob", dateOfbirth,
                 "block", block,
                 userID,
-                verified,
+                JSON.parse(verified),
                 "device", resetDevice
                 )
 
@@ -171,17 +171,20 @@ const EditUser = () => {
                 fullName,
                 phone: phNo,
                 dateOfbirth,
-                verified,
+                verified: JSON.parse(verified),
                 blocked: block,
                 deviceID: resetDevice
               }
             );
+            console.log("res", res.data)
             toast.success("User edited successfully")
         } catch (error) {
             console.log("Error:", error);
             toast.error("Something went wrong")
           }
         };
+
+        console.log(block, typeof(verified))
 
   return (
     <div className='form-container'>
@@ -287,18 +290,34 @@ const EditUser = () => {
                 <label className='input-label'>Date of Birth</label>
                 <input type="date" name='dateOfbirth' defaultValue={userInfo.dateOfbirth} onChange={(e) => setDateOfbirth(e.target.value)} />
             </div>
-            <div className='input-control single-input'>
+            <div className='input-control'>
+                <label className='input-label'>Block User</label>
+                <select name="block" defaultValue={userInfo.block} onChange={(e) => setBlock(e.target.value)}>
+                  <option value={block} disabled selected>{userInfo.blocked}</option>
+                  <option value="Yes">Yes</option>
+                  <option value="No">No</option>
+                </select>
+            </div>
+            <div className='input-control'>
+                <label className='input-label'>Verify User</label>
+                <select name="verified" defaultValue={userInfo.verified} onChange={(e) => setVerified(e.target.value)}>
+                  <option value={verified} disabled selected>{userInfo.verified ? 'Yes' : "No"}</option>
+                  <option value={true}>Yes</option>
+                  <option value={false}>No</option>
+                </select>
+            </div>
+            {/* <div className='input-control single-input'>
                 <input type="text" name='block' value={userInfo.block} onChange={(e) => setBlock(e.target.value)} />
                 <button className='button' onClick={blockHandler}>{block === 'yes' ? "UnBlock" : "Block"}</button>
-            </div>
-            <div className='input-control single-input'>
+            </div> */}
+            {/* <div className='input-control single-input'>
                 <input type="text" name='verified' defaultValue={userInfo.verified} onChange={(e) => setVerified(e.target.value)} />
                 <button className='button'>{verified ? "Verified" : "Verify"}</button>
-            </div>
-            <div className='input-control single-input'>
+            </div> */}
+            {/* <div className='input-control single-input'>
                 <input type="text" name='resetDevice' value={userInfo.deviceID} />
                 <button className={`button ${resetDevice.length === 0 ? 'reset' : ''}`} onClick={handleDeviceReset}>Reset</button>
-            </div>
+            </div> */}
 
             <button className='button'>Edit</button>
         </form>
