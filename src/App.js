@@ -62,17 +62,17 @@ function App() {
         {/* <Sidebar/> */}
         {/* {isAuth() && <Sidebar/>} */}
 
-        {loggedUserRole === 'SUPERADMIN' && <Route path="/" exact>
+        <Route path="/" exact>
           <Redirect to="/dashboard" />
-        </Route>}
+        </Route>
 
-        {loggedUserRole === 'ADMIN' && <Route path="/" exact>
+        {/* {loggedUserRole === 'ADMIN' && <Route path="/" exact>
           <Redirect to="/dashboard" />
         </Route>}
 
         {loggedUserRole === 'Distributor' || loggedUserRole === 'STOKIST' && <Route path="/" exact>
           <Redirect to="/userManager" />
-        </Route>}
+        </Route>} */}
 
         <Route path="/dashboard" exact>
           <Sidebar />
