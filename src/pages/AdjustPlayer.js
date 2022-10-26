@@ -121,7 +121,7 @@ const AdjustPlayer = () => {
                     ) : (
                       players.map((item, index) => (
                         <option key={index} value={item.userID}>
-                          {item.fullName} (balance:{item.balance})
+                          {item.userName} (Balance:{item.balance})
                         </option>
                       ))
                     )}

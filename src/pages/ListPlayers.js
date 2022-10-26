@@ -8,9 +8,14 @@ import {FaUserEdit} from 'react-icons/fa'
 
 const DataTable = styled.div`
   min-height: 500px;
-  height: 80vh;
+  height: 600px;
+  width: 100vw;
   padding: 0 3rem;
   margin: 0 auto;
+  @media screen and (max-width: 768px) {
+    padding: 1rem;
+    margin: 0 auto;
+  }
 `;
 
 const ModifyLink = styled.div`

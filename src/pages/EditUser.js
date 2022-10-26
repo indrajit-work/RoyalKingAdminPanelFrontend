@@ -14,10 +14,10 @@ const EditUser = () => {
     const [userRole, setUserRole] = useState('')
     const [bossID, setBossID] = useState('')
     const [phNo, setphNo] = useState('')
-    const [dateOfbirth, setDateOfbirth] = useState(null)
-    const [resetDevice, setResetDevice] = useState(false)
+    const [dateOfbirth, setDateOfbirth] = useState('')
+    const [resetDevice, setResetDevice] = useState('')
     const [verified, setVerified] = useState(false)
-    const [block, setBlock] = useState("no")
+    const [block, setBlock] = useState("")
     const [loggedUserRole, setloggedUserRole] = useState('')
 
     const [userList, setUserList] = useState([])
@@ -31,7 +31,7 @@ const EditUser = () => {
     const params = useParams();
     const userID = params.userID;
     const deviceID = params.deviceID ?? "";
-    console.log(userID, deviceID);
+    // console.log(userID, deviceID);
 
     // get loggedin user id
     const loggedUser = getCookie("token");
@@ -60,7 +60,6 @@ const EditUser = () => {
         })
       );
       res.data?.users.map(user =>{
-        // console.log([user?.userName])
             return (
                 setUserNameList((prev) => [...prev, user?.userName])
             )
@@ -71,17 +70,26 @@ const EditUser = () => {
     const superadminLists = userList.filter(user => user.userRole === 'SUPERADMIN')
     const distributorLists = userList.filter(user => user.userRole === 'Distributor')
     const stokistLists = userList.filter(user => user.userRole === 'STOKIST')
-    // const playerLists = userList.filter(user => user.userRole === 'PLAYER')
-    // console.log(adminLists, distributorLists, stokistLists, playerLists)
 
     const fetchUser = async () => {
-      console.log(userID)
       try {
         const res = await axios.get(
           `https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/fetchuserbyid?userID=${userID}`
         );
-        console.log(res.data.data)
+        // console.log(res.data.data)
         setUserInfo(res.data.data)
+
+        setUserName(res.data.data.userName)
+        setFullName(res.data.data.fullName)
+        setPassword(res.data.data.password)
+        setBossID(res.data.data.bossID)
+        setUserRole(res.data.data.userRole)
+        setDateOfbirth(res.data.data.dateOfbirth)
+        setBlock(res.data.data.blocked)
+        setphNo(res.data.data.phone)
+        setVerified(res.data.data.verified)
+        setCommPercent(res.data.data.commPercent)
+        setResetDevice(res.data.data.deviceID)
       } catch (error) {
         console.log(error)
       }
@@ -90,9 +98,6 @@ const EditUser = () => {
     useEffect(() => {
       fetchUser()
     }, [])
-
-    console.log(userInfo)
-    
 
     //username check
     const usernameCheckHandler = (input) => {
@@ -110,10 +115,9 @@ const EditUser = () => {
     };
 
     //reset device handler
-    const handleDeviceReset = (e) => {
-      e.target.value = "";
-      setResetDevice(true)
-      deviceID = ""
+    const handleDeviceReset = () => {
+      setResetDevice("")
+      console.log(resetDevice)
     };
 
     //handle block ....................................
@@ -130,13 +134,29 @@ const EditUser = () => {
       } catch (error) {
         console.log(error)
       }
-      setBlock("yes");
+      // setBlock("yes");
     }
 
 
     // form submit logic
     const onHandleSubmit = async (e) => {
         e.preventDefault();
+        // setUserName(userName)
+
+        console.log(
+                "userName", userName,
+                "fullName", fullName,
+                "password",password,
+                "role", userRole,
+                "per", commPercent,
+                "boss", bossID,
+                "ph", phNo,
+                "dob", dateOfbirth,
+                "block", block,
+                userID,
+                verified,
+                "device", resetDevice
+                )
 
         try {
             const res = await axios.post(
@@ -152,31 +172,16 @@ const EditUser = () => {
                 phone: phNo,
                 dateOfbirth,
                 verified,
-                block,
-                deviceID
+                blocked: block,
+                deviceID: resetDevice
               }
             );
-            console.log("Submited:...............", res);
-            reset()
             toast.success("User edited successfully")
         } catch (error) {
             console.log("Error:", error);
             toast.error("Something went wrong")
           }
         };
-
-    const reset = () => {
-        setUserName("");
-        setPassword("");
-        setFullName("");
-        // setUserRole(),
-        setBossID(null);
-        setCommPercent("");
-        setBossID("");
-        setphNo("");
-        setDateOfbirth(null)
-        setBlock("")
-    }
 
   return (
     <div className='form-container'>
@@ -287,8 +292,12 @@ const EditUser = () => {
                 <button className='button' onClick={blockHandler}>{block === 'yes' ? "UnBlock" : "Block"}</button>
             </div>
             <div className='input-control single-input'>
-                <input type="text" name='verified' value={userInfo.verified} onChange={(e) => setVerified(e.target.value)} />
+                <input type="text" name='verified' defaultValue={userInfo.verified} onChange={(e) => setVerified(e.target.value)} />
                 <button className='button'>{verified ? "Verified" : "Verify"}</button>
+            </div>
+            <div className='input-control single-input'>
+                <input type="text" name='resetDevice' value={userInfo.deviceID} />
+                <button className={`button ${resetDevice.length === 0 ? 'reset' : ''}`} onClick={handleDeviceReset}>Reset</button>
             </div>
 
             <button className='button'>Edit</button>

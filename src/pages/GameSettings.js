@@ -17,22 +17,9 @@ import 'react-toastify/dist/ReactToastify.css'
 import { ToastContainer, toast } from 'react-toastify';
 
 const GameSettings = (props) => {
-  const [state, setState] = useState({
-    gameType: "Payout Settings",
-    payoutPercent: 0,
-    // payoutMod: "",
-    multiplier: 0,
-    btnText: "Submit",
-  });
-
-  const { gameType, multiplier, payoutPercent, btnText } = state;
-
-  const handleChange = (name) => (e) => {
-    setState({
-      ...state,
-      [name]: e.target.value,
-    });
-  };
+  const [gameType, setGameType] = useState("")
+  const [multiplier, setMultiplier] = useState("")
+  const [payoutPercent, setpayoutPercent] = useState('')
 
   const handleSubmitMultiplier = async (e) => {
     e.preventDefault()
@@ -42,80 +29,55 @@ const GameSettings = (props) => {
       return;
     }
 
-    setState({
-      ...state,
-      btnText: "Submitting",
-    });
-    console.log(state);
+    setMultiplier(e.target.value)
+    console.log(multiplier);
 
     try {
       const res = await axios.post(
-        `https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/multiplier`,
+        `https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/setmultiplier`,
         {
           gameType: gameType,
           multiplier: multiplier
         }
       );
+      console.log(gameType, multiplier); 
       console.log("Multiplier", res.data);
 
-      setState({
-        gameType: "Payout Settings",
-        payoutPercent: 0,
-        mutiplier: 0,
-        btnText: "Submited",
-      });
-      toast.success('Payout settings has been changed successfully')
+      setMultiplier("")
+      setGameType("")
+      console.log("Settings:...............", res.data);
+      toast.success('Multiplier has been changed successfully')
     } catch (error) {
       console.log("Error:", error);
-      setState({
-        ...state,
-        buttonText: "Submit",
-      });
     }
   };
 
-  const handleSubmit = async () => {
-    if (parseInt(payoutPercent) === 0) {
-      alert("Payout Percent cannot be zero");
-      return;
-    }
+  const handleSubmitPercent = async (e) => {
+    e.preventDefault()
 
-    // if( multiplier<1)
-    // {
-    //     alert("select values in range 1-10");
-    //     return;
+    // if (payoutPercent === 0) {
+    //   alert("Payout Percent cannot be zero");
+    //   return;
     // }
 
-    setState({
-      ...state,
-      btnText: "Submitting",
-    });
-    console.log(state);
+    setpayoutPercent(e.target.value)
+
     try {
       const res = await axios.post(
-        `https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/gamesettings`,
+        `https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/payoutpercent`,
         {
           gameType: gameType,
           payoutPercent: payoutPercent,
-          //  multiplier:multiplier,
-          // payoutMod: payoutMod,
         }
       );
-
-      console.log("Settings:...............", res.data);
-      setState({
-        gameType: "Payout Settings",
-        payoutPercent: 0,
-        mutiplier: 0,
-        btnText: "Submited",
-      });
-      toast.success('Payout settings has been changed successfully')
+      console.log(res)
+      console.log(gameType, payoutPercent)
+      
+      setpayoutPercent("")
+      setGameType("")
+      toast.success('Payout percent has been changed successfully')
     } catch (error) {
       console.log("Error:", error);
-      setState({
-        ...state,
-        buttonText: "Submit",
-      });
     }
   };
 
@@ -134,8 +96,10 @@ const GameSettings = (props) => {
               <Col md>
                 <FloatingLabel controlId="floatingSelectGrid">
                   <Form.Select
-                    onChange={handleChange("gameType")}
+                    onChange={(e) => setGameType(e.target.value)}
                     aria-label="Floating label select example"
+                    value={gameType}
+                    required
                   >
                     <option>Select below...</option>
                     <option value="cards16">Cards 16</option>
@@ -167,9 +131,11 @@ const GameSettings = (props) => {
               <Col md>
                 <FloatingLabel label="Enter Payout Percentage">
                   <Form.Control
-                    onChange={handleChange("payoutPercent")}
+                    onChange={(e) => setpayoutPercent(e.target.value)}
                     type="number"
                     placeholder="Enter values from -100 to 100"
+                    value={payoutPercent}
+                    required={true}
                   />
                 </FloatingLabel>
               </Col>
@@ -202,7 +168,7 @@ const GameSettings = (props) => {
             <Button
               variant="secondary"
               className="float-right mr-4"
-              onSubmit={handleSubmit}
+              onClick={handleSubmitPercent}
             >
               Submit
             </Button>
@@ -224,10 +190,12 @@ const GameSettings = (props) => {
                   label="Select values from 1-10"
                 >
                   <Form.Control
-                    onChange={handleChange("multiplier")}
+                    onChange={((e) => setMultiplier(e.target.value))}
                     type="number"
                     min={1} max={10}
                     placeholder="Enter values from -100 to 100"
+                    value={multiplier}
+                    required={true}
                   />
                 </FloatingLabel>
               </Col>
@@ -238,7 +206,7 @@ const GameSettings = (props) => {
                   onClick={handleSubmitMultiplier}
                   variant="secondary"
                 >
-                  {btnText}
+                  Submit
                 </Button>
               </Col>
             </Row>
