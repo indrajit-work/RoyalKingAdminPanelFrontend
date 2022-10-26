@@ -5,6 +5,7 @@ import ListDistributor from './ListDistributor'
 import ListPlayer from './ListPlayers'
 import StokistList from './StokistList'
 import { getCookie, getRole } from "../utils/auth";
+import {BsPersonPlusFill} from 'react-icons/bs'
 import { Link } from 'react-router-dom'
 
 const ButtonContainer = styled.div`
@@ -28,7 +29,7 @@ const Button = styled.button`
 `
 
 const AddLink = styled(Link)`
-  background-color: steelblue;
+  background-color: #f34949;
   color: white;
   padding: 10px;
   border: none;
@@ -95,7 +96,7 @@ const UserTable = () => {
           </Button>
         ))}
 
-        <AddLink to='/addUser'>Add User</AddLink>
+        <AddLink to='/addUser'><BsPersonPlusFill /> Add User</AddLink>
 
           {/* <Button style={{backgroundColor: '#850000'}}>
             Add User

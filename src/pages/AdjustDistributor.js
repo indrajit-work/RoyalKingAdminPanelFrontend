@@ -11,6 +11,8 @@ import {
   Row,
   FloatingLabel,
 } from "react-bootstrap";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'
 import TransactionTable from "../components/TransactionTable";
 
 const AdjustDistributor = () => {
@@ -19,6 +21,7 @@ const AdjustDistributor = () => {
   const [comment, setComment] = useState("")
   const [selectedPlayer, setSelectedPlayer] = useState(0)
   const [amt, setAmt] = useState(0)
+  const [selectedUserBalance, setSelectedUserBalance] = useState(0)
 
   const [userRole, setUserRole] = useState("")
 
@@ -33,29 +36,42 @@ const AdjustDistributor = () => {
     setUserRole(role)
   })();
 
-  console.log(userRole)
-
   useEffect(() => {
-    getAdmins();
+    loadUserData();
   }, []);
 
-  const getAdmins = async () => {
-    const res = await axios.post(
-      "https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/getbyrole",
-      {
-        userRole: "Distributor",
-      }
-    );
-
-    setDistributors(res.data.adminsAll);
+  const loadUserData = async () => {
+    try {
+      const res = await axios.post(
+        `https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/usersunderme`,
+        {
+          userID: loggedUser,
+        }
+      );
+      setDistributors(
+        res.data?.userUnderMe.filter(user => user.userRole === 'Distributor').map((user) => {
+          console.log(user)
+          return {
+            ...user,
+            id: user.userID,
+          };
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const Transaction = async () => {
     if (parseInt(amt) <= 0) {
       alert("Enter correct Amount");
+      // return
     }
 
-    if (transactionType === "") alert("Enter type of transfer(Adjust)");
+    if (transactionType === ""){
+      alert("Enter type of transfer(Adjust)");
+      // return
+    }
 
     try {
       const res = await axios.post(
@@ -69,11 +85,16 @@ const AdjustDistributor = () => {
         }
       );
 
-      console.log("............", res);
+      if(res.data.startsWith("Not")){
+        alert("Not enough balance to deduct")
+        return
+      }
+      toast.success(`Points ${transactionType === "add" ? 'added': 'deducted'} successfully`)
     } catch (err) {
       console.log(err);
     }
   };
+
   return (
     <>
       <Container>
@@ -90,6 +111,7 @@ const AdjustDistributor = () => {
               <Col md>
                 <FloatingLabel controlId="floatingSelectGrid">
                   <Form.Select
+                    // className="w-75"
                     aria-label="Floating label select example"
                     onChange={(e) => setSelectedPlayer(e.target.value)}
                   >
@@ -127,16 +149,17 @@ const AdjustDistributor = () => {
                 <FloatingLabel
                   controlId="floatingSelectGrid"
                   label="Enter Amount..."
+                  // className="w-75"
                 >
                   <Form.Control type="number" onChange={(e) => setAmt(e.target.value)} />
                 </FloatingLabel>
               </Col>
               <Col md></Col>
 
-              <Card.Title className="text-muted mt-4">Comment</Card.Title>
+              <Card.Title className="text-muted mt-4">Comment (Optional)</Card.Title>
               <FloatingLabel
                 controlId="floatingTextarea2"
-                label="Leave a comment here(Optional)"
+                // label="Leave a comment here(Optional)"
               >
                 <Form.Control
                   className="w-50"
@@ -164,8 +187,9 @@ const AdjustDistributor = () => {
 
         <br />
       </Container>
+      <ToastContainer />
 
-      <TransactionTable />
+    <TransactionTable loggedUser={loggedUser} />
     </>
   );
 };

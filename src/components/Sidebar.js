@@ -84,11 +84,18 @@ const Sidebar = () => {
             <NavIcon to="#" className="logo">
               <BsBoxArrowInLeft onClick={showSidebar} />
             </NavIcon>
-            {userRole !== 'SUPERADMIN' && SidebarData.slice(0, 5).map((item, index) => {
-              return <SubMenu  showSideBar={showSidebar} item={item} key={index} />;
+            {userRole === 'SUPERADMIN' && SidebarData.map((item, index) => {
+              return <SubMenu showSideBar={showSidebar} item={item} key={index} />;
             })}
-           {userRole === 'SUPERADMIN' && SidebarData.map((item, index) => {
-              return <SubMenu  showSideBar={showSidebar} item={item} key={index} />;
+
+            {userRole === 'ADMIN' && SidebarData.slice(0, 6).map((item, index) => {
+              return <SubMenu showSideBar={showSidebar} item={item} key={index} />;
+            })}
+            {userRole === 'Distributor' && SidebarData.slice(1, 6).map((item, index) => {
+              return <SubMenu showSideBar={showSidebar} item={item} key={index} />;
+            })}
+            {userRole === 'STOKIST' && SidebarData.slice(1, 6).map((item, index) => {
+              return <SubMenu showSideBar={showSidebar} item={item} key={index} />;
             })}
           </SidebarWrap>
         </SidebarNav>

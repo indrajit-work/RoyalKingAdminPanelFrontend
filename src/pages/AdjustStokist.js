@@ -12,6 +12,8 @@ import {
   Row,
   FloatingLabel,
 } from "react-bootstrap";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'
 import TransactionTable from "../components/TransactionTable";
 
 const AdjustStokist = () => {
@@ -21,28 +23,38 @@ const AdjustStokist = () => {
   const [comment, setComment] = useState("")
   const [selectedPlayer, setSelectedPlayer] = useState(0)
 
-
   //current user
   const loggedUser = getCookie("token");
   // console.log("logeed in", loggedUser);
 
-  const userRole = getRole(loggedUser);
-  console.log("ROLE", userRole);
+  // const userRole = getRole(loggedUser);
 
   useEffect(() => {
-    getAdmins();
+    loadUserData();
   }, []);
 
-  const getAdmins = async () => {
-    const res = await axios.post(
-      "https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/getbyrole",
-      {
-        userRole: "STOKIST",
-      }
-    );
-
-    setStokists(res.data.adminsAll);
+  const loadUserData = async () => {
+    try {
+      const res = await axios.post(
+        `https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/usersunderme`,
+        {
+          userID: loggedUser,
+        }
+      );
+      setStokists(
+        res.data?.userUnderMe.filter(user => user.userRole === 'STOKIST').map((user) => {
+          return {
+            ...user,
+            id: user.userID,
+          };
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
   };
+
+  console.log(stokists)
 
   const Transaction = async () => {
     if (parseInt(amt) <= 0) {
@@ -84,6 +96,11 @@ const AdjustStokist = () => {
       setComment("")
   
       console.log("............", res);
+      if(res.data.startsWith("Not")){
+        alert("Not enough balance to deduct")
+        return
+      }
+      toast.success(`Points ${transactionType === "add" ? 'added': 'deducted'} successfully`)
     } catch (error) {
       console.log("Error from distributor adjust points:", error);
     }
@@ -177,7 +194,9 @@ const AdjustStokist = () => {
 
         <br />
       </Container>
-      <TransactionTable />
+      <ToastContainer />
+
+      <TransactionTable loggedUser={loggedUser} />
     </>
   );
 };

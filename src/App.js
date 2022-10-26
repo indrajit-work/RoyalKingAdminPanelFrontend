@@ -1,6 +1,6 @@
 import { Route, Switch, Redirect, Router } from "react-router-dom";
 import './App.css'
-import { isAuth } from "./utils/auth";
+import { getCookie, getRole, isAuth } from "./utils/auth";
 import Login from "./components/Login";
 import Sidebar from "./components/Sidebar";
 import Dashboard from "./pages/Dashboard";
@@ -36,8 +36,22 @@ import CreateUser from "./pages/CreateUser";
 import AddUser from "./pages/AddUser";
 import EditUser from "./pages/EditUser";
 import CleanData from "./pages/CleanData";
+import { useState } from "react";
 
 function App() {
+  const [loggedUserRole, setloggedUserRole] = useState('')
+
+  // get loggedin user id
+  const loggedUser = getCookie("token");
+  console.log("logeed in", loggedUser);
+
+  // get logged user role
+  (async () => {
+    const role = await getRole(loggedUser);
+    setloggedUserRole(role)
+  })();
+  console.log(loggedUserRole);
+
   return (
     <>
       <Route path="/login" exact>
@@ -47,13 +61,24 @@ function App() {
       <Switch>
         {/* <Sidebar/> */}
         {/* {isAuth() && <Sidebar/>} */}
-        <Route path="/" exact>
+
+        {loggedUserRole === 'SUPERADMIN' && <Route path="/" exact>
           <Redirect to="/dashboard" />
-        </Route>
+        </Route>}
+
+        {loggedUserRole === 'ADMIN' && <Route path="/" exact>
+          <Redirect to="/dashboard" />
+        </Route>}
+
+        {loggedUserRole === 'Distributor' || loggedUserRole === 'STOKIST' && <Route path="/" exact>
+          <Redirect to="/userManager" />
+        </Route>}
+
         <Route path="/dashboard" exact>
           <Sidebar />
           <Dashboard />
         </Route>
+
         <Route path="/profile" exact>
           <Sidebar />
           <Dashboard />
@@ -69,14 +94,16 @@ function App() {
           <ChangePassword />
         </Route>
 
-        <Route path="/createUser" exact>
+        {/* <Route path="/createUser" exact>
           <Sidebar />
           <CreateUser />
-        </Route>
+        </Route> */}
+
         <Route path="/addUser" exact>
           <Sidebar />
           <AddUser />
         </Route>
+
         <Route path="/editUser/:userID/:deviceID" exact>
           <Sidebar />
           <EditUser />

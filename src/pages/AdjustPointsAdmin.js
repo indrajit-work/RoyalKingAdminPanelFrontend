@@ -62,6 +62,10 @@ const AdjustPointsAdmin = () => {
       );
 
       console.log("............", res.data);
+      if(res.data.startsWith("Not")){
+        alert("Not enough balance to deduct")
+        return
+      }
       toast.success(`Points ${transactionType === "add" ? 'added': 'deducted'} successfully`)
     } catch (err) {
       console.log("Error from stokist adjust points:", err);

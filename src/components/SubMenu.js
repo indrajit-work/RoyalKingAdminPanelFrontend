@@ -60,7 +60,7 @@ const SubMenu = ({ item ,showSide,showSideBar}) => {
       setloggedUserRole(role)
   })();
 
-  // console.log(showSideBar)
+  // console.log(item)
   // onClick={showSideBar}
   return (
     <>
@@ -77,10 +77,62 @@ const SubMenu = ({ item ,showSide,showSideBar}) => {
             : null}
         </div>
       </SidebarLink>
- 
-      {subnav && loggedUserRole === 'SUPERADMIN' && item.subNav.map((item, index) => {
+
+      {subnav && item.title === 'Profile' && loggedUserRole === 'SUPERADMIN' && item.subNav.map((menu, index) => {
         return (
-          <DropdownLink to={item.path} key={index} onClick={showSide}>
+          <DropdownLink to={menu.path} key={index} onClick={showSideBar}>
+            {menu.icon}
+            <SidebarLabel>{menu.title}</SidebarLabel>
+          </DropdownLink>
+        );
+      })}
+      {/* {item.title === 'Profile' && loggedUserRole === 'ADMIN' && 
+        <DropdownLink to={item.subnav.slice(-1).path} onClick={showSideBar}>
+          {item.subnav.slice(-1).icon}
+          <SidebarLabel>{item.subnav.slice(-1).title}</SidebarLabel>
+        </DropdownLink>
+      } */}
+      {/* {item.title === 'Profile' && loggedUserRole === 'Distributor' && 
+        <DropdownLink to={item.slice(-1).path} onClick={showSideBar}>
+          {item.slice(-1).icon}
+          <SidebarLabel>{item.slice(-1).title}</SidebarLabel>
+        </DropdownLink>
+      }
+      {item.title === 'Profile' && loggedUserRole === 'STOKIST' && 
+        <DropdownLink to={item.subnav.slice(-1).path} onClick={showSideBar}>
+          {item.subnav.slice(-1).icon}
+          <SidebarLabel>{item.subnav.slice(-1).title}</SidebarLabel>
+        </DropdownLink>
+      } */}
+      {/* {subnav && item.title === 'Profile' && loggedUserRole !== 'SUPERADMIN' && item.subNav.splice(0, 1).map((item, index) => {
+        return (
+          <DropdownLink to={item.path} key={index} onClick={showSideBar}>
+            {item.icon}
+            <SidebarLabel>{item.title}</SidebarLabel>
+          </DropdownLink>
+        );
+      })} */}
+      {/* {subnav && item.title === 'Profile' && loggedUserRole === 'STOKIST' && item.subNav.slice(0, 1).map((item, index) => {
+        return (
+          <DropdownLink to={item.path} key={index} onClick={showSideBar}>
+            {item.icon}
+            <SidebarLabel>{item.title}</SidebarLabel>
+          </DropdownLink>
+        );
+      })} */}
+      {/* {subnav && item.title === 'Profile' && loggedUserRole === 'ADMIN' && item.subNav.map((item, index) => {
+        console.log(item)
+        return (
+          <DropdownLink to={item.path} key={index} onClick={showSideBar}>
+            {item.icon}
+            <SidebarLabel>{item.title}oo</SidebarLabel>
+          </DropdownLink>
+        );
+      })} */}
+ 
+      {subnav && item.title === 'Adjust Points' && loggedUserRole === 'SUPERADMIN' && item.subNav.map((item, index) => {
+        return (
+          <DropdownLink to={item.path} key={index} onClick={showSideBar}>
             {item.icon}
             <SidebarLabel>{item.title}</SidebarLabel>
           </DropdownLink>
@@ -88,7 +140,7 @@ const SubMenu = ({ item ,showSide,showSideBar}) => {
       })}
       {subnav && loggedUserRole === 'ADMIN' && item.subNav.slice(1).map((item, index) => {
         return (
-          <DropdownLink to={item.path} key={index} onClick={showSide}>
+          <DropdownLink to={item.path} key={index} onClick={showSideBar}>
             {item.icon}
             <SidebarLabel>{item.title}</SidebarLabel>
           </DropdownLink>
@@ -96,15 +148,15 @@ const SubMenu = ({ item ,showSide,showSideBar}) => {
       })}
       {subnav && loggedUserRole === 'Distributor' && item.subNav.slice(2).map((item, index) => {
         return (
-          <DropdownLink to={item.path} key={index} onClick={showSide}>
+          <DropdownLink to={item.path} key={index} onClick={showSideBar}>
             {item.icon}
             <SidebarLabel>{item.title}</SidebarLabel>
           </DropdownLink>
         );
       })}
-      {subnav && loggedUserRole === 'STOKIST' && item.subNav.slice(3).map((item, index) => {
+      {subnav && loggedUserRole === 'STOKIST' && item.subNav.length === 4 && item.subNav.slice(3).map((item, index) => {
         return (
-          <DropdownLink to={item.path} key={index} onClick={showSide}>
+          <DropdownLink to={item.path} key={index} onClick={showSideBar}>
             {item.icon}
             <SidebarLabel>{item.title}</SidebarLabel>
           </DropdownLink>

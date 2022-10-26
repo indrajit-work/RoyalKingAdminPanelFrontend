@@ -30,7 +30,7 @@ const EditUser = () => {
 
     const params = useParams();
     const userID = params.userID;
-    const deviceID = params.deviceID;
+    const deviceID = params.deviceID ?? "";
     console.log(userID, deviceID);
 
     // get loggedin user id
@@ -142,6 +142,7 @@ const EditUser = () => {
             const res = await axios.post(
               `https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/modifyuser`,
               {
+                userID,
                 userName,
                 password,
                 userRole,
@@ -151,7 +152,8 @@ const EditUser = () => {
                 phone: phNo,
                 dateOfbirth,
                 verified,
-                block
+                block,
+                deviceID
               }
             );
             console.log("Submited:...............", res);

@@ -1,24 +1,51 @@
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridToolbarContainer, GridToolbarExport } from "@mui/x-data-grid";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { getCookie, getRole } from "../utils/auth";
+import {MdRefresh} from 'react-icons/md'
 
 const DataTable = styled.div`
-  width: 90vw;
+  width: 100vw;
   height: 800px;
   padding: 3rem;
   margin: 0 auto;
+  @media screen and (max-width: 768px) {
+    padding: 1rem;
+    margin: 0 auto;
+  }
 `;
 
+const Button = styled.button`
+  position: absolute;
+  right: 10%;
+  top: 7%;
+  font-size: 1rem;
+  background-color: transparent;
+  color: steelblue;
+  border: none;
+  z-index: 999;
+  @media screen and (max-width: 768px) {
+    top: 3%;
+  }
+`
+
 const userColumns = [
-  { field: "id", headerName: "Transaction ID", width: 200, sortingOrder: ['desc', 'asc'] },
+  { field: "id", headerName: "Transaction ID", width: 150, sortingOrder: ['desc', 'asc'] },
   { field: "transactionDateReadable", headerName: "Transaction Date", width: 250 },
     { field: "senderID", headerName: "Sender", width: 130 },
-    { field: "recieverID", headerName: "Receiver", width: 200 },
-    { field: "amount", headerName: "Amount", width: 200 },
+    { field: "recieverID", headerName: "Receiver", width: 130 },
+    { field: "amount", headerName: "Amount", width: 180 },
     { field: "comment", headerName: "Comment", width: 300, sortable: false }
 ]
+
+function CustomToolbar() {
+  return (
+    <GridToolbarContainer>
+      <GridToolbarExport />
+    </GridToolbarContainer>
+  );
+}
 
 const TransactionTable = ({loggedUser}) => {
   const [transactionList, setTransactionList] = useState([])
@@ -70,7 +97,12 @@ const TransactionTable = ({loggedUser}) => {
   // console.log(transactionList)
 
   return (
-    <div>
+    <div style={{position: 'relative'}}>
+      <Button title='Refresh' onClick={loadUserData}>
+        Refresh <MdRefresh />
+      </Button>
+
+
       <DataTable>
         <DataGrid
           rows={transactionList}
@@ -79,6 +111,7 @@ const TransactionTable = ({loggedUser}) => {
           pageSize={pageSize}
           onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
           checkboxSelection={false}
+          components={{ Toolbar: CustomToolbar }} 
           // onSortModelChange={(model) => setSortModel(model)}
           initialState={{
             sorting: {

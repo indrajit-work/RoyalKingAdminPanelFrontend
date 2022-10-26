@@ -11,14 +11,12 @@ import {
   Row,
   FloatingLabel,
 } from "react-bootstrap";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'
 import TransactionTable from "../components/TransactionTable";
-
 
 const AdjustPlayer = () => {
   const [players, setPlayers] = useState();
-
-  // const [senderID, setSenderID] = useState(0)
-  // const [receiverID, setReceiverID] = useState(0)
   const [amt, setAmt] = useState(0)
   const [transactionType, setTransactionType] = useState("")
   const [comment, setComment] = useState("")
@@ -26,24 +24,34 @@ const AdjustPlayer = () => {
 
   //current user
   const loggedUser = getCookie("token");
-  // console.log("logeed in", loggedUser);
-  const userRole = getRole(loggedUser);
-  // console.log("ROLE", userRole);
+  // const userRole = getRole(loggedUser);
 
   useEffect(() => {
-    getAdmins();
+    loadUserData();
   }, []);
 
-  const getAdmins = async () => {
-    const res = await axios.post(
-      "https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/getbyrole",
-      {
-        userRole: "PLAYER",
-      }
-    );
-    console.log("getAdmins ",res.data)
-    setPlayers(res.data.adminsAll);
+  const loadUserData = async () => {
+    try {
+      const res = await axios.post(
+        `https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/usersunderme`,
+        {
+          userID: loggedUser,
+        }
+      );
+      setPlayers(
+        res.data?.userUnderMe.filter(user => user.userRole === 'PLAYER').map((user) => {
+          return {
+            ...user,
+            id: user.userID,
+          };
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
   };
+
+  console.log(players)
 
   const Transaction = async () => {
     if (parseInt(amt) <= 0) {
@@ -80,6 +88,11 @@ const AdjustPlayer = () => {
       setComment("")
 
       console.log("............", res.data);
+      if(res.data.startsWith("Not")){
+        alert("Not enough balance to deduct")
+        return
+      }
+      toast.success(`Points ${transactionType === "add" ? 'added': 'deducted'} successfully`)
     } catch (err) {
       console.log("Error from stokist adjust points:", err);
     }
@@ -175,8 +188,9 @@ const AdjustPlayer = () => {
 
         <br />
       </Container>
+      <ToastContainer />
 
-      <TransactionTable />
+      <TransactionTable loggedUser={loggedUser} />
     </>
   );
 };

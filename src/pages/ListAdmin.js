@@ -5,6 +5,7 @@ import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { getCookie, getRole } from "../utils/auth";
 import { userColumns } from "../utils/TableDataSource";
+import {FaUserEdit} from 'react-icons/fa'
 
 const DataTable = styled.div`
   min-height: 500px;
@@ -17,7 +18,7 @@ const DataTable = styled.div`
 `;
 
 const ModifyLink = styled.div`
-  background-color: steelblue;
+  background-color: #7334e9;
   color: #fff;
   padding: 8px 2rem;
   border-radius: 5px;
@@ -25,8 +26,8 @@ const ModifyLink = styled.div`
   font-weight: 500;
   &:hover {
     background-color: white;
-    color: steelblue;
-    border: 1px solid steelblue;
+    color: #7334e9;
+    border: 1px solid #7334e9;
   }
 `;
 
@@ -52,7 +53,7 @@ const ListAdmin = ({ userType, loggedUser, loggedUserRole }) => {
               to={`/editUser/${user.userID}/${user.deviceID ? user.deviceID : undefined}`}
               style={{ textDecoration: "none" }}
             >
-              <ModifyLink>Edit</ModifyLink>
+              <ModifyLink><FaUserEdit /> Edit</ModifyLink>
             </Link>
           ))
         );

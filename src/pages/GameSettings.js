@@ -174,7 +174,7 @@ const GameSettings = (props) => {
                 </FloatingLabel>
               </Col>
               <Col md> </Col>
-              <h4 className="text-muted ml-4 mt-3 p-2 ">
+              {/* <h4 className="text-muted ml-4 mt-3 p-2 ">
                 Payout Mode
                 <small className="text-muted">(Select only one)</small>
               </h4>
@@ -197,7 +197,7 @@ const GameSettings = (props) => {
                   label="High Payout Mode"
                   disabled
                 />
-              </Form>
+              </Form> */}
             </Row>
             <Button
               variant="secondary"

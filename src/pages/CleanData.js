@@ -55,12 +55,12 @@ const CleanData = () => {
   return (
     <FormContainer>
         <Form onSubmit={cleanDataHandler}>
-            <label>Enter No. of Days</label>
+            <label>Delete data older than</label>
             <select name='daysToClean' style={{height: '40px'}}>
                 <option value='' selected disabled>Select no of days below...</option>
-                <option value='15'>15</option>
-                <option value='30'>30</option>
-                <option value='90'>90</option>
+                <option value='15'>15 days</option>
+                <option value='30'>30 days</option>
+                <option value='90'>90 days</option>
             </select>
             <Button className='button' disabled>Clean</Button>
         </Form>
