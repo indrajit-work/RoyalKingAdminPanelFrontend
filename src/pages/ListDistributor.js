@@ -99,7 +99,7 @@ const ListDistributor = ({ userType, loggedUser, loggedUserRole }) => {
           <DataGrid
             rows={distributorList}
             columns={userColumns.concat(modifyColumn)}
-            rowsPerPageOptions={[5, 10, 20]}
+            rowsPerPageOptions={[10, 25, 50]}
             pageSize={pageSize}
             onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
             checkboxSelection={false}

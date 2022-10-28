@@ -130,7 +130,7 @@ const SubMenu = ({ item ,showSide,showSideBar}) => {
         );
       })} */}
  
-      {subnav && item.title === 'Adjust Points' && loggedUserRole === 'SUPERADMIN' && item.subNav.map((item, index) => {
+      {/* {subnav && item.title === 'Adjust Points' && loggedUserRole === 'SUPERADMIN' && item.subNav.map((item, index) => {
         return (
           <DropdownLink to={item.path} key={index} onClick={showSideBar}>
             {item.icon}
@@ -161,7 +161,7 @@ const SubMenu = ({ item ,showSide,showSideBar}) => {
             <SidebarLabel>{item.title}</SidebarLabel>
           </DropdownLink>
         );
-      })}
+      })} */}
     </>
   );
 };

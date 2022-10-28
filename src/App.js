@@ -37,6 +37,7 @@ import AddUser from "./pages/AddUser";
 import EditUser from "./pages/EditUser";
 import CleanData from "./pages/CleanData";
 import { useState } from "react";
+import AdjustPoints from "./pages/AdjustPoints";
 
 function App() {
   const [loggedUserRole, setloggedUserRole] = useState('')
@@ -159,7 +160,12 @@ function App() {
           <Broadcast />
         </Route>
 
-        <Route path="/adjustpointsAdmin" exact>
+        <Route path="/adjustpoints" exact>
+          <Sidebar />
+          <AdjustPoints />
+        </Route>
+
+        {/* <Route path="/adjustpointsAdmin" exact>
           <Sidebar />
           <AdjustPointsAdmin />
         </Route>
@@ -177,7 +183,7 @@ function App() {
         <Route path="/adjustpointPlayers" exact>
           <Sidebar />
           <AdjustPlayer />
-        </Route>
+        </Route> */}
 
         <Route path="/player/modify/:userID/:deviceID" exact>
           <Sidebar />

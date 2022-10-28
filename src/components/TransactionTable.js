@@ -8,10 +8,10 @@ import {MdRefresh} from 'react-icons/md'
 const DataTable = styled.div`
   width: 100vw;
   height: 800px;
-  padding: 3rem;
+  padding: 0 3rem 3rem;
   margin: 0 auto;
   @media screen and (max-width: 768px) {
-    padding: 1rem;
+    padding: 8px;
     margin: 0 auto;
   }
 `;
@@ -19,14 +19,14 @@ const DataTable = styled.div`
 const Button = styled.button`
   position: absolute;
   right: 10%;
-  top: 7%;
+  top: 1%;
   font-size: 1rem;
   background-color: transparent;
   color: steelblue;
   border: none;
   z-index: 999;
   @media screen and (max-width: 768px) {
-    top: 3%;
+    top: 2%;
   }
 `
 
@@ -97,35 +97,38 @@ const TransactionTable = ({loggedUser}) => {
   // console.log(transactionList)
 
   return (
-    <div style={{position: 'relative'}}>
-      <Button title='Refresh' onClick={loadUserData}>
-        Refresh <MdRefresh />
-      </Button>
+    <>
+      <h2 style={{textAlign: 'center', paddingTop: '1rem'}}>Transaction List</h2>
+      <div style={{position: 'relative'}}>
+        <Button title='Refresh' onClick={loadUserData}>
+          Refresh <MdRefresh />
+        </Button>
 
 
-      <DataTable>
-        <DataGrid
-          rows={transactionList}
-          columns={userColumns}
-          rowsPerPageOptions={[10, 20, 30, 40, 50]}
-          pageSize={pageSize}
-          onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-          checkboxSelection={false}
-          components={{ Toolbar: CustomToolbar }} 
-          // onSortModelChange={(model) => setSortModel(model)}
-          initialState={{
-            sorting: {
-              sortModel: [
-                {
-                  field: 'id',
-                  sort: 'desc',
-                },
-              ],
-            },
-          }}
-        ></DataGrid>
-      </DataTable>
-    </div>
+        <DataTable>
+          <DataGrid
+            rows={transactionList}
+            columns={userColumns}
+            rowsPerPageOptions={[10, 20, 30, 40, 50]}
+            pageSize={pageSize}
+            onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+            checkboxSelection={false}
+            components={{ Toolbar: CustomToolbar }} 
+            // onSortModelChange={(model) => setSortModel(model)}
+            initialState={{
+              sorting: {
+                sortModel: [
+                  {
+                    field: 'id',
+                    sort: 'desc',
+                  },
+                ],
+              },
+            }}
+          ></DataGrid>
+        </DataTable>
+      </div>
+    </>
   );
 };
 

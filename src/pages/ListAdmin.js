@@ -139,7 +139,7 @@ const ListAdmin = ({ userType, loggedUser, loggedUserRole }) => {
             <DataGrid
             rows={adminList}
             columns={userColumns.concat(modifyColumn)}
-            rowsPerPageOptions={[5, 10, 20]}
+            rowsPerPageOptions={[10, 25, 50]}
             pageSize={pageSize}
             onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
             checkboxSelection={false}

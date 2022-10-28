@@ -15,8 +15,7 @@ const EditUser = () => {
     const [bossID, setBossID] = useState('')
     const [phNo, setphNo] = useState('')
     const [dateOfbirth, setDateOfbirth] = useState('')
-    const [resetDevice, setResetDevice] = useState('')
-    const [verified, setVerified] = useState()
+    const [verified, setVerified] = useState('')
     const [block, setBlock] = useState("")
     const [loggedUserRole, setloggedUserRole] = useState('')
 
@@ -26,8 +25,9 @@ const EditUser = () => {
 
     const [userInfo, setUserInfo] = useState({})
 
+    const [resetDevice, setResetDevice] = useState()
     const roleList = ['ADMIN', 'Distributor', 'STOKIST', 'PLAYER']
-
+    
     const params = useParams();
     const userID = params.userID;
     const deviceID = params.deviceID ?? "";
@@ -89,7 +89,7 @@ const EditUser = () => {
         setphNo(res.data.data.phone)
         setVerified(res.data.data.verified)
         setCommPercent(res.data.data.commPercent)
-        setResetDevice(res.data.data.deviceID)
+        // setResetDevice(res.data.data.deviceID)
       } catch (error) {
         console.log(error)
       }
@@ -116,36 +116,38 @@ const EditUser = () => {
 
     //reset device handler
     const handleDeviceReset = () => {
+      // if()
+      console.log("clicked")
       setResetDevice("")
       console.log(resetDevice)
     };
-
+    
     //handle block ....................................
-    const blockHandler = async (e) => {
-      try {
-        const res = await axios.post(
-          `https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/blockuser`,
-          {
-            userID: userID,
-            block: "yes",
-          }
-        );
-        console.log(res.data)
-      } catch (error) {
-        console.log(error)
-      }
-      setBlock(e.target.value);
-    }
+    // const blockHandler = async (e) => {
+    //   try {
+    //     const res = await axios.post(
+    //       `https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/blockuser`,
+    //       {
+    //         userID: userID,
+    //         block: "yes",
+    //       }
+    //     );
+    //     console.log(res.data)
+    //   } catch (error) {
+    //     console.log(error)
+    //   }
+    //   setBlock(e.target.value);
+    // }
 
 
     // form submit logic
     const onHandleSubmit = async (e) => {
         e.preventDefault();
-        // setUserName(userName)
 
+        console.log(resetDevice)
         console.log(
-                "userName", userName,
                 "fullName", fullName,
+                "userName", userName,
                 "password",password,
                 "role", userRole,
                 "per", commPercent,
@@ -314,14 +316,25 @@ const EditUser = () => {
                 <input type="text" name='verified' defaultValue={userInfo.verified} onChange={(e) => setVerified(e.target.value)} />
                 <button className='button'>{verified ? "Verified" : "Verify"}</button>
             </div> */}
-            {/* <div className='input-control single-input'>
-                <input type="text" name='resetDevice' value={userInfo.deviceID} />
-                <button className={`button ${resetDevice.length === 0 ? 'reset' : ''}`} onClick={handleDeviceReset}>Reset</button>
-            </div> */}
+              <label className='input-label'>Device ID</label>
+            <div className='input-control single-input reset-input'>
+              <input type="text" name='resetDevice' value={deviceID} />
+              <input type="button" style={{flex: 1}} className={`button`} onClick={handleDeviceReset} value="Reset" />
+            </div>
 
             <button className='button'>Edit</button>
         </form>
-        <ToastContainer />
+        <ToastContainer 
+          style={{position: "fixed", top: "5%", left: "0"}}
+          autoClose={2000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss={false}
+          pauseOnHover={false}
+          theme="dark" 
+        />
     </div>
   )
 }

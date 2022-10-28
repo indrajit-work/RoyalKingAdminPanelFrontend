@@ -29,7 +29,7 @@ const ModifyLink = styled.div`
 
 const ListDistributor = ({userType, loggedUser, loggedUserRole}) => {
   const [userList, setUserList] = useState([]);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(10);
 
   const modifyColumn = [
     {
@@ -95,7 +95,7 @@ const ListDistributor = ({userType, loggedUser, loggedUserRole}) => {
           <DataGrid
             rows={stokistList}
             columns={userColumns.concat(modifyColumn)}
-            rowsPerPageOptions={[5, 10, 20]}
+            rowsPerPageOptions={[10, 25, 50]}
             pageSize={pageSize}
             onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
             checkboxSelection={false}

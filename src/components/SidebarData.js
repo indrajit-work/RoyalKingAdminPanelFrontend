@@ -11,26 +11,26 @@ export const SidebarData = [
     icon: <IoIcons.IoIosPaper />,
     cName: "sub-nav",
   },
-  {
-    title: "Profile",
-    path: "#",
-    icon: <AiIcons.AiFillHome />,
-    iconClosed: <RiIcons.RiArrowDownSFill />,
-    iconOpened: <RiIcons.RiArrowUpSFill />,
+  // {
+  //   title: "Profile",
+  //   path: "#",
+  //   icon: <AiIcons.AiFillHome />,
+  //   iconClosed: <RiIcons.RiArrowDownSFill />,
+  //   iconOpened: <RiIcons.RiArrowUpSFill />,
 
-    subNav: [
-      {
-        title: "Change Username",
-        path: "/profile/username",
-        icon: <IoIcons.IoIosPaper />,
-      },
-      {
-        title: "Change Passowrd",
-        path: "/profile/changepassword",
-        icon: <IoIcons.IoIosPaper />,
-      },
-    ],
-  },
+  //   subNav: [
+  //     {
+  //       title: "Change Username",
+  //       path: "/profile/username",
+  //       icon: <IoIcons.IoIosPaper />,
+  //     },
+  //     {
+  //       title: "Change Passowrd",
+  //       path: "/profile/changepassword",
+  //       icon: <IoIcons.IoIosPaper />,
+  //     },
+  //   ],
+  // },
   // {
   //   title: 'Admin',
   //   icon: <FaIcons.FaCartPlus />,
@@ -121,36 +121,36 @@ export const SidebarData = [
   },
   {
     title: "Adjust Points",
-    // path: '',
+    path: '/adjustpoints',
     icon: <FaIcons.FaCartPlus />,
-    iconClosed: <RiIcons.RiArrowDownSFill />,
-    iconOpened: <RiIcons.RiArrowUpSFill />,
-    subNav: [
-      {
-        title: "Admin",
-        path: "/adjustpointsAdmin",
-        icon: <IoIcons.IoIosPaper />,
-        cName: "sub-nav",
-      },
-      {
-        title: "Distributor",
-        path: "/adjustpointDistributor",
-        icon: <IoIcons.IoIosPaper />,
-        cName: "sub-nav",
-      },
-      {
-        title: "Stokist",
-        path: "/adjustpointStokist",
-        icon: <IoIcons.IoIosPaper />,
-        cName: "sub-nav",
-      },
-      {
-        title: "Player",
-        path: "/adjustpointPlayers",
-        icon: <IoIcons.IoIosPaper />,
-        cName: "sub-nav",
-      },
-    ],
+    // iconClosed: <RiIcons.RiArrowDownSFill />,
+    // iconOpened: <RiIcons.RiArrowUpSFill />,
+    // subNav: [
+    //   {
+    //     title: "Admin",
+    //     path: "/adjustpointsAdmin",
+    //     icon: <IoIcons.IoIosPaper />,
+    //     cName: "sub-nav",
+    //   },
+    //   {
+    //     title: "Distributor",
+    //     path: "/adjustpointDistributor",
+    //     icon: <IoIcons.IoIosPaper />,
+    //     cName: "sub-nav",
+    //   },
+    //   {
+    //     title: "Stokist",
+    //     path: "/adjustpointStokist",
+    //     icon: <IoIcons.IoIosPaper />,
+    //     cName: "sub-nav",
+    //   },
+    //   {
+    //     title: "Player",
+    //     path: "/adjustpointPlayers",
+    //     icon: <IoIcons.IoIosPaper />,
+    //     cName: "sub-nav",
+    //   },
+    // ],
   },
   {
     title: "Ticket History",

@@ -9,13 +9,15 @@ import SubMenu from "./SubMenu";
 import { IconContext } from "react-icons/lib";
 import { getCookie, getRole, logout } from "../utils/auth";
 import "./Sidebar.css"
-import {   BsBoxArrowInLeft } from "react-icons/bs";
+import {   AiOutlineCloseCircle } from "react-icons/ai";
 const Nav = styled.div`
   background: #15171c;
   height: 60px;
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  position: sticky;
+  top: 0;
 `;
 
 const NavIcon = styled(Link)`
@@ -82,7 +84,7 @@ const Sidebar = () => {
         <SidebarNav sidebar={sidebar}>
           <SidebarWrap>
             <NavIcon to="#" className="logo">
-              <BsBoxArrowInLeft onClick={showSidebar} />
+              <AiOutlineCloseCircle onClick={showSidebar} />
             </NavIcon>
             {userRole === 'SUPERADMIN' && SidebarData.map((item, index) => {
               return <SubMenu showSideBar={showSidebar} item={item} key={index} />;

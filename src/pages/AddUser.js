@@ -23,18 +23,18 @@ const AddUser = () => {
 
     const roleList = ['ADMIN', 'Distributor', 'STOKIST', 'PLAYER']
 
-    console.log(userRole, userName, password, fullName, commPercent, bossID, phNo)
+    // console.log(userRole, userName, password, fullName, commPercent, bossID, phNo)
 
     // get loggedin user id
     const loggedUser = getCookie("token");
-    console.log("logeed in", loggedUser);
+    // console.log("logeed in", loggedUser);
 
     // get logged user role
     (async () => {
         const role = await getRole(loggedUser);
         setloggedUserRole(role)
     })();
-  console.log(loggedUserRole);
+  // console.log(loggedUserRole);
 
   // get boss info
   useEffect(() => {
@@ -123,7 +123,7 @@ const AddUser = () => {
         setVerifyPassword("");
         setBossID(null);
         setCommPercent("");
-        // setUserRole(""),
+        setUserRole(null);
         setBossID("");
         setphNo("");
         setDateOfbirth('dd-mm-yyyy')
@@ -249,7 +249,17 @@ const AddUser = () => {
 
             <button className='button'>Submit</button>
         </form>
-        <ToastContainer />
+        <ToastContainer 
+          style={{position: "fixed", top: "5%", left: "0"}}
+          autoClose={2000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss={false}
+          pauseOnHover={false}
+          theme="dark" 
+        />
     </div>
   )
 }
