@@ -80,6 +80,8 @@ const AdjustPointForm = ({ userRole, loggedUser }) => {
         } successfully`
       );
 
+      loadUserData()
+
     } catch (err) {
       console.log(err);
     }

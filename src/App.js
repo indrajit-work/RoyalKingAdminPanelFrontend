@@ -90,7 +90,7 @@ function App() {
           <UserTable />
         </Route>
 
-        <Route path="/profile/changepassword" exact>
+        <Route path="/changepassword" exact>
           <Sidebar />
           <ChangePassword />
         </Route>

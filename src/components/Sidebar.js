@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { NavLink,Link, useHistory } from "react-router-dom";
 import * as FaIcons from "react-icons/fa";
@@ -10,6 +10,7 @@ import { IconContext } from "react-icons/lib";
 import { getCookie, getRole, logout } from "../utils/auth";
 import "./Sidebar.css"
 import {   AiOutlineCloseCircle } from "react-icons/ai";
+import axios from "axios";
 const Nav = styled.div`
   background: #15171c;
   height: 60px;
@@ -34,22 +35,30 @@ const SidebarNav = styled.nav`
   width: 240px;
   height: 100vh;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   position: fixed;
   top: 0;
   left: ${({ sidebar }) => (sidebar ? "0" : "-100%")};
   transition: 250ms;
   z-index: 10;
   opacity: 0.95;
+  flex-direction: column;
 `;
 
 const SidebarWrap = styled.div`
   width: 100%;
 `;
 
+const UserInfo = styled.div`
+  color: white;
+  padding-bottom: 2rem;
+`
+
 const Sidebar = () => {
   const [sidebar, setSidebar] = useState(true);
   const [userRole, setUserRole] = useState('')
+  const [userName, setUserName] = useState('')
+  const [balance, setBalance] = useState()
 
   const history = useHistory();
   const showSidebar = () => setSidebar(!sidebar);
@@ -66,6 +75,19 @@ const Sidebar = () => {
 // const hideSideBar=()=>{
 //   setSidebar(false)
 // }
+
+  const fetchUserDetails = async () => {
+    const res = await axios.get(
+      `https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/fetchuserbyid?userID=${loggedUser}`
+    );
+    setUserName(res.data.data.userName)
+    setBalance(res.data.data.balance)
+  }
+
+  useEffect(() => {
+    fetchUserDetails()
+  }, [])
+  
   
   return (
     <>
@@ -100,6 +122,15 @@ const Sidebar = () => {
               return <SubMenu showSideBar={showSidebar} item={item} key={index} />;
             })}
           </SidebarWrap>
+
+          {userRole !== 'SUPERADMIN' && <UserInfo>
+            <p style={{marginBottom: '4px'}}>Username: 
+              <span style={{fontWeight: 'bold'}}> {userName}</span>
+            </p>
+            <p>Balance: 
+              <span style={{fontWeight: 'bold'}}> {balance}</span>
+            </p>
+          </UserInfo>}
         </SidebarNav>
       </IconContext.Provider>
     </>

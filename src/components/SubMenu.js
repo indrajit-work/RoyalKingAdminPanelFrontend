@@ -46,6 +46,7 @@ const DropdownLink = styled(Link)`
 const SubMenu = ({ item ,showSide,showSideBar}) => {
   const [subnav, setSubnav] = useState(false);
   const [loggedUserRole, setloggedUserRole] = useState('')
+
 // const[showSide,setShowSide]=useState(true);
 
 // const showingSide=()=>setShowSide(!showSide)
@@ -64,7 +65,7 @@ const SubMenu = ({ item ,showSide,showSideBar}) => {
   // onClick={showSideBar}
   return (
     <>
-      <SidebarLink to={item.path} onClick={item.subNav && showSubnav}>
+      <SidebarLink to={item.path} onClick={showSideBar}>
         <div>
           {item.icon}
           <SidebarLabel>{item.title}</SidebarLabel>
@@ -78,14 +79,16 @@ const SubMenu = ({ item ,showSide,showSideBar}) => {
         </div>
       </SidebarLink>
 
-      {subnav && item.title === 'Profile' && loggedUserRole === 'SUPERADMIN' && item.subNav.map((menu, index) => {
+
+
+      {/* {subnav && item.title === 'Profile' && loggedUserRole === 'SUPERADMIN' && item.subNav.map((menu, index) => {
         return (
           <DropdownLink to={menu.path} key={index} onClick={showSideBar}>
             {menu.icon}
             <SidebarLabel>{menu.title}</SidebarLabel>
           </DropdownLink>
         );
-      })}
+      })} */}
       {/* {item.title === 'Profile' && loggedUserRole === 'ADMIN' && 
         <DropdownLink to={item.subnav.slice(-1).path} onClick={showSideBar}>
           {item.subnav.slice(-1).icon}
