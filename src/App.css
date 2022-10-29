@@ -103,7 +103,7 @@ input[type="button"]{
 
 .reset{
   cursor: not-allowed;
-  background-color: grey;
+  background-color: grey !important;
   color: white;
 }
 

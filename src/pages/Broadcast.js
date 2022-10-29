@@ -32,7 +32,7 @@ const Broadcast = () => {
         const res=await axios.post("https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/broadcastmsg",{
             message:msg
         })
-        setBtn("Sended")
+        setBtn("Sent")
         console.log(res);
     }
     

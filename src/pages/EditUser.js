@@ -25,7 +25,7 @@ const EditUser = () => {
 
     const [userInfo, setUserInfo] = useState({})
 
-    const [resetDevice, setResetDevice] = useState()
+    const [resetDevice, setResetDevice] = useState("")
     const roleList = ['ADMIN', 'Distributor', 'STOKIST', 'PLAYER']
     
     const params = useParams();
@@ -89,7 +89,7 @@ const EditUser = () => {
         setphNo(res.data.data.phone)
         setVerified(res.data.data.verified)
         setCommPercent(res.data.data.commPercent)
-        // setResetDevice(res.data.data.deviceID)
+        setResetDevice(res.data.data.deviceID)
       } catch (error) {
         console.log(error)
       }
@@ -116,7 +116,6 @@ const EditUser = () => {
 
     //reset device handler
     const handleDeviceReset = () => {
-      // if()
       console.log("clicked")
       setResetDevice("")
       console.log(resetDevice)
@@ -185,8 +184,6 @@ const EditUser = () => {
             toast.error("Something went wrong")
           }
         };
-
-        console.log(block, typeof(verified))
 
   return (
     <div className='form-container'>
@@ -308,6 +305,12 @@ const EditUser = () => {
                   <option value={false}>No</option>
                 </select>
             </div>
+
+            <label className='input-label'>Device ID</label>
+            <div className='input-control single-input reset-input'>
+              <input type="text" name='resetDevice' defaultValue={resetDevice} readOnly />
+              <input type="button" style={{flex: 1}} className={`button ${resetDevice.length === 0 ? 'reset' : ''}`} onClick={handleDeviceReset} value="Reset" disabled={resetDevice === ""} />
+            </div>
             {/* <div className='input-control single-input'>
                 <input type="text" name='block' value={userInfo.block} onChange={(e) => setBlock(e.target.value)} />
                 <button className='button' onClick={blockHandler}>{block === 'yes' ? "UnBlock" : "Block"}</button>
@@ -316,11 +319,6 @@ const EditUser = () => {
                 <input type="text" name='verified' defaultValue={userInfo.verified} onChange={(e) => setVerified(e.target.value)} />
                 <button className='button'>{verified ? "Verified" : "Verify"}</button>
             </div> */}
-              <label className='input-label'>Device ID</label>
-            <div className='input-control single-input reset-input'>
-              <input type="text" name='resetDevice' value={deviceID} />
-              <input type="button" style={{flex: 1}} className={`button`} onClick={handleDeviceReset} value="Reset" />
-            </div>
 
             <button className='button'>Edit</button>
         </form>
