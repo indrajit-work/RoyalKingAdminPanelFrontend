@@ -309,7 +309,7 @@ const EditUser = () => {
             <label className='input-label'>Device ID</label>
             <div className='input-control single-input reset-input'>
               <input type="text" name='resetDevice' defaultValue={resetDevice} readOnly />
-              <input type="button" style={{flex: 1}} className={`button ${resetDevice.length === 0 ? 'reset' : ''}`} onClick={handleDeviceReset} value="Reset" disabled={resetDevice === ""} />
+              <input type="button" style={{flex: 1}} className={`button ${resetDevice === '' || undefined ? 'reset' : ''}`} onClick={handleDeviceReset} value="Reset" disabled={resetDevice === "" || undefined} />
             </div>
             {/* <div className='input-control single-input'>
                 <input type="text" name='block' value={userInfo.block} onChange={(e) => setBlock(e.target.value)} />
