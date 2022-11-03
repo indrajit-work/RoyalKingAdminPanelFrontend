@@ -78,7 +78,7 @@ const TurnOverTable = ({ userID, from, to, gameType, role, link }) => {
                                     <td>{gameData.totalPlayed}</td>
                                     <td>{gameData.totalWin}</td>
                                     <td>{gameData.comPercent}</td>
-                                    <td>{gameData.netProfit}</td>
+                                    <td>{gameData?.netProfit?.toFixed(2)}</td>
                                     </tr>
                                 </MDBTableBody>
                                 // ))
@@ -131,7 +131,7 @@ const TurnOverTable = ({ userID, from, to, gameType, role, link }) => {
                                         <td>{item.totalPlayed}</td>
                                         <td>{item.totalWin}</td>
                                         <td> {item.comPercent}</td>
-                                        <td>{item.netProfit}</td>
+                                        <td>{item?.netProfit?.toFixed(2)}</td>
                                     </tr>
                                     </MDBTableBody>
                                 ))

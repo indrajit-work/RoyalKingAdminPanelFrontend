@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import {
   Card,
@@ -10,14 +10,13 @@ import {
   FloatingLabel,
 } from "react-bootstrap";
 import "react-calendar/dist/Calendar.css";
-import * as AiIcons from "react-icons/ai";
 import "./Icon.css";
 import "./Turnover.css";
 import 'react-toastify/dist/ReactToastify.css'
 import { ToastContainer, toast } from 'react-toastify';
 
-const GameSettings = (props) => {
-  const [gameType, setGameType] = useState("")
+const GameSettings = () => {
+  const [gameType, setGameType] = useState("All")
   const [multiplier, setMultiplier] = useState("")
   const [payoutPercent, setpayoutPercent] = useState('')
 
@@ -101,7 +100,7 @@ const GameSettings = (props) => {
                     value={gameType}
                     required
                   >
-                    <option>Select below...</option>
+                    <option value="All">All</option>
                     <option value="cards16">Cards 16</option>
                     <option value="cards52">Cards 52</option>
                     <option value="jeetoJoker">jeetoJoker</option>

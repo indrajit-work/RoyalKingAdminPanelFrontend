@@ -14,7 +14,7 @@ const AddUser = () => {
     const [bossID, setBossID] = useState('')
     const [phNo, setphNo] = useState('')
     const [dateOfbirth, setDateOfbirth] = useState(null)
-    const [payoutPercent, setPayoutPercent] = useState()
+    const [payout, setPayout] = useState()
     const [loggedUserRole, setloggedUserRole] = useState('')
 
     const [userList, setUserList] = useState([])
@@ -105,10 +105,11 @@ const AddUser = () => {
                 fullName,
                 phone: phNo,
                 dateOfbirth,
-                payoutPercent
+                payout
               }
             );
             console.log("Submited:...............", res);
+            console.log(payout)
             reset()
             toast.success("User added successfully")
         } catch (error) {
@@ -128,7 +129,7 @@ const AddUser = () => {
         setBossID("");
         setphNo("");
         setDateOfbirth('dd-mm-yyyy')
-        setPayoutPercent()
+        setPayout(null)
     }
 
   return (
@@ -226,7 +227,7 @@ const AddUser = () => {
             </div>
             <div className='input-control'>
               <label className='input-label'>Payout Percentage</label>
-              <input type="number" name='payoutPercent' min={0} max={100} value={payoutPercent} onChange={(e) => setPayoutPercent(e.target.value)} required />
+              <input type="number" name='payout' min={0} max={200} value={payout} onChange={(e) => setPayout(e.target.value)} required />
             </div>
             <div className='input-control'>
                 <label className='input-label'>Mobile Number</label>

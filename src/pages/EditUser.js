@@ -17,7 +17,7 @@ const EditUser = () => {
     const [dateOfbirth, setDateOfbirth] = useState('')
     const [verified, setVerified] = useState('')
     const [block, setBlock] = useState("")
-    const [payoutPercent, setPayoutPercent] = useState()
+    const [payout, setPayout] = useState()
     const [loggedUserRole, setloggedUserRole] = useState('')
 
     const [userList, setUserList] = useState([])
@@ -77,7 +77,7 @@ const EditUser = () => {
         const res = await axios.get(
           `https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/fetchuserbyid?userID=${userID}`
         );
-        // console.log(res.data.data)
+        console.log(res.data.data)
         setUserInfo(res.data.data)
 
         setUserName(res.data.data.userName)
@@ -90,7 +90,7 @@ const EditUser = () => {
         setphNo(res.data.data.phone)
         setVerified(res.data.data.verified)
         setCommPercent(res.data.data.commPercent)
-        setPayoutPercent(res.data.data.payoutPercent)
+        setPayout(parseInt(res.data.data.payout))
         setResetDevice(res.data.data.deviceID)
       } catch (error) {
         console.log(error)
@@ -158,7 +158,8 @@ const EditUser = () => {
                 "block", block,
                 userID,
                 JSON.parse(verified),
-                "device", resetDevice
+                "device", resetDevice === undefined ? '' : resetDevice,
+                "payout", payout
                 )
 
         try {
@@ -170,14 +171,14 @@ const EditUser = () => {
                 password,
                 userRole,
                 commPercent,
-                payoutPercent,
+                payout,
                 bossID,
                 fullName,
                 phone: phNo,
                 dateOfbirth,
                 verified: JSON.parse(verified),
                 blocked: block,
-                deviceID: resetDevice
+                deviceID: resetDevice === undefined ? '' : resetDevice
               }
             );
             console.log("res", res.data)
@@ -286,7 +287,7 @@ const EditUser = () => {
             </div>
             <div className='input-control'>
               <label className='input-label'>Payout Percentage</label>
-              <input type="number" name='payoutPercent' min={0} max={100} defaultValue={payoutPercent} onChange={(e) => setPayoutPercent(e.target.value)} required />
+              <input type="number" name='payout' min={0} max={100} defaultValue={userInfo.payout} onChange={(e) => setPayout(e.target.value)} required />
             </div>
             <div className='input-control'>
                 <label className='input-label'>Mobile Number</label>
