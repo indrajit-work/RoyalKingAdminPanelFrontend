@@ -17,6 +17,7 @@ const EditUser = () => {
     const [dateOfbirth, setDateOfbirth] = useState('')
     const [verified, setVerified] = useState('')
     const [block, setBlock] = useState("")
+    const [payoutPercent, setPayoutPercent] = useState()
     const [loggedUserRole, setloggedUserRole] = useState('')
 
     const [userList, setUserList] = useState([])
@@ -89,6 +90,7 @@ const EditUser = () => {
         setphNo(res.data.data.phone)
         setVerified(res.data.data.verified)
         setCommPercent(res.data.data.commPercent)
+        setPayoutPercent(res.data.data.payoutPercent)
         setResetDevice(res.data.data.deviceID)
       } catch (error) {
         console.log(error)
@@ -143,7 +145,7 @@ const EditUser = () => {
     const onHandleSubmit = async (e) => {
         e.preventDefault();
 
-        console.log(resetDevice)
+        // console.log(resetDevice)
         console.log(
                 "fullName", fullName,
                 "userName", userName,
@@ -168,6 +170,7 @@ const EditUser = () => {
                 password,
                 userRole,
                 commPercent,
+                payoutPercent,
                 bossID,
                 fullName,
                 phone: phNo,
@@ -280,6 +283,10 @@ const EditUser = () => {
             <div className='input-control'>
                 <label className='input-label'>Commision Percentage(%)</label>
                 <input type="text" name='commPercent' defaultValue={userInfo.commPercent} onChange={(e) => setCommPercent(e.target.value)} required />
+            </div>
+            <div className='input-control'>
+              <label className='input-label'>Payout Percentage</label>
+              <input type="number" name='payoutPercent' min={0} max={100} defaultValue={payoutPercent} onChange={(e) => setPayoutPercent(e.target.value)} required />
             </div>
             <div className='input-control'>
                 <label className='input-label'>Mobile Number</label>

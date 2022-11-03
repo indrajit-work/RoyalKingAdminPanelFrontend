@@ -12,53 +12,49 @@ import {
   MDBBtn,
   MDBBtnGroup,
 } from "mdb-react-ui-kit";
-
 import { Button } from "react-bootstrap";
+import TurnOverTable from "../components/TurnOverTable";
+
 const DistributorStokist = () => {
+  const[gameData , setGameData] = useState({});
+
+  const params = useParams();
+
+  const userID = params.userID;
+  const gameType = params.gameType
+  const from = params.from
+  const to = params.to
   
- const[stokist,setStokist]=useState();
-//   useEffect(() => {
-//     loadUserData();
-//   }, []);
+  // useEffect(() => {
+  //   const getSt = async () => {
+  //     try {
+  //       const res = await axios.post(
+  //         "https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/turnover",
+  //         {
+  //           userID: userID,
+  //           from: from,
+  //           to: to,
+  //           gameType: gameType
+  //         })
+  //       console.log(res.data)
+  //       setGameData(res.data.data)
+  //     } catch (error) {
+  //       console.log(error)
+  //     }
+  //   }
 
-
-
-
-//fteching params
-
-const params=useParams();
-const distributorID=params.userID;
-const distributorcommPer=params.commPercent
-
-useEffect(()=>{
- getSt()
-        
-   },[])
+  //   getSt()
+  // }, [])
   
-  
-  const getSt = async()=>{
-    return  await  axios.post("https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/fetchstokists",{
-      userRole:"STOKIST",
-      bossID:distributorID
-  }).then((res)=> setStokist(res.data))
-  .catch((err)=>console.log(err))
-  }
-  //console.log("data:", data.users);
-
-
-console.log(stokist)
-
-
+  console.log("dist-stok ", userID, from, to, gameType)
+  // console.log("......", gameData)
 
   return (
     <>
-    <MDBContainer>
+    {/* <MDBContainer>
       <div style={{ marginTop: "80px" }}>
         <h1 className="text-center mb-5 text-muted"> Distributor </h1>
-  
-     {/* <input className="mb-2" placeholder="search..."  value={filterVal} onInput={(e)=>handleFilter(e)}/> */}
-    
-       
+
         <MDBRow>
           <MDBCol size="12">
             <MDBTable>
@@ -69,21 +65,18 @@ console.log(stokist)
                   <th scope=" col ">Games Won </th>
                   <th scope=" col "> Commission </th>
                   <th scope=" col ">Net</th>
-                  
                 </tr>
               </MDBTableHead>
                  
-                  <MDBTableBody key={distributorID}>
-                    <tr>
-                      <td> {distributorID} </td>
-                      <td> 0 </td>
-                      <td> 0 </td>
-                      <td>{distributorcommPer}</td>
-                      <td> 0 </td>
-                      
-                    </tr>
-                  </MDBTableBody>
-             
+                <MDBTableBody key={userID}>
+                  <tr>
+                    <td>{userID}</td>
+                    <td>{gameData.totalPlayed}</td>
+                    <td>{gameData.totalWin}</td>
+                    <td>{gameData.comPercent}</td>
+                    <td>{gameData.netProfit}</td> 
+                  </tr>
+                </MDBTableBody>
             </MDBTable>
           </MDBCol>
         </MDBRow>
@@ -108,7 +101,7 @@ console.log(stokist)
           </tr>
         </MDBTableHead>
 
-        {! stokist? (
+        {!gameData?.childTurnOverArray ? (
           <MDBTableBody className="align-center mb-8">
             <tr>
               <td colspan={8} className=" text-center mb-8">
@@ -119,15 +112,15 @@ console.log(stokist)
           </MDBTableBody>
         ) 
         : (
-          stokist.stokists.Items.map((item, index) => (
+          gameData?.childTurnOverArray.map((item, index) => (
             <MDBTableBody key={index}>
               <tr>
-                <td> {item.userID} </td>
-                <td><Link to={`/stokist/player/${item.userID}/${item.commPercent}`}><Button variant="secondary" size="sm">{item.fullName} (Stokist)</Button></Link>  </td>
-                <td> 0</td>
-                <td>0</td>
-                <td> {item.commPercent} </td>
-                <td> 0 </td>
+                <td>{item.userID} </td>
+                <td><Link to={`/stokist/player/${item.userID}/${from}-to-${to}/${gameType}`}><Button variant="secondary" size="sm">{item.fullName} (Stokist)</Button></Link>  </td>
+                <td>{item.totalPlayed}</td>
+                <td>{item.totalWin}</td>
+                <td> {item.comPercent}</td>
+                <td>{item.netProfit}</td>
               </tr>
             </MDBTableBody>
           ))
@@ -136,7 +129,10 @@ console.log(stokist)
     </MDBCol>
   </MDBRow>
  </div>
-</MDBContainer></>
+</MDBContainer> */}
+
+  <TurnOverTable userID={userID} from={from} to={to} gameType={gameType} role='Stokist' link={`/stokist/player/`} />
+</>
     
   );
 };

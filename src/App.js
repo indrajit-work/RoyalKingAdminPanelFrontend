@@ -38,6 +38,7 @@ import EditUser from "./pages/EditUser";
 import CleanData from "./pages/CleanData";
 import { useState } from "react";
 import AdjustPoints from "./pages/AdjustPoints";
+import Turnover2 from "./pages/Turnover2";
 
 function App() {
   const [loggedUserRole, setloggedUserRole] = useState('')
@@ -131,21 +132,25 @@ function App() {
           <ListPlayer />
         </Route>
 
-        <Route path="/turnover" exact>
+        {/* <Route path="/turnover" exact>
           <Sidebar />
           <Turnover />
+        </Route> */}
+        <Route path="/turnover" exact>
+          <Sidebar />
+          <Turnover2 />
         </Route>
 
-        <Route path="/admin/distributor/:userID/:commPercent" exact>
+        <Route path="/admin/distributor/:userID/:from-to-:to/:gameType" exact>
           <Sidebar />
           <AdminDistributor />
         </Route>
 
-        <Route path="/distributor/stokist/:userID/:commPercent" exact>
+        <Route path="/distributor/stokist/:userID/:from-to-:to/:gameType" exact>
           <Sidebar />
           <DistributorStokist />
         </Route>
-        <Route path="/stokist/player/:userID/:commPercent" exact>
+        <Route path="/stokist/player/:userID/:from-to-:to/:gameType" exact>
           <Sidebar />
           <StokistPlayer />
         </Route>

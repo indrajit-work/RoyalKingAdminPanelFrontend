@@ -1,3 +1,30 @@
 .cardstyle{
     box-shadow : 0 10px 20px rgba( 0,0,0,0.19 ) , 0 6p 6px rgba( 0,0,0,0.23 ) ;
 }
+
+.input-area{
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    margin-top: 3rem;
+    flex-wrap: wrap;
+}
+
+.input-field{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.input-field label{
+    font-weight: bold;
+}
+
+table{
+    margin: 0 auto;
+}
+
+table,
+td {
+    border: 1px solid #333;
+}

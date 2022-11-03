@@ -1,7 +1,6 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { getCookie, getRole } from '../utils/auth'
-import { TiTick, TiTimes } from "react-icons/ti";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -15,6 +14,7 @@ const AddUser = () => {
     const [bossID, setBossID] = useState('')
     const [phNo, setphNo] = useState('')
     const [dateOfbirth, setDateOfbirth] = useState(null)
+    const [payoutPercent, setPayoutPercent] = useState()
     const [loggedUserRole, setloggedUserRole] = useState('')
 
     const [userList, setUserList] = useState([])
@@ -104,7 +104,8 @@ const AddUser = () => {
                 bossID,
                 fullName,
                 phone: phNo,
-                dateOfbirth
+                dateOfbirth,
+                payoutPercent
               }
             );
             console.log("Submited:...............", res);
@@ -127,6 +128,7 @@ const AddUser = () => {
         setBossID("");
         setphNo("");
         setDateOfbirth('dd-mm-yyyy')
+        setPayoutPercent()
     }
 
   return (
@@ -139,14 +141,6 @@ const AddUser = () => {
                   autocomplete="off" required />
                 {!usernameIsvalid && userName.length !== 0 && (
                   <>
-                    {/* <TiTimes
-                      style={{
-                        color: "red",
-                        position: "absolute",
-                        right: "1%",
-                        top: "37.5%",
-                      }}
-                    /> */}
                     <p
                       style={{
                         color: "red",
@@ -161,14 +155,6 @@ const AddUser = () => {
                 )}
                 {usernameIsvalid && userName.length > 0 && (
                   <>
-                    {/* <TiTick
-                      style={{
-                        color: "green",
-                        position: "absolute",
-                        right: "1%",
-                        top: "37.5%",
-                      }}
-                    /> */}
                     <p
                       style={{
                         color: "green",
@@ -237,6 +223,10 @@ const AddUser = () => {
             <div className='input-control'>
                 <label className='input-label'>Commision Percentage(%)</label>
                 <input type="text" name='commPercent' value={commPercent} autocomplete="off" onChange={(e) => setCommPercent(e.target.value)} required />
+            </div>
+            <div className='input-control'>
+              <label className='input-label'>Payout Percentage</label>
+              <input type="number" name='payoutPercent' min={0} max={100} value={payoutPercent} onChange={(e) => setPayoutPercent(e.target.value)} required />
             </div>
             <div className='input-control'>
                 <label className='input-label'>Mobile Number</label>

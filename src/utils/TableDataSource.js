@@ -37,7 +37,7 @@ export const userColumns = [
     },
     { field: "blocked", headerName: "Blocked", width: 120, sortable: false, 
         renderCell : (params) => {
-            if (params.row.blocked === 'yes') {
+            if (params.row.blocked === 'Yes') {
                 return(
                     <BlockYes>Yes</BlockYes>
                     )
