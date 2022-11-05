@@ -184,7 +184,6 @@ const AddUser = () => {
             <div className='input-control'>
                 <label className='input-label'>User Role</label>
                 <select name="userRole" onChange={(e) => setUserRole(e.target.value)}>
-
                   <option value="" disabled selected>Select below...</option>
                   {loggedUserRole === 'SUPERADMIN' && roleList.map((role, i) => (
                     <option key={i} value={role}>{role}</option>
@@ -196,9 +195,6 @@ const AddUser = () => {
                     <option key={i} value={role}>{role}</option>
                   ))}
                   {loggedUserRole === 'STOKIST' && roleList.slice(3).map((role, i) => (
-                    <option key={i} value={role}>{role}</option>
-                  ))}
-                  {loggedUserRole === 'PLAYER' && roleList.slice(4).map((role, i) => (
                     <option key={i} value={role}>{role}</option>
                   ))}
                 </select>

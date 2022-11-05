@@ -1,16 +1,16 @@
 .cardstyle{
-    box-shadow : 0 10px 20px rgba( 0,0,0,0.19 ) , 0 6p 6px rgba( 0,0,0,0.23 ) ;
+    box-shadow : 0 10px 20px rgba( 0,0,0,0.19 ) , 0 6px 6px rgba( 0,0,0,0.23 ) ;
 }
 
 .input-area{
     display: flex;
     justify-content: space-evenly;
     align-items: center;
-    margin-top: 2rem;
-    /* margin-bottom: 4rem; */
-    flex-wrap: wrap;
+    margin: 2rem 4rem;
+    /* flex-wrap: wrap; */
     height: 200px;
-    z-index: 1;
+    background-color: #fff;
+    z-index: 9;
 }
 
 .input-field{
@@ -28,11 +28,40 @@
     height: 30px;
 }
 
+.react-calendar{
+    z-index: 9;
+}
+
 table{
-    margin: 0 auto;
+    margin: 2rem auto 0;
 }
 
 table,
 td {
     border: 1px solid #333;
+}
+
+td{
+    padding: 8px 1rem;
+}
+
+td:first-child{
+    font-weight: bold;
+    background-color: #fff;
+}
+
+@media screen and (max-width: 768px) {
+    .input-area{
+        flex-direction: column;
+        gap: 16px;
+        margin: 8rem 2rem 8rem;
+        height: 380px;
+    }
+    .input-field input{
+        width: 100%;
+    }
+    .container{
+        margin: 0 auto;
+        width: 100%;
+    }
 }

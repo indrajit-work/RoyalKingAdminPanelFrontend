@@ -169,14 +169,14 @@ export const SidebarData = [
     icon: <FaIcons.FaEnvelopeOpenText />,
   },
   {
-    title: "Game Result",
-    path: "/gameResult",
-    icon: <IoIcons.IoMdHelpCircle />,
-  },
-  {
     title: "Game Settings",
     path: "/gamesettings",
     icon: <IoIcons.IoMdPeople />,
+  },
+  {
+    title: "Game Result",
+    path: "/gameResult",
+    icon: <IoIcons.IoMdHelpCircle />,
   },
   {
     title: "Broadcast Message",

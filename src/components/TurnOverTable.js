@@ -10,10 +10,49 @@ import {
 } from "mdb-react-ui-kit";
 import { Link } from "react-router-dom";
 import { Button } from "react-bootstrap";
+import { DataGrid } from "@mui/x-data-grid";
+import styled from "styled-components";
+
+const DataTable = styled.div`
+  min-height: 500px;
+  height: 80vh;
+  padding: 0 5rem;
+  margin: 3rem auto;
+  @media (max-width: 768px) {
+    height: 300px;
+    padding: 0 1rem;
+  }
+`;
+
+const loggedUserTOCol = [
+    { field: "userID", headerName: "User ID", width: 130 },
+    { field: "fullName", headerName: "User Name", width: 180 },
+    { field: "totalPlayed", headerName: "Played", width: 150 },
+    { field: "totalWin", headerName: "Win", width: 150 },
+    { field: "comPercent", headerName: "Commission Percent(%)", width: 180 },
+    { field: "netProfit", headerName: "Net Profit", width: 180 },
+  ];
 
 const TurnOverTable = ({ userID, from, to, gameType, role, link }) => {
   const [gameData, setGameData] = useState({});
   const [loading, setLoading] = useState("")
+  const [usersUnder, setUsersUnder] = useState([])
+
+  const viewDetailsCol = [
+    {
+      field: "details",
+      headerName: '',
+      width: 130,
+      sortable: false,
+      renderCell: (params) => {
+        return(
+            <Link to={`${link}${params.row.userID}/${from}-to-${to}/${gameType}`}>
+                <Button disabled={!link} variant="secondary" size="sm">View Details</Button>
+            </Link>
+        )
+      }
+    }
+  ]
 
   useEffect(() => {
     getSt();
@@ -31,13 +70,23 @@ const TurnOverTable = ({ userID, from, to, gameType, role, link }) => {
           gameType: gameType,
         }
       );
-      setGameData(res.data.data);
+      setGameData(res.data?.data);
+      setUsersUnder(res.data?.data?.childTurnOverArray.map(user => {
+        return{
+          id: user.userID,
+          comPercent: user.comPercent.toFixed(2),
+          netProfit: user.netProfit.toFixed(2),
+          ...user,
+        }
+      }))
     } catch (error) {
       console.log(error);
     }finally{
         setLoading('');
     }
   };
+  console.log(usersUnder)
+
   return (
     <div>
         {
@@ -46,7 +95,29 @@ const TurnOverTable = ({ userID, from, to, gameType, role, link }) => {
             ) :
             (
                 <>
-                    <MDBContainer>
+                    <table>
+                        <tr>
+                            <td>User ID</td>
+                            <td>{userID}</td>
+                        </tr>
+                        <tr>
+                            <td>Played</td>
+                            <td>{gameData.totalPlayed}</td>
+                        </tr>
+                        <tr>
+                            <td>Win</td>
+                            <td>{gameData.totalWin}</td>
+                        </tr>
+                        <tr>
+                            <td>Commission Percentage(%)</td>
+                            <td>{gameData?.comPercent?.toFixed(2)}</td>
+                        </tr>
+                        <tr>
+                            <td>Net Profit</td>
+                            <td>{gameData?.netProfit?.toFixed(2)}</td>
+                        </tr>
+                    </table>
+                    {/* <MDBContainer>
                         <div style={{ marginTop: "80px" }}>
                         <MDBRow>
                             <MDBCol size="12">
@@ -60,7 +131,6 @@ const TurnOverTable = ({ userID, from, to, gameType, role, link }) => {
                                     <th scope=" col "> Net </th>
                                 </tr>
                                 </MDBTableHead>
-
                                 {false ? (
                                 <MDBTableBody className="align-center mb-8">
                                     <tr>
@@ -71,7 +141,6 @@ const TurnOverTable = ({ userID, from, to, gameType, role, link }) => {
                                     </tr>
                                 </MDBTableBody>
                                 ) : (
-                                // games.map((item, index) => (
                                 <MDBTableBody>
                                     <tr>
                                     <td>{userID}</td>
@@ -81,16 +150,14 @@ const TurnOverTable = ({ userID, from, to, gameType, role, link }) => {
                                     <td>{gameData?.netProfit?.toFixed(2)}</td>
                                     </tr>
                                 </MDBTableBody>
-                                // ))
-                                // )}
                                 )}
                             </MDBTable>
                             </MDBCol>
                         </MDBRow>
                         </div>
-                    </MDBContainer>
+                    </MDBContainer> */}
 
-                    <MDBContainer>
+                    {/* <MDBContainer>
                         <div style={{ marginTop: "80px" }}>
                         <h1 className="text-center mb-5 text-muted"> {role}s </h1>
                         <MDBRow>
@@ -140,7 +207,16 @@ const TurnOverTable = ({ userID, from, to, gameType, role, link }) => {
                             </MDBCol>
                         </MDBRow>
                         </div>
-                    </MDBContainer>
+                    </MDBContainer> */}
+
+                    <h1 className="text-center my-5 text-muted">{role}s</h1>
+                    <DataTable>
+                        <DataGrid
+                        rows={usersUnder}
+                        columns={loggedUserTOCol.concat(viewDetailsCol)}
+                        checkboxSelection={false}
+                        ></DataGrid>
+                    </DataTable>
                 </>
             )
         }

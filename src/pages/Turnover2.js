@@ -1,6 +1,6 @@
 import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import "./Turnover.css";
 import Calendar from "react-calendar";
@@ -21,20 +21,20 @@ import { BsCalendar3 } from "react-icons/bs";
 const DataTable = styled.div`
   min-height: 500px;
   height: 80vh;
-  padding: 0 3rem;
-  margin: 0 auto;
+  padding: 0 5rem;
+  margin: 3rem auto;
   @media (max-width: 768px) {
     height: 300px;
+    padding: 0 1rem;
   }
 `;
 
 const loggedUserTOCol = [
-  { field: "id", headerName: "User ID", width: 150 },
-  { field: "userRole", headerName: "User Role", width: 150 },
-  { field: "played", headerName: "Played", width: 250 },
-  { field: "win", headerName: "Win", width: 130 },
-  { field: "commPercent", headerName: "Commission Percent", width: 130 },
-  { field: "amount", headerName: "Net", width: 180 },
+  { field: "userID", headerName: "User ID", width: 130 },
+  { field: "totalPlayed", headerName: "Played", width: 150 },
+  { field: "totalWin", headerName: "Win", width: 150 },
+  { field: "comPercent", headerName: "Commission Percent(%)", width: 180 },
+  { field: "netProfit", headerName: "Net Profit", width: 180 },
 ];
 
 const Turnover2 = () => {
@@ -50,6 +50,7 @@ const Turnover2 = () => {
   const [showCal, setShowCal] = useState(false);
   const [showCalEnd, setShowCalEnd] = useState(false);
   const [gameData, setGameData] = useState({});
+  const [usersUnder, setUsersUnder] = useState([])
   const [loading, setLoading] = useState("");
   const [showTable, setShowTable] = useState(false)
 
@@ -73,6 +74,74 @@ const Turnover2 = () => {
   if (userRole === "STOKIST") {
     othersRole = "PLAYER";
   }
+
+  const userNameCol = [
+    {
+      field: "fullName",
+      headerName: "User Name",
+      width: 180,
+      sortable: false,
+      renderCell : (params) => {
+        if(userRole === "SUPERADMIN"){
+          return(
+            <p>{params.row.fullName}</p>
+          )
+        }
+        if(userRole === "ADMIN"){
+          return(
+            <p>{params.row.fullName}</p>
+          )
+        }
+        if(userRole === "Distributor"){
+          return(
+            <p>{params.row.fullName}</p>
+          )
+        }
+        if(userRole === "STOKIST"){
+          return (
+            <p>{params.row.fullName}</p>
+          )
+        }
+      }
+    }
+  ]
+
+  const viewDetailsCol = [
+    {
+      field: "details",
+      headerName: '',
+      width: 130,
+      sortable: false,
+      renderCell : (params) => {
+        if(userRole === "SUPERADMIN"){
+          return(
+            <Link to={`/admin/distributor/${params.row.userID}/${from}-to-${to}/${gameType}`}>
+              <Button variant="secondary" size="sm">View Details</Button>
+            </Link>
+          )
+        }
+        if(userRole === "ADMIN"){
+          return(
+            <Link to={`/distributor/stokist/${params.row.userID}/${from}-to-${to}/${gameType}`}>
+              <Button variant="secondary" size="sm">View Details</Button>
+            </Link>
+          )
+        }
+        if(userRole === "Distributor"){
+          return(
+            <Link to={`/stokist/player/${params.row.userID}/${from}-to-${to}/${gameType}`}>
+              <Button variant="secondary" size="sm">View Details</Button>
+            </Link>
+          )
+        }
+        // if(userRole === "STOKIST"){
+        //   return (
+        //     <></>
+        //   )
+        // }
+      }
+    }
+  ]
 
   const calHandler = () => {
     setShowCal(!showCal);
@@ -100,15 +169,24 @@ const Turnover2 = () => {
       );
       console.log(from);
       console.log(to);
-      setGameData(res.data.data);
+      setGameData({id: parseInt(loggedUser), ...res.data?.data});
+      setUsersUnder(res.data?.data?.childTurnOverArray.map(user => {
+        return{
+          id: user.userID,
+          comPercent: user.comPercent.toFixed(2),
+          netProfit: user.netProfit.toFixed(2),
+          ...user,
+        }
+      }))
     } catch (error) {
       console.log(error);
     } finally {
       setLoading("");
     }
   };
-  console.log(gameData);
-  console.log(showTable);
+  // console.log(gameData);
+  // console.log(usersUnder)
+  // console.log(showTable);
 
   return (
     <>
@@ -125,44 +203,62 @@ const Turnover2 = () => {
           </select>
         </div>
 
-        <div className="input-area">
-          <div className="input-field">
-            <label>Start Date</label>
-            <input value={from} disabled />
-            <span className="iconStyle">
-              <BsCalendar3 onClick={calHandler} />
-            </span>
-            {showCal && <Calendar onChange={setFrom} value={from} />}
-            {/* <input
-              type="date"
-              name="from"
-              value={from}
-              onChange={(e) => setFrom(e.target.value)}
-            /> */}
-          </div>
+        <div className="input-field">
+          <label>Start Date</label>
+          <input value={from} disabled />
+          <span className="iconStyle">
+            <BsCalendar3 onClick={calHandler} />
+          </span>
+          {showCal && <Calendar onChange={setFrom} value={from} />}
+          {/* <input
+            type="date"
+            name="from"
+            value={from}
+            onChange={(e) => setFrom(e.target.value)}
+          /> */}
         </div>
 
-        <div className="input-area">
-          <div className="input-field">
-            <label>End Date</label>
-            <input value={to} disabled />
-            <span className="iconStyle">
-              <BsCalendar3 onClick={EndHandler} />
-            </span>
-            {showCalEnd && <Calendar onChange={setTo} value={to} />}
-            {/* <input
-              type="date"
-              name="to"
-              value={to}
-              onChange={(e) => setTo(e.target.value)}
-            /> */}
-          </div>
+        <div className="input-field">
+          <label>End Date</label>
+          <input value={to} disabled />
+          <span className="iconStyle">
+            <BsCalendar3 onClick={EndHandler} />
+          </span>
+          {showCalEnd && <Calendar onChange={setTo} value={to} />}
+          {/* <input
+            type="date"
+            name="to"
+            value={to}
+            onChange={(e) => setTo(e.target.value)}
+          /> */}
         </div>
-
         <button>Search</button>
       </form>
 
-      <MDBContainer>
+      <table>
+        <tr>
+          <td>User Role</td>
+          <td>{userRole}</td>
+        </tr>
+        <tr>
+          <td>Played</td>
+          <td>{gameData.totalPlayed}</td>
+        </tr>
+        <tr>
+          <td>Win</td>
+          <td>{gameData.totalWin}</td>
+        </tr>
+        <tr>
+          <td>Commission Percentage(%)</td>
+          <td>{gameData?.comPercent?.toFixed(2)}</td>
+        </tr>
+        <tr>
+          <td>Net Profit</td>
+          <td>{gameData?.netProfit?.toFixed(2)}</td>
+        </tr>
+      </table>
+
+      {/* <MDBContainer>
         <div style={{ marginTop: "80px" }}>
           <MDBRow>
             <MDBCol size="12">
@@ -193,22 +289,19 @@ const Turnover2 = () => {
                       <td>{userRole}</td>
                       <td>{gameData.totalPlayed}</td>
                       <td>{gameData.totalWin}</td>
-                      <td>{gameData.comPercent}</td>
+                      <td>{gameData.comPercent?.toFixed(2)}</td>
                       <td>{gameData?.netProfit?.toFixed(2)}</td>
                     </tr>
                   </MDBTableBody>
-                  // ))
-                  // )}
                 )}
               </MDBTable>
             </MDBCol>
           </MDBRow>
         </div>
-      </MDBContainer>
+      </MDBContainer> */}
 
       {/* {show} */}
-
-      {showTable && loading !== "" &&
+      {/* {showTable && loading !== "" &&
         <p style={{display: 'grid', placeItems: 'center', fontSize: '20px'}}>{loading}</p>
       }
       {
@@ -282,7 +375,7 @@ const Turnover2 = () => {
                           </td>
                           <td>{item.totalPlayed}</td>
                           <td>{item.totalWin}</td>
-                          <td> {item.comPercent}</td>
+                          <td> {item.comPercent?.toFixed(2)}</td>
                           <td>{item?.netProfit?.toFixed(2)}</td>
                         </tr>
                       </MDBTableBody>
@@ -293,7 +386,7 @@ const Turnover2 = () => {
             </MDBRow>
           </div>
         </MDBContainer>
-      }
+      } */}
 
       {/* <table>
         <thead>
@@ -342,13 +435,27 @@ const Turnover2 = () => {
         </tbody>
       </table> */}
 
-      {/* <DataTable>
-            <DataGrid
-            rows={['df', 12, 45, 0, 2]}
-            columns={loggedUserTOCol}
-            checkboxSelection={false}
-            ></DataGrid>
-        </DataTable> */}
+      {showTable && loading !== "" &&
+        <p style={{display: 'grid', placeItems: 'center', fontSize: '20px'}}>{loading}</p>
+      }
+      {showTable && loading !== "Loading..." && !gameData?.childTurnOverArray ? 
+      <p style={{textAlign: 'center'}}>No Data Found</p> :
+      <>
+        <h1 className="text-center mt-5">
+          {userRole === "SUPERADMIN" && "Administrators"}
+          {userRole === "ADMIN" && "Distributors"}
+          {userRole === "Distributor" && "Stokists"}
+          {userRole === "STOKIST" && "Players"}
+        </h1>
+        <DataTable>
+          <DataGrid
+          rows={usersUnder}
+          columns={loggedUserTOCol.concat(userNameCol, viewDetailsCol)}
+          checkboxSelection={false}
+          ></DataGrid>
+        </DataTable>
+      </>
+      }
     </>
   );
 };

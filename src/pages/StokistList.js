@@ -29,6 +29,10 @@ const ModifyLink = styled.div`
 
 const ListDistributor = ({userType, loggedUser, loggedUserRole}) => {
   const [userList, setUserList] = useState([]);
+  const [loading, setLoading] = useState({
+    status: false,
+    msg: ''
+  })
   const [pageSize, setPageSize] = useState(10);
 
   const modifyColumn = [
@@ -73,15 +77,12 @@ const ListDistributor = ({userType, loggedUser, loggedUserRole}) => {
           };
         })
       );
-
       console.log("users: ", userList);
-     
     } catch (error) {
       console.log(error);
     }
   };
 
-  console.log(userList);
   const stokistList = userList.filter(user => user.userRole === 'STOKIST')
   console.log(stokistList);
 
@@ -89,7 +90,7 @@ const ListDistributor = ({userType, loggedUser, loggedUserRole}) => {
     <>
       <h1 className="text-center my-5 text-muted">{userType}s</h1>
       {userList?.length === 0 ? (
-        <p style={{ textAlign: "center" }}>Loading...</p>
+        <p style={{ textAlign: "center" }}>No Users Found</p>
       ) : (
         <DataTable>
           <DataGrid

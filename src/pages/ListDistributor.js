@@ -34,8 +34,6 @@ const ListDistributor = ({ userType, loggedUser, loggedUserRole }) => {
   const [userList, setUserList] = useState([]);
   const [pageSize, setPageSize] = useState(10);
 
-  
-
   useEffect(() => {
     loadUserData();
   }, []);
@@ -93,7 +91,7 @@ const ListDistributor = ({ userType, loggedUser, loggedUserRole }) => {
     <>
       <h1 className="text-center my-5 text-muted">{userType}s</h1>
       {userList?.length === 0 ? (
-        <p style={{ textAlign: "center" }}>Loading...</p>
+        <p style={{ textAlign: "center" }}>No Users Found</p>
       ) : (
         <DataTable>
           <DataGrid
