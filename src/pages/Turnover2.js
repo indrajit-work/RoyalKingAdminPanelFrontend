@@ -29,13 +29,7 @@ const DataTable = styled.div`
   }
 `;
 
-const loggedUserTOCol = [
-  { field: "userID", headerName: "User ID", width: 130 },
-  { field: "totalPlayed", headerName: "Played", width: 150 },
-  { field: "totalWin", headerName: "Win", width: 150 },
-  { field: "comPercent", headerName: "Commission Percent(%)", width: 180 },
-  { field: "netProfit", headerName: "Net Profit", width: 180 },
-];
+
 
 const Turnover2 = () => {
   const date = new Date();
@@ -61,50 +55,25 @@ const Turnover2 = () => {
     setUserRole(role);
   })();
 
-  let othersRole = "";
-  if (userRole === "SUPERADMIN") {
-    othersRole = "ADMIN";
-  }
-  if (userRole === "ADMIN") {
-    othersRole = "Distributor";
-  }
-  if (userRole === "Distributor") {
-    othersRole = "STOKIST";
-  }
-  if (userRole === "STOKIST") {
-    othersRole = "PLAYER";
-  }
-
-  const userNameCol = [
+  const loggedUserTOCol = [
+    { field: "userID", headerName: "User ID", width: 130 },
+    { field: "userName", headerName: "Username", width: 180, sortable: false },
+    { field: "totalPlayed", headerName: "Play Point", width: 150 },
+    { field: "totalWin", headerName: "Win Point", width: 150 },
     {
-      field: "fullName",
-      headerName: "User Name",
+      field: "",
+      headerName: "End",
       width: 180,
       sortable: false,
-      renderCell : (params) => {
-        if(userRole === "SUPERADMIN"){
-          return(
-            <p>{params.row.fullName}</p>
-          )
-        }
-        if(userRole === "ADMIN"){
-          return(
-            <p>{params.row.fullName}</p>
-          )
-        }
-        if(userRole === "Distributor"){
-          return(
-            <p>{params.row.fullName}</p>
-          )
-        }
-        if(userRole === "STOKIST"){
-          return (
-            <p>{params.row.fullName}</p>
-          )
-        }
+      renderCell: (params) => {
+        return(
+          <>{params.row.totalPlayed - params.row.totalWin}</>
+        )
       }
-    }
-  ]
+    },
+    { field: "comPercent", headerName: "Commission Amount", width: 180 },
+    { field: "netProfit", headerName: "Net to Pay", width: 180 },
+  ];
 
   const viewDetailsCol = [
     {
@@ -154,7 +123,7 @@ const Turnover2 = () => {
   // search Handler
   const onSearchHandler = async (e) => {
     e.preventDefault();
-    console.log(loggedUser, "start:", from, "end", to, gameType);
+    // console.log(loggedUser, "start:", from, "end", to, gameType);
     setLoading("Loading...");
     setShowTable(true)
     try {
@@ -241,19 +210,19 @@ const Turnover2 = () => {
           <td>{userRole}</td>
         </tr>
         <tr>
-          <td>Played</td>
+          <td>Play Point</td>
           <td>{gameData.totalPlayed}</td>
         </tr>
         <tr>
-          <td>Win</td>
+          <td>Win Point</td>
           <td>{gameData.totalWin}</td>
         </tr>
         <tr>
-          <td>Commission Percentage(%)</td>
+          <td>Commission Amount</td>
           <td>{gameData?.comPercent?.toFixed(2)}</td>
         </tr>
         <tr>
-          <td>Net Profit</td>
+          <td>Net to Pay</td>
           <td>{gameData?.netProfit?.toFixed(2)}</td>
         </tr>
       </table>
@@ -450,7 +419,7 @@ const Turnover2 = () => {
         <DataTable>
           <DataGrid
           rows={usersUnder}
-          columns={loggedUserTOCol.concat(userNameCol, viewDetailsCol)}
+          columns={loggedUserTOCol.concat(viewDetailsCol)}
           checkboxSelection={false}
           ></DataGrid>
         </DataTable>

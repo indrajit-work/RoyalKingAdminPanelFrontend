@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/static/css/main.4597b64f.css",
-    "main.js": "/static/js/main.2be43b5a.js",
+    "main.js": "/static/js/main.c04020d1.js",
     "static/media/royalKing.png": "/static/media/royalKing.856ffa2e76d940242864.png",
     "index.html": "/index.html",
     "main.4597b64f.css.map": "/static/css/main.4597b64f.css.map",
-    "main.2be43b5a.js.map": "/static/js/main.2be43b5a.js.map"
+    "main.c04020d1.js.map": "/static/js/main.c04020d1.js.map"
   },
   "entrypoints": [
     "static/css/main.4597b64f.css",
-    "static/js/main.2be43b5a.js"
+    "static/js/main.c04020d1.js"
   ]
 }

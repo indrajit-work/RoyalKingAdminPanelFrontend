@@ -26,11 +26,11 @@ const DataTable = styled.div`
 
 const loggedUserTOCol = [
     { field: "userID", headerName: "User ID", width: 130 },
-    { field: "fullName", headerName: "User Name", width: 180 },
-    { field: "totalPlayed", headerName: "Played", width: 150 },
-    { field: "totalWin", headerName: "Win", width: 150 },
-    { field: "comPercent", headerName: "Commission Percent(%)", width: 180 },
-    { field: "netProfit", headerName: "Net Profit", width: 180 },
+    { field: "userName", headerName: "Username", width: 180 },
+    { field: "totalPlayed", headerName: "Play Point", width: 150 },
+    { field: "totalWin", headerName: "Win Point", width: 150 },
+    { field: "comPercent", headerName: "Commission Amount", width: 180 },
+    { field: "netProfit", headerName: "Net to Pay", width: 180 },
   ];
 
 const TurnOverTable = ({ userID, from, to, gameType, role, link }) => {
@@ -85,7 +85,7 @@ const TurnOverTable = ({ userID, from, to, gameType, role, link }) => {
         setLoading('');
     }
   };
-  console.log(usersUnder)
+  // console.log(usersUnder)
 
   return (
     <div>
@@ -101,19 +101,19 @@ const TurnOverTable = ({ userID, from, to, gameType, role, link }) => {
                             <td>{userID}</td>
                         </tr>
                         <tr>
-                            <td>Played</td>
+                            <td>Play Point</td>
                             <td>{gameData.totalPlayed}</td>
                         </tr>
                         <tr>
-                            <td>Win</td>
+                            <td>Win Point</td>
                             <td>{gameData.totalWin}</td>
                         </tr>
                         <tr>
-                            <td>Commission Percentage(%)</td>
+                            <td>Commission Amount</td>
                             <td>{gameData?.comPercent?.toFixed(2)}</td>
                         </tr>
                         <tr>
-                            <td>Net Profit</td>
+                            <td>Net to Pay</td>
                             <td>{gameData?.netProfit?.toFixed(2)}</td>
                         </tr>
                     </table>
