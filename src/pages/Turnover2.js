@@ -29,8 +29,6 @@ const DataTable = styled.div`
   }
 `;
 
-
-
 const Turnover2 = () => {
   const date = new Date();
   date.setHours(0, 0, 0, 0);
@@ -56,23 +54,24 @@ const Turnover2 = () => {
   })();
 
   const loggedUserTOCol = [
-    { field: "userID", headerName: "User ID", width: 130 },
-    { field: "userName", headerName: "Username", width: 180, sortable: false },
-    { field: "totalPlayed", headerName: "Play Point", width: 150 },
-    { field: "totalWin", headerName: "Win Point", width: 150 },
+    { field: "userID", headerName: "User ID", minWidth: 80, flex: 1 },
+    { field: "userName", headerName: "Username", minWidth: 100, sortable: false, flex: 1 },
+    { field: "totalPlayed", headerName: "Play Point", minWidth: 120, flex: 1 },
+    { field: "totalWin", headerName: "Win Point", minWidth: 120, flex: 1 },
     {
       field: "",
       headerName: "End",
-      width: 180,
+      minWidth: 120,
       sortable: false,
+      flex: 1,
       renderCell: (params) => {
         return(
           <>{params.row.totalPlayed - params.row.totalWin}</>
         )
       }
     },
-    { field: "comPercent", headerName: "Commission Amount", width: 180 },
-    { field: "netProfit", headerName: "Net to Pay", width: 180 },
+    { field: "comPercent", headerName: "Commission Amount", minWidth: 160, flex: 1 },
+    { field: "netProfit", headerName: "Net to Pay", minWidth: 120, flex: 1 },
   ];
 
   const viewDetailsCol = [
@@ -421,6 +420,7 @@ const Turnover2 = () => {
           rows={usersUnder}
           columns={loggedUserTOCol.concat(viewDetailsCol)}
           checkboxSelection={false}
+          pageSize={25}
           ></DataGrid>
         </DataTable>
       </>

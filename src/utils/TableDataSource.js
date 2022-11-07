@@ -18,11 +18,11 @@ const BlockNo = styled.div`
 `
 
 export const userColumns = [
-    { field: "id", headerName: "User ID", width: 100 },
-    { field: "userName", headerName: "Username", width: 180, sortable: false},
-    { field: "fullName", headerName: "Name", width: 250, sortable: false},
-    { field: "balance", headerName: "Balance", width: 140}, 
-    { field: "verified", headerName: "Verified", width: 120, sortable: false, 
+    { field: "id", headerName: "User ID", minWidth: 70, flex: 1 },
+    { field: "userName", headerName: "Username", minWidth: 100, sortable: false, flex: 1},
+    { field: "fullName", headerName: "Name", minWidth: 100, sortable: false, flex: 1},
+    { field: "balance", headerName: "Balance", minWidth: 100, flex: 1}, 
+    { field: "verified", headerName: "Verified", minWidth: 80, sortable: false, flex: 1,
         renderCell : (params) => {
             if (params.row.verified) {
                 return(
@@ -35,7 +35,7 @@ export const userColumns = [
             }
         }
     },
-    { field: "blocked", headerName: "Blocked", width: 120, sortable: false, 
+    { field: "blocked", headerName: "Blocked", minWidth: 80, sortable: false, flex: 1,
         renderCell : (params) => {
             if (params.row.blocked === 'Yes') {
                 return(

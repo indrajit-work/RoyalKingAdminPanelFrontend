@@ -31,12 +31,12 @@ const Button = styled.button`
 `
 
 const userColumns = [
-  { field: "id", headerName: "Transaction ID", width: 150, sortingOrder: ['desc', 'asc'] },
-  { field: "transactionDateReadable", headerName: "Transaction Date", width: 250 },
-    { field: "senderID", headerName: "Sender", width: 130 },
-    { field: "recieverID", headerName: "Receiver", width: 130 },
-    { field: "amount", headerName: "Amount", width: 180 },
-    { field: "comment", headerName: "Comment", width: 300, sortable: false }
+  { field: "id", headerName: "Transaction ID", minWidth: 130, sortingOrder: ['desc', 'asc'], flex: 1 },
+  { field: "transactionDateReadable", headerName: "Transaction Date", minWidth: 180, flex: 1 },
+  { field: "senderID", headerName: "Sender", minWidth: 80, flex: 1 },
+  { field: "recieverID", headerName: "Receiver", minWidth: 80, flex: 1 },
+  { field: "amount", headerName: "Amount", minWidth: 100, flex: 1 },
+  { field: "comment", headerName: "Comment", minWidth: 200, sortable: false, flex: 1 }
 ]
 
 function CustomToolbar() {
@@ -49,27 +49,19 @@ function CustomToolbar() {
 
 const TransactionTable = ({loggedUser}) => {
   const [transactionList, setTransactionList] = useState([])
-  const [pageSize, setPageSize] = useState(10)
-
+  const [pageSize, setPageSize] = useState(20)
   const [userRole, setUserRole] = useState('');
 
   const bossID = getCookie("token");
-//   console.log(bossID)
 
   useEffect(() => {
     loadUserData();
   }, []);
 
-    // current user
-  // const loggedUser = getCookie("token");
-  console.log("logeed in", loggedUser);
-
   (async () => {
     const role = await getRole(loggedUser);
     setUserRole(role)
   })();
-
-  console.log("ROLE LOGGED IN", userRole);
 
   const loadUserData = async () => {
     try {
@@ -79,10 +71,7 @@ const TransactionTable = ({loggedUser}) => {
             userRole: loggedUser,
             bossID: bossID,
           }
-        );
-    
-        console.log("res.data", res.data.users)
-      
+        ); 
         setTransactionList(res.data?.users?.map(transactionList => {
           return {
             ...transactionList, 
@@ -94,8 +83,6 @@ const TransactionTable = ({loggedUser}) => {
     }
   };
 
-  // console.log(transactionList)
-
   return (
     <>
       <h2 style={{textAlign: 'center', paddingTop: '1rem'}}>Transaction List</h2>
@@ -104,12 +91,11 @@ const TransactionTable = ({loggedUser}) => {
           Refresh <MdRefresh />
         </Button>
 
-
         <DataTable>
           <DataGrid
             rows={transactionList}
             columns={userColumns}
-            rowsPerPageOptions={[10, 20, 30, 40, 50]}
+            rowsPerPageOptions={[20, 30, 40, 50]}
             pageSize={pageSize}
             onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
             checkboxSelection={false}

@@ -7,21 +7,20 @@ import { userColumns } from "../utils/TableDataSource";
 import {FaUserEdit} from 'react-icons/fa'
 
 const DataTable = styled.div`
-  min-height: 500px;
-  height: 600px;
-  width: 100vw;
+  min-height: 600px;
+  height: 90vh;
   padding: 0 3rem;
   margin: 0 auto;
-  @media screen and (max-width: 768px) {
-    padding: 1rem;
-    margin: 0 auto;
+  @media (max-width: 768px) {
+    height: 500px;
+    padding: 0 8px;
   }
 `;
 
 const ModifyLink = styled.div`
   background-color: #7334e9;
   color: #fff;
-  padding: 8px 2rem;
+  padding: 8px 1rem;
   border-radius: 5px;
   cursor: pointer;
   font-weight: 500;
@@ -40,9 +39,10 @@ const ListPlayer = ({userType, loggedUser, loggedUserRole}) => {
     {
       field: "modify",
       headerName: `Modify ${userType}`,
-      width: 170,
+      minWidth: 120,
       sortable: false,
       filterable: false,
+      flex: 1,
       renderCell: (params) => {
         return (
           playerList.filter(player => player.userID === params.id).map((user) => (

@@ -35,7 +35,6 @@ const AdjustPoints = () => {
   const [loggedUserRole, setloggedUserRole] = useState('')
 
   const loggedUser = getCookie("token");
-  console.log("logeed in", loggedUser);
 
   (async () => {
     const role = await getRole(loggedUser);
@@ -68,29 +67,20 @@ const AdjustPoints = () => {
             {role}
           </Button>
         ))}
-
-          {/* <Button style={{backgroundColor: '#850000'}}>
-            Add User
-          </Button> */}
-
       </ButtonContainer>
 
       <div>
         {userRole === "Admin" && (
-          // <AdjustPointsAdmin />
           <AdjustPointForm userRole='ADMIN' loggedUser={loggedUser} />
           )}
         {userRole === "Distributor" && (
           <AdjustPointForm userRole='Distributor' loggedUser={loggedUser} />
-          // <AdjustDistributor />
           )}
         {userRole === "Stokist" && (
           <AdjustPointForm userRole='STOKIST' loggedUser={loggedUser} />
-          // <AdjustStokist />
           )}
         {userRole === "Player" && (
           <AdjustPointForm userRole='PLAYER' loggedUser={loggedUser} />
-          // <AdjustPlayer />
         )}
       </div>
     </>

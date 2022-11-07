@@ -15,22 +15,34 @@ import styled from "styled-components";
 
 const DataTable = styled.div`
   min-height: 500px;
-  height: 80vh;
+  height: 90vh;
   padding: 0 5rem;
   margin: 3rem auto;
   @media (max-width: 768px) {
-    height: 300px;
+    height: 500px;
     padding: 0 1rem;
   }
 `;
 
 const loggedUserTOCol = [
-    { field: "userID", headerName: "User ID", width: 130 },
-    { field: "userName", headerName: "Username", width: 180 },
-    { field: "totalPlayed", headerName: "Play Point", width: 150 },
-    { field: "totalWin", headerName: "Win Point", width: 150 },
-    { field: "comPercent", headerName: "Commission Amount", width: 180 },
-    { field: "netProfit", headerName: "Net to Pay", width: 180 },
+    { field: "userID", headerName: "User ID", minWidth: 80, flex: 1 },
+    { field: "userName", headerName: "Username", minWidth: 100, flex: 1 },
+    { field: "totalPlayed", headerName: "Play Point", minWidth: 120, flex: 1 },
+    { field: "totalWin", headerName: "Win Point", minWidth: 120, flex: 1 },
+    {
+      field: "",
+      headerName: "End",
+      minWidth: 120,
+      sortable: false,
+      flex: 1,
+      renderCell: (params) => {
+        return(
+          <>{params.row.totalPlayed - params.row.totalWin}</>
+        )
+      }
+    },
+    { field: "comPercent", headerName: "Commission Amount", minWidth: 160, flex: 1 },
+    { field: "netProfit", headerName: "Net to Pay", minWidth: 120, flex: 1 },
   ];
 
 const TurnOverTable = ({ userID, from, to, gameType, role, link }) => {
@@ -46,9 +58,9 @@ const TurnOverTable = ({ userID, from, to, gameType, role, link }) => {
       sortable: false,
       renderCell: (params) => {
         return(
-            <Link to={`${link}${params.row.userID}/${from}-to-${to}/${gameType}`}>
-                <Button disabled={!link} variant="secondary" size="sm">View Details</Button>
-            </Link>
+          <Link to={`${link}${params.row.userID}/${from}-to-${to}/${gameType}`}>
+            <Button disabled={!link} variant="secondary" size="sm">View Details</Button>
+          </Link>
         )
       }
     }
@@ -209,12 +221,13 @@ const TurnOverTable = ({ userID, from, to, gameType, role, link }) => {
                         </div>
                     </MDBContainer> */}
 
-                    <h1 className="text-center my-5 text-muted">{role}s</h1>
+                    <h1 className="text-center mt-5">{role}s</h1>
                     <DataTable>
                         <DataGrid
                         rows={usersUnder}
                         columns={loggedUserTOCol.concat(viewDetailsCol)}
                         checkboxSelection={false}
+                        pageSize={25}
                         ></DataGrid>
                     </DataTable>
                 </>
