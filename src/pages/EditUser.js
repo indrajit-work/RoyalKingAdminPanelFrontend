@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useHistory, useParams } from "react-router-dom";
 import { Modal, Typography } from "@mui/material";
 import { Box } from "@mui/system";
+import {AiOutlineEye, AiOutlineEyeInvisible} from 'react-icons/ai'
 
 const style = {
   position: 'absolute',
@@ -39,6 +40,7 @@ const EditUser = () => {
   const [userNameList, setUserNameList] = useState([]);
   const [usernameIsvalid, setUsernameIsvalid] = useState(null);
   const [changeRole, setChangeRole] = useState(false)
+  const [showPwd, setShowPwd] = useState(false)
 
   const [userInfo, setUserInfo] = useState({});
   const [loggedUserInfo, setLoggedUserInfo] = useState({});
@@ -246,8 +248,8 @@ const EditUser = () => {
             name="userName"
             defaultValue={userInfo.userName}
             onChange={(e) => usernameCheckHandler(e.target.value)}
-            autocomplete="off"
-            disabled={disable}
+            autoComplete="off"
+            disabled={disable || loggedUserRole === 'STOKIST'}
           />
           {!usernameIsvalid &&
             userName.length !== 0 &&
@@ -295,14 +297,19 @@ const EditUser = () => {
             name="fullName"
             defaultValue={userInfo.fullName}
             onChange={(e) => setFullName(e.target.value)}
-            autocomplete="off"
+            autoComplete="off"
+            disabled={loggedUserRole === 'Distributor' || loggedUserRole === 'STOKIST'}
             required
           />
         </div>
         <div className="input-control">
-          <label className="input-label">Password</label>
+          <label className="input-label">Password&nbsp;
+            <span style={{cursor: 'pointer'}} onClick={prev => setShowPwd(!showPwd)}>
+              {!showPwd ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}
+            </span>
+          </label>
           <input
-            type="password"
+            type={showPwd ? `text` : `password`}
             name="password"
             defaultValue={userInfo.password}
             onChange={(e) => setPassword(e.target.value)}
@@ -311,7 +318,7 @@ const EditUser = () => {
         </div>
         <div className="input-control">
           <label className="input-label">User Role</label>
-          <select name="userRole" defaultValue={userInfo.userRole} onChange={(e) => {
+          <select name="userRole" defaultValue={userInfo.userRole} disabled={loggedUserRole === 'Distributor' || loggedUserRole === 'STOKIST'} onChange={(e) => {
             setUserRole(e.target.value)
             alert("Please select the proper BossID manually from the list")
             setChangeRole(true)
@@ -355,7 +362,11 @@ const EditUser = () => {
           <label className="input-label">Boss ID
             {changeRole && <span style={{color: 'red', fontSize: '12px'}}> (Select BossID manually from the list)</span>}
           </label>
-          <select name="bossID" onChange={(e) => {setBossID(e.target.value); setChangeRole(false)}} required>
+          <select name="bossID" 
+          disabled={loggedUserRole === 'Distributor' || loggedUserRole === 'STOKIST'} 
+          onChange={(e) => {setBossID(e.target.value) 
+          setChangeRole(false)}} 
+          required>
             {!changeRole ? 
               <option value={bossID} disabled selected>
                 {userInfo.bossID}
@@ -396,6 +407,7 @@ const EditUser = () => {
               <select
                 name="changeUsername"
                 defaultValue={changeUsername}
+                disabled={loggedUserRole === 'STOKIST'}
                 onChange={(e) => setChangeUsername(e.target.value)}
               >
                 <option value={changeUsername} disabled selected>
@@ -413,6 +425,7 @@ const EditUser = () => {
             name="commPercent"
             defaultValue={userInfo.commPercent}
             onChange={(e) => setCommPercent(e.target.value)}
+            disabled={loggedUserRole === 'Distributor' || loggedUserRole === 'STOKIST'}
             required
           />
         </div>
@@ -424,6 +437,7 @@ const EditUser = () => {
             min={0}
             max={100}
             defaultValue={userInfo.payout}
+            disabled={loggedUserRole === 'Distributor' || loggedUserRole === 'STOKIST'}
             onChange={(e) => setPayout(e.target.value)}
             required
           />
@@ -434,6 +448,7 @@ const EditUser = () => {
             type="number"
             name="phNo"
             defaultValue={userInfo.phone}
+            disabled={loggedUserRole === 'Distributor' || loggedUserRole === 'STOKIST'}
             onChange={(e) => setphNo(e.target.value)}
           />
         </div>
@@ -443,6 +458,7 @@ const EditUser = () => {
             type="date"
             name="dateOfbirth"
             defaultValue={userInfo.dateOfbirth}
+            disabled={loggedUserRole === 'Distributor' || loggedUserRole === 'STOKIST'}
             onChange={(e) => setDateOfbirth(e.target.value)}
           />
         </div>
@@ -450,6 +466,7 @@ const EditUser = () => {
           <label className="input-label">Block User</label>
           <select
             name="block"
+            disabled={loggedUserRole === 'Distributor' || loggedUserRole === 'STOKIST'}
             defaultValue={userInfo.block}
             onChange={(e) => setBlock(e.target.value)}
           >
@@ -465,6 +482,7 @@ const EditUser = () => {
           <select
             name="verified"
             defaultValue={userInfo.verified}
+            disabled={loggedUserRole === 'Distributor' || loggedUserRole === 'STOKIST'}
             onChange={(e) => setVerified(e.target.value)}
           >
             <option value={verified} disabled selected>
@@ -480,6 +498,7 @@ const EditUser = () => {
           <input
             type="text"
             name="resetDevice"
+            disabled={loggedUserRole === 'Distributor' || loggedUserRole === 'STOKIST'}
             defaultValue={resetDevice}
             readOnly
           />
@@ -491,7 +510,7 @@ const EditUser = () => {
             }`}
             onClick={handleDeviceReset}
             value="Reset"
-            disabled={resetDevice === "" || undefined}
+            disabled={(resetDevice === "" || undefined) && (loggedUserRole === 'Distributor') && (loggedUserRole === 'STOKIST')}
           />
         </div>
         {/* <div className='input-control single-input'>
@@ -503,7 +522,7 @@ const EditUser = () => {
                 <button className='button'>{verified ? "Verified" : "Verify"}</button>
             </div> */}
 
-        <button className="button">Edit</button>
+        <button className="button" disabled={(loggedUserRole === 'Distributor') || (loggedUserRole === 'STOKIST')}>Edit</button>
       </form>
       <ToastContainer
         style={{ position: "fixed", top: "5%", left: "0" }}

@@ -32,6 +32,7 @@ const ModifyLink = styled.div`
 `;
 
 const ListDistributor = ({userType, loggedUser, loggedUserRole}) => {
+  // console.log(loggedUserRole)
   const [userList, setUserList] = useState([]);
   const [loading, setLoading] = useState({
     status: false,
@@ -49,10 +50,11 @@ const ListDistributor = ({userType, loggedUser, loggedUserRole}) => {
       flex: 1,
       renderCell: (params) => {
         return (
-          stokistList.filter(stokist => stokist.userID === params.id).map((user) => (
+          stokistList.filter(stokist => stokist.userID === params.id).map((user, i) => (
             <Link
-              to={`/editUser/${user.userID}/${user.deviceID ? user.deviceID : undefined}`}
+              to={`/editUser/${user?.userID}/${user?.deviceID ? user?.deviceID : undefined}`}
               style={{ textDecoration: "none" }}
+              key={i}
             >
               <ModifyLink><FaUserEdit /> Edit</ModifyLink>
             </Link>
@@ -89,7 +91,7 @@ const ListDistributor = ({userType, loggedUser, loggedUserRole}) => {
   };
 
   const stokistList = userList.filter(user => user.userRole === 'STOKIST')
-  console.log(stokistList);
+  // console.log(stokistList);
 
   return (
     <>

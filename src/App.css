@@ -109,14 +109,26 @@ input[type="button"]{
 
 .rdrDateRangePickerWrapper{
   position: absolute;
-  top: 33%;
-  left: 33%;
+  top: 35%;
+  left: 50%;
   z-index: 7;
+  transform: translateX(-50%);
 }
 
 @media screen and (max-width: 768px) {
   .form-container{
     width: 90vw;
+  }
+  .rdrDateRangePickerWrapper{
+    position: absolute;
+    top: 47%;
+    left: 50%;
+  }
+}
+
+@media screen and (max-width: 625px){
+  .rdrDefinedRangesWrapper{
+    display: none;
   }
 }
 

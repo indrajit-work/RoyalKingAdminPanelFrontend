@@ -32,6 +32,7 @@ const ModifyLink = styled.div`
 `;
 
 const ListPlayer = ({userType, loggedUser, loggedUserRole}) => {
+  // console.log(loggedUserRole)
   const [userList, setUserList] = useState([]);
   const [pageSize, setPageSize] = useState(10);
 
@@ -45,9 +46,10 @@ const ListPlayer = ({userType, loggedUser, loggedUserRole}) => {
       flex: 1,
       renderCell: (params) => {
         return (
-          playerList.filter(player => player.userID === params.id).map((user) => (
+          playerList.filter(player => player.userID === params.id).map((user, i) => (
             <Link
-              to={`/editUser/${user.userID}/${user.deviceID ? user.deviceID : undefined}`}
+              to={`/editUser/${user?.userID}/${user?.deviceID ? user?.deviceID : undefined}`}
+              key={i}
               style={{ textDecoration: "none" }}
             >
               <ModifyLink><FaUserEdit /> Edit</ModifyLink>
@@ -79,15 +81,15 @@ const ListPlayer = ({userType, loggedUser, loggedUserRole}) => {
         })
       );
 
-      console.log("users: ", userList);
+      // console.log("users: ", userList);
     } catch (error) {
       console.log(error);
     }
   };
 
-  console.log(userList);
+  // console.log(userList);
   const playerList = userList.filter(user => user.userRole === 'PLAYER')
-  console.log(playerList);
+  // console.log(playerList);
 
   return (
     <>

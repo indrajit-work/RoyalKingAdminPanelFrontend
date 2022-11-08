@@ -12,6 +12,7 @@ import { getCookie, getRole } from "../utils/auth";
 import { Link } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import { BsCalendar3 } from "react-icons/bs";
+import { IoClose } from "react-icons/io5";
 import moment from "moment/moment";
 
 const DataTable = styled.div`
@@ -57,7 +58,7 @@ const Turnover2 = () => {
   }
 
   const handleSelect = (ranges) => {
-    console.log("ranges", ranges)
+    // console.log("ranges", ranges)
     setStartDate(ranges.selection.startDate)
     setEndDate(ranges.selection.endDate)
   }
@@ -111,8 +112,8 @@ const Turnover2 = () => {
   // search Handler
   const onSearchHandler = async (e) => {
     e.preventDefault();
-    console.log(loggedUser, "start:", startMom._i, "end", endMom._i, gameType);
-    console.log(typeof startMom, typeof endMom)
+    // console.log(loggedUser, "start:", startMom._i, "end", endMom._i, gameType);
+    // console.log(typeof startMom, typeof endMom)
     setLoading("Loading...");
     setShowTable(true)
     try {
@@ -191,7 +192,7 @@ const Turnover2 = () => {
       }
     }
   ]
-
+  // console.log(gameData?.netProfit?.toFixed(2))
   return (
     <>
       <form className="input-area" onSubmit={onSearchHandler}>
@@ -208,8 +209,13 @@ const Turnover2 = () => {
         </div>
 
         <div className="input-field">
-          <label>Select Start-End Date</label>
-          <button onClick={datePickerHandler}>Select Date Range</button>
+          <label>Select Date Range &nbsp;
+            <button onClick={datePickerHandler}>
+              {!showDatePicker ? <BsCalendar3 /> : <IoClose />}
+            </button>
+          </label>
+          <p>{moment(startDate).format('DD.M.YYYY')} - {moment(endDate).add(1, 'days').subtract(1, 'seconds').format('DD.M.YYYY')}</p>
+
           {showDatePicker && <DateRangePicker ranges={[selectionRange]} onChange={handleSelect} />}
         </div>
 
@@ -231,7 +237,7 @@ const Turnover2 = () => {
           {showCalEnd && <Calendar onChange={setTo} value={to} />}
         </div> */}
 
-        <button>Search</button>
+        {/* <button>Search</button> */}
       </form>
 
       <table>
