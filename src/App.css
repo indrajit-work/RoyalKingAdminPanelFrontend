@@ -107,6 +107,13 @@ input[type="button"]{
   color: white;
 }
 
+.rdrDateRangePickerWrapper{
+  position: absolute;
+  top: 33%;
+  left: 33%;
+  z-index: 7;
+}
+
 @media screen and (max-width: 768px) {
   .form-container{
     width: 90vw;

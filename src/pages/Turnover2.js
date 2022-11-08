@@ -5,18 +5,14 @@ import styled from "styled-components";
 import "./Turnover.css";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-import {
-  MDBTable,
-  MDBTableHead,
-  MDBTableBody,
-  MDBRow,
-  MDBCol,
-  MDBContainer,
-} from "mdb-react-ui-kit";
+import 'react-date-range/dist/styles.css'; // main style file
+import 'react-date-range/dist/theme/default.css'; // theme css file
+import { DateRangePicker } from 'react-date-range';
 import { getCookie, getRole } from "../utils/auth";
 import { Link } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import { BsCalendar3 } from "react-icons/bs";
+import moment from "moment/moment";
 
 const DataTable = styled.div`
   min-height: 500px;
@@ -45,6 +41,34 @@ const Turnover2 = () => {
   const [usersUnder, setUsersUnder] = useState([])
   const [loading, setLoading] = useState("");
   const [showTable, setShowTable] = useState(false)
+  const [showDatePicker, setShowDatePicker] = useState(false);
+
+  const datePickerHandler = () => {
+    setShowDatePicker((prevState) => !prevState)
+  }
+
+  const [startDate, setStartDate] = useState(new Date())
+  const [endDate, setEndDate] = useState(new Date())
+
+  const selectionRange = {
+    startDate,
+    endDate,
+    key: 'selection',
+  }
+
+  const handleSelect = (ranges) => {
+    console.log("ranges", ranges)
+    setStartDate(ranges.selection.startDate)
+    setEndDate(ranges.selection.endDate)
+  }
+
+  // console.log(startDate, endDate)
+  let startMom = moment(startDate).format('ddd DD MMM YYYY HH:mm:ss')
+  startMom = moment(startMom)
+  // console.log(startMom)
+  let endMom = moment(endDate).add(1, 'days').subtract(1, 'seconds').format('ddd DD MMM YYYY HH:mm:ss')
+  endMom = moment(endMom)
+  // console.log(endMom)
 
   const loggedUser = getCookie("token");
 
@@ -74,42 +98,7 @@ const Turnover2 = () => {
     { field: "netProfit", headerName: "Net to Pay", minWidth: 120, flex: 1 },
   ];
 
-  const viewDetailsCol = [
-    {
-      field: "details",
-      headerName: '',
-      width: 130,
-      sortable: false,
-      renderCell : (params) => {
-        if(userRole === "SUPERADMIN"){
-          return(
-            <Link to={`/admin/distributor/${params.row.userID}/${from}-to-${to}/${gameType}`}>
-              <Button variant="secondary" size="sm">View Details</Button>
-            </Link>
-          )
-        }
-        if(userRole === "ADMIN"){
-          return(
-            <Link to={`/distributor/stokist/${params.row.userID}/${from}-to-${to}/${gameType}`}>
-              <Button variant="secondary" size="sm">View Details</Button>
-            </Link>
-          )
-        }
-        if(userRole === "Distributor"){
-          return(
-            <Link to={`/stokist/player/${params.row.userID}/${from}-to-${to}/${gameType}`}>
-              <Button variant="secondary" size="sm">View Details</Button>
-            </Link>
-          )
-        }
-        // if(userRole === "STOKIST"){
-        //   return (
-        //     <></>
-        //   )
-        // }
-      }
-    }
-  ]
+  
 
   const calHandler = () => {
     setShowCal(!showCal);
@@ -122,7 +111,8 @@ const Turnover2 = () => {
   // search Handler
   const onSearchHandler = async (e) => {
     e.preventDefault();
-    // console.log(loggedUser, "start:", from, "end", to, gameType);
+    console.log(loggedUser, "start:", startMom._i, "end", endMom._i, gameType);
+    console.log(typeof startMom, typeof endMom)
     setLoading("Loading...");
     setShowTable(true)
     try {
@@ -130,13 +120,22 @@ const Turnover2 = () => {
         "https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/turnover",
         {
           userID: parseInt(loggedUser),
-          from: from,
-          to: to,
+          from: startMom._i,
+          to: endMom._i,
           gameType: gameType,
         }
       );
-      console.log(from);
-      console.log(to);
+
+      // let fromDateString = new Date(from).toUTCString();
+      // console.log("from1", fromDateString);
+      // fromDateString = fromDateString.split(' ').slice(0, 6).join(' ');
+      // console.log("from", fromDateString);
+      
+      // let toDateString = new Date(from).toUTCString();
+      // console.log("to1", fromDateString);
+      // toDateString = toDateString.split(' ').slice(0, 5).join(' ');
+      // console.log("to", toDateString);
+
       setGameData({id: parseInt(loggedUser), ...res.data?.data});
       setUsersUnder(res.data?.data?.childTurnOverArray.map(user => {
         return{
@@ -156,6 +155,43 @@ const Turnover2 = () => {
   // console.log(usersUnder)
   // console.log(showTable);
 
+  const viewDetailsCol = [
+    {
+      field: "details",
+      headerName: '',
+      width: 130,
+      sortable: false,
+      renderCell : (params) => {
+        if(userRole === "SUPERADMIN"){
+          return(
+            <Link to={`/admin/distributor/${params.row.userID}/${startMom._i}-to-${endMom._i}/${gameType}`}>
+              <Button variant="secondary" size="sm">View Details</Button>
+            </Link>
+          )
+        }
+        if(userRole === "ADMIN"){
+          return(
+            <Link to={`/distributor/stokist/${params.row.userID}/${startMom._i}-to-${endMom._i}/${gameType}`}>
+              <Button variant="secondary" size="sm">View Details</Button>
+            </Link>
+          )
+        }
+        if(userRole === "Distributor"){
+          return(
+            <Link to={`/stokist/player/${params.row.userID}/${startMom._i}-to-${endMom._i}/${gameType}`}>
+              <Button variant="secondary" size="sm">View Details</Button>
+            </Link>
+          )
+        }
+        // if(userRole === "STOKIST"){
+        //   return (
+        //     <></>
+        //   )
+        // }
+      }
+    }
+  ]
+
   return (
     <>
       <form className="input-area" onSubmit={onSearchHandler}>
@@ -172,34 +208,29 @@ const Turnover2 = () => {
         </div>
 
         <div className="input-field">
+          <label>Select Start-End Date</label>
+          <button onClick={datePickerHandler}>Select Date Range</button>
+          {showDatePicker && <DateRangePicker ranges={[selectionRange]} onChange={handleSelect} />}
+        </div>
+
+        {/* <div className="input-field">
           <label>Start Date</label>
           <input value={from} disabled />
           <span className="iconStyle">
             <BsCalendar3 onClick={calHandler} />
           </span>
           {showCal && <Calendar onChange={setFrom} value={from} />}
-          {/* <input
-            type="date"
-            name="from"
-            value={from}
-            onChange={(e) => setFrom(e.target.value)}
-          /> */}
-        </div>
+        </div> */}
 
-        <div className="input-field">
+        {/* <div className="input-field">
           <label>End Date</label>
           <input value={to} disabled />
           <span className="iconStyle">
             <BsCalendar3 onClick={EndHandler} />
           </span>
           {showCalEnd && <Calendar onChange={setTo} value={to} />}
-          {/* <input
-            type="date"
-            name="to"
-            value={to}
-            onChange={(e) => setTo(e.target.value)}
-          /> */}
-        </div>
+        </div> */}
+
         <button>Search</button>
       </form>
 
