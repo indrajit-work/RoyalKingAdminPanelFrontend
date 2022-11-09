@@ -121,7 +121,7 @@ input[type="button"]{
   }
   .rdrDateRangePickerWrapper{
     position: absolute;
-    top: 47%;
+    top: 40%;
     left: 50%;
   }
 }

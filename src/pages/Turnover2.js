@@ -195,7 +195,7 @@ const Turnover2 = () => {
   // console.log(gameData?.netProfit?.toFixed(2))
   return (
     <>
-      <form className="input-area" onSubmit={onSearchHandler}>
+      <form className="input-area">
         <div className="input-field">
           <label>Game Type</label>
           <select name="gameType" onChange={(e) => setGameType(e.target.value)}>
@@ -210,9 +210,9 @@ const Turnover2 = () => {
 
         <div className="input-field">
           <label>Select Date Range &nbsp;
-            <button onClick={datePickerHandler}>
-              {!showDatePicker ? <BsCalendar3 /> : <IoClose />}
-            </button>
+            <span style={{cursor: 'pointer'}}>
+            {!showDatePicker ? <BsCalendar3 onClick={datePickerHandler} /> : <IoClose onClick={datePickerHandler} />}
+            </span>
           </label>
           <p>{moment(startDate).format('DD.M.YYYY')} - {moment(endDate).add(1, 'days').subtract(1, 'seconds').format('DD.M.YYYY')}</p>
 
@@ -237,8 +237,12 @@ const Turnover2 = () => {
           {showCalEnd && <Calendar onChange={setTo} value={to} />}
         </div> */}
 
-        {/* <button>Search</button> */}
+        <button onClick={onSearchHandler}>Search</button>
       </form>
+
+      {showTable && loading !== "" &&
+        <p style={{display: 'grid', placeItems: 'center', fontSize: '20px'}}>{loading}</p>
+      }
 
       <table>
         <tr>
@@ -440,9 +444,7 @@ const Turnover2 = () => {
         </tbody>
       </table> */}
 
-      {showTable && loading !== "" &&
-        <p style={{display: 'grid', placeItems: 'center', fontSize: '20px'}}>{loading}</p>
-      }
+      
       {showTable && loading !== "Loading..." && !gameData?.childTurnOverArray ? 
       <p style={{textAlign: 'center'}}>No Data Found</p> :
       <>
