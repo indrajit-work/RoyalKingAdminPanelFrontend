@@ -39,6 +39,10 @@ body {
   margin: 1rem auto 0;
 }
 
+.hide{
+  display: none !important;
+}
+
 .input-control{
   display: flex;
   flex-direction: column;

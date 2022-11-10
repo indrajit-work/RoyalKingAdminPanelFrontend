@@ -241,7 +241,7 @@ const EditUser = () => {
     <div className="form-container">
       <h2>Edit User Info</h2>
       <form className="form" onSubmit={onHandleSubmit}>
-        <div className="input-control">
+        <div className={`input-control ${loggedUserRole === 'Distributor' || loggedUserRole === 'STOKIST' ? 'hide' : ''}`} >
           <label className="input-label">UserName</label>
           <input
             type="text"
@@ -290,7 +290,7 @@ const EditUser = () => {
             </p>
           )}
         </div>
-        <div className="input-control">
+        <div className={`input-control ${loggedUserRole === 'Distributor' || loggedUserRole === 'STOKIST' ? 'hide' : ''}`}>
           <label className="input-label">Full Name</label>
           <input
             type="text"
@@ -316,7 +316,7 @@ const EditUser = () => {
             required
           />
         </div>
-        <div className="input-control">
+        <div className={`input-control ${loggedUserRole === 'Distributor' || loggedUserRole === 'STOKIST' ? 'hide' : ''}`}>
           <label className="input-label">User Role</label>
           <select name="userRole" defaultValue={userInfo.userRole} disabled={loggedUserRole === 'Distributor' || loggedUserRole === 'STOKIST'} onChange={(e) => {
             setUserRole(e.target.value)
@@ -358,7 +358,7 @@ const EditUser = () => {
               ))}
           </select>
         </div>
-        <div className="input-control">
+        <div className={`input-control ${loggedUserRole === 'Distributor' || loggedUserRole === 'STOKIST' ? 'hide' : ''}`}>
           <label className="input-label">Boss ID
             {changeRole && <span style={{color: 'red', fontSize: '12px'}}> (Select BossID manually from the list)</span>}
           </label>
@@ -418,7 +418,7 @@ const EditUser = () => {
               </select>
             </div>
           )}
-        <div className="input-control">
+        <div className={`input-control ${loggedUserRole === 'Distributor' || loggedUserRole === 'STOKIST' ? 'hide' : ''}`}>
           <label className="input-label">Commision Percentage(%)</label>
           <input
             type="text"
@@ -429,7 +429,7 @@ const EditUser = () => {
             required
           />
         </div>
-        <div className="input-control">
+        <div className={`input-control ${loggedUserRole === 'Distributor' || loggedUserRole === 'STOKIST' ? 'hide' : ''}`}>
           <label className="input-label">Payout Percentage</label>
           <input
             type="number"
@@ -442,7 +442,7 @@ const EditUser = () => {
             required
           />
         </div>
-        <div className="input-control">
+        <div className={`input-control ${loggedUserRole === 'Distributor' || loggedUserRole === 'STOKIST' ? 'hide' : ''}`}>
           <label className="input-label">Mobile Number</label>
           <input
             type="number"
@@ -452,7 +452,7 @@ const EditUser = () => {
             onChange={(e) => setphNo(e.target.value)}
           />
         </div>
-        <div className="input-control">
+        <div className={`input-control ${loggedUserRole === 'Distributor' || loggedUserRole === 'STOKIST' ? 'hide' : ''}`}>
           <label className="input-label">Date of Birth</label>
           <input
             type="date"
@@ -462,7 +462,7 @@ const EditUser = () => {
             onChange={(e) => setDateOfbirth(e.target.value)}
           />
         </div>
-        <div className="input-control">
+        <div className={`input-control ${loggedUserRole === 'Distributor' || loggedUserRole === 'STOKIST' ? 'hide' : ''}`}>
           <label className="input-label">Block User</label>
           <select
             name="block"
@@ -477,12 +477,11 @@ const EditUser = () => {
             <option value="No">No</option>
           </select>
         </div>
-        <div className="input-control">
+        <div className={`input-control ${loggedUserRole === 'STOKIST' ? 'hide' : ''}`}>
           <label className="input-label">Verify User</label>
           <select
             name="verified"
             defaultValue={userInfo.verified}
-            disabled={loggedUserRole === 'Distributor' || loggedUserRole === 'STOKIST'}
             onChange={(e) => setVerified(e.target.value)}
           >
             <option value={verified} disabled selected>
@@ -492,26 +491,27 @@ const EditUser = () => {
             <option value={false}>No</option>
           </select>
         </div>
-
-        <label className="input-label">Device ID</label>
-        <div className="input-control single-input reset-input">
-          <input
-            type="text"
-            name="resetDevice"
-            disabled={loggedUserRole === 'Distributor' || loggedUserRole === 'STOKIST'}
-            defaultValue={resetDevice}
-            readOnly
-          />
-          <input
-            type="button"
-            style={{ flex: 1 }}
-            className={`button ${
-              resetDevice === "" || undefined ? "reset" : ""
-            }`}
-            onClick={handleDeviceReset}
-            value="Reset"
-            disabled={(resetDevice === "" || undefined) && (loggedUserRole === 'Distributor') && (loggedUserRole === 'STOKIST')}
-          />
+        
+        <div className={`${loggedUserRole === 'Distributor' || loggedUserRole === 'STOKIST' ? 'hide' : ''}`}>
+          <label className="input-label">Device ID</label>
+          <div className="input-control single-input reset-input">
+            <input
+              type="text"
+              name="resetDevice"
+              defaultValue={resetDevice}
+              readOnly
+            />
+            <input
+              type="button"
+              style={{ flex: 1 }}
+              className={`button ${
+                resetDevice === "" || undefined ? "reset" : ""
+              }`}
+              onClick={handleDeviceReset}
+              value="Reset"
+              disabled={(resetDevice === "" || undefined) && (loggedUserRole === 'Distributor') && (loggedUserRole === 'STOKIST')}
+            />
+          </div>
         </div>
         {/* <div className='input-control single-input'>
                 <input type="text" name='block' value={userInfo.block} onChange={(e) => setBlock(e.target.value)} />

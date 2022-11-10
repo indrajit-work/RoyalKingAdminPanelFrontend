@@ -96,7 +96,7 @@ const UserTable = () => {
           </Button>
         ))}
 
-        <AddLink to='/addUser'><BsPersonPlusFill /> Add User</AddLink>
+        {(loggedUserRole === 'SUPERADMIN' || loggedUserRole === 'ADMIN') && <AddLink to='/addUser'><BsPersonPlusFill /> Add User</AddLink>}
 
           {/* <Button style={{backgroundColor: '#850000'}}>
             Add User
