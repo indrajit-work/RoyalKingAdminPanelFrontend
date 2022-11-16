@@ -116,10 +116,10 @@ const Sidebar = () => {
             {userRole === 'ADMIN' && SidebarData.slice(0, 7).map((item, index) => {
               return <SubMenu showSideBar={showSidebar} item={item} key={index} />;
             })}
-            {userRole === 'Distributor' && SidebarData.slice(1, 6).map((item, index) => {
+            {userRole === 'Distributor' && SidebarData.slice(1, 5).map((item, index) => {
               return <SubMenu showSideBar={showSidebar} item={item} key={index} />;
             })}
-            {userRole === 'STOKIST' && SidebarData.slice(1, 6).map((item, index) => {
+            {userRole === 'STOKIST' && SidebarData.slice(1, 5).map((item, index) => {
               return <SubMenu showSideBar={showSidebar} item={item} key={index} />;
             })}
           </SidebarWrap>

@@ -216,7 +216,12 @@ const Turnover2 = () => {
           </label>
           <p>{moment(startDate).format('DD.M.YYYY')} - {moment(endDate).add(1, 'days').subtract(1, 'seconds').format('DD.M.YYYY')}</p>
 
-          {showDatePicker && <DateRangePicker ranges={[selectionRange]} onChange={handleSelect} />}
+          {showDatePicker && 
+          <DateRangePicker 
+          ranges={[selectionRange]} 
+          onChange={handleSelect} 
+          weekStartsOn={1}
+          />}
         </div>
 
         {/* <div className="input-field">

@@ -159,14 +159,14 @@ export const SidebarData = [
     // ],
   },
   {
-    title: "Ticket History",
-    path: "/gameHistory",
-    icon: <IoIcons.IoIosPaper />,
-  },
-  {
     title: "Turn over",
     path: "/turnover",
     icon: <FaIcons.FaEnvelopeOpenText />,
+  },
+  {
+    title: "Ticket History",
+    path: "/gameHistory",
+    icon: <IoIcons.IoIosPaper />,
   },
   {
     title: "Game Settings",
