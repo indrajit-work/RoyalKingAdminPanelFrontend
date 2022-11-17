@@ -30,7 +30,7 @@ const Turnover2 = () => {
   const date = new Date();
   date.setHours(0, 0, 0, 0);
   const date2 = new Date();
-  date2.setHours(23, 59, 59, 59);
+  date2.setHours(0, 0, 0, 0);
 
   const [gameType, setGameType] = useState("All");
   const [from, setFrom] = useState(date);
@@ -48,8 +48,8 @@ const Turnover2 = () => {
     setShowDatePicker((prevState) => !prevState)
   }
 
-  const [startDate, setStartDate] = useState(new Date())
-  const [endDate, setEndDate] = useState(new Date())
+  const [startDate, setStartDate] = useState(date)
+  const [endDate, setEndDate] = useState(date2)
 
   const selectionRange = {
     startDate,
@@ -63,13 +63,13 @@ const Turnover2 = () => {
     setEndDate(ranges.selection.endDate)
   }
 
-  // console.log(startDate, endDate)
+  console.log(startDate, endDate)
   let startMom = moment(startDate).format('ddd DD MMM YYYY HH:mm:ss')
   startMom = moment(startMom)
-  // console.log(startMom)
+  console.log(startMom)
   let endMom = moment(endDate).add(1, 'days').subtract(1, 'seconds').format('ddd DD MMM YYYY HH:mm:ss')
   endMom = moment(endMom)
-  // console.log(endMom)
+  console.log(endMom)
 
   const loggedUser = getCookie("token");
 
@@ -101,18 +101,18 @@ const Turnover2 = () => {
 
   
 
-  const calHandler = () => {
-    setShowCal(!showCal);
-  };
+  // const calHandler = () => {
+  //   setShowCal(!showCal);
+  // };
 
-  const EndHandler = () => {
-    setShowCalEnd(!showCalEnd);
-  };
+  // const EndHandler = () => {
+  //   setShowCalEnd(!showCalEnd);
+  // };
 
   // search Handler
   const onSearchHandler = async (e) => {
     e.preventDefault();
-    // console.log(loggedUser, "start:", startMom._i, "end", endMom._i, gameType);
+    console.log(loggedUser, "start:", startMom._i, "end", endMom._i, gameType);
     // console.log(typeof startMom, typeof endMom)
     setLoading("Loading...");
     setShowTable(true)

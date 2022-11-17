@@ -14,6 +14,7 @@ import "./Icon.css";
 import "./Turnover.css";
 import 'react-toastify/dist/ReactToastify.css'
 import { ToastContainer, toast } from 'react-toastify';
+import GameSettingOnOff from "../components/GameSettingOnOff";
 
 const GameSettings = () => {
   const [gameType, setGameType] = useState("All")
@@ -214,6 +215,9 @@ const GameSettings = () => {
 
         <br />
       </Container>
+      
+      <GameSettingOnOff />
+
       <ToastContainer />
     </>
   );
