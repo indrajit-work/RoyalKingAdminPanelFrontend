@@ -15,6 +15,7 @@ import "./Turnover.css";
 import 'react-toastify/dist/ReactToastify.css'
 import { ToastContainer, toast } from 'react-toastify';
 import GameSettingOnOff from "../components/GameSettingOnOff";
+import RandomResult from "../components/RandomResult";
 
 const GameSettings = () => {
   const [gameType, setGameType] = useState("All")
@@ -24,8 +25,8 @@ const GameSettings = () => {
   const handleSubmitMultiplier = async (e) => {
     e.preventDefault()
     
-    if (multiplier < 1) {
-      alert("select values in range 1-10");
+    if ((1 > multiplier) || (multiplier > 20)) {
+      alert("select values in range 1-20");
       return;
     }
 
@@ -187,12 +188,12 @@ const GameSettings = () => {
               <Col md>
                 <FloatingLabel
                   controlId="floatingSelectGrid"
-                  label="Select values from 1-10"
+                  label="Select values from 1-20"
                 >
                   <Form.Control
                     onChange={((e) => setMultiplier(e.target.value))}
                     type="number"
-                    min={1} max={10}
+                    min={1} max={20}
                     placeholder="Enter values from -100 to 100"
                     value={multiplier}
                     required={true}
@@ -217,6 +218,8 @@ const GameSettings = () => {
       </Container>
       
       <GameSettingOnOff />
+      <hr style={{width: '80%', margin: '0 auto'}} />
+      <RandomResult />
 
       <ToastContainer />
     </>
