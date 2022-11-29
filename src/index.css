@@ -26,6 +26,10 @@ code {
   color: white;
 }
 
+.rdrDefinedRangesWrapper{
+  display: none;
+}
+
 .MuiSvgIcon-root path{
   fill: #969696;
 }

@@ -3,7 +3,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import styled from "styled-components";
 import "./Turnover.css";
-import Calendar from "react-calendar";
+// import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
@@ -33,16 +33,22 @@ const Turnover2 = () => {
   date2.setHours(0, 0, 0, 0);
 
   const [gameType, setGameType] = useState("All");
-  const [from, setFrom] = useState(date);
-  const [to, setTo] = useState(date2);
+  // const [from, setFrom] = useState(date);
+  // const [to, setTo] = useState(date2);
   const [userRole, setUserRole] = useState("");
-  const [showCal, setShowCal] = useState(false);
-  const [showCalEnd, setShowCalEnd] = useState(false);
+  // const [showCal, setShowCal] = useState(false);
+  // const [showCalEnd, setShowCalEnd] = useState(false);
   const [gameData, setGameData] = useState({});
   const [usersUnder, setUsersUnder] = useState([])
   const [loading, setLoading] = useState("");
   const [showTable, setShowTable] = useState(false)
   const [showDatePicker, setShowDatePicker] = useState(false);
+
+  const [startRange, setStartRange] = useState(null)
+  const [endRange, setEndRange] = useState()
+  const [selectDate, setSelectDate] = useState('')
+  // const [startLastMonth, setStartLastMonth] = useState()
+  // const [endLastMonth, setEndLastMonth] = useState()
 
   const datePickerHandler = () => {
     setShowDatePicker((prevState) => !prevState)
@@ -59,17 +65,44 @@ const Turnover2 = () => {
 
   const handleSelect = (ranges) => {
     // console.log("ranges", ranges)
+    setSelectDate('')
     setStartDate(ranges.selection.startDate)
     setEndDate(ranges.selection.endDate)
   }
 
-  console.log(startDate, endDate)
+
+  // console.log(startDate, endDate)
   let startMom = moment(startDate).format('ddd DD MMM YYYY HH:mm:ss')
   startMom = moment(startMom)
-  console.log(startMom)
+  // console.log(startMom)
   let endMom = moment(endDate).add(1, 'days').subtract(1, 'seconds').format('ddd DD MMM YYYY HH:mm:ss')
   endMom = moment(endMom)
-  console.log(endMom)
+  // console.log(endMom)
+
+  const handleLastWeek = (e) => {
+    // console.log(e.target.value)
+    setSelectDate(e.target.value)
+
+    if(e.target.value === 'lastweek'){
+      let startMom = moment(date).subtract(7, 'days').format('ddd DD MMM YYYY HH:mm:ss')
+      setStartRange(startMom)
+      let endMom = moment(date).subtract(1, 'seconds').format('ddd DD MMM YYYY HH:mm:ss')
+      setEndRange(endMom)
+    }
+
+    if(e.target.value === 'lastmonth'){
+      let startMom = moment(date).subtract(30, 'days').format('ddd DD MMM YYYY HH:mm:ss')
+      setStartRange(startMom)
+      let endMom = moment(date).subtract(1, 'seconds').format('ddd DD MMM YYYY HH:mm:ss')
+      setEndRange(endMom)
+    }
+  }
+  // console.log("range", startRange, endRange)
+  const printStart = moment(startRange).format('DD.M.YYYY')
+  const printEnd = moment(endRange).format('DD.M.YYYY')
+
+  // console.log(printStart, printEnd, typeof printStart)
+
 
   const loggedUser = getCookie("token");
 
@@ -99,7 +132,6 @@ const Turnover2 = () => {
     { field: "netProfit", headerName: "Net to Pay", minWidth: 120, flex: 1 },
   ];
 
-  
 
   // const calHandler = () => {
   //   setShowCal(!showCal);
@@ -113,19 +145,52 @@ const Turnover2 = () => {
   const onSearchHandler = async (e) => {
     e.preventDefault();
     console.log(loggedUser, "start:", startMom._i, "end", endMom._i, gameType);
+    console.log(loggedUser, "start:", startRange, "end", endRange, gameType);
     // console.log(typeof startMom, typeof endMom)
     setLoading("Loading...");
     setShowTable(true)
     try {
-      const res = await axios.post(
-        "https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/turnover",
-        {
-          userID: parseInt(loggedUser),
-          from: startMom._i,
-          to: endMom._i,
-          gameType: gameType,
-        }
-      );
+      if(selectDate === 'lastweek' || selectDate === 'lastmonth') {
+        console.log("custom")
+        const res = await axios.post(
+          "https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/turnover",
+          {
+            userID: parseInt(loggedUser),
+            from: startRange,
+            to: endRange,
+            gameType: gameType,
+          }
+        );
+        setGameData({id: parseInt(loggedUser), ...res.data?.data});
+        setUsersUnder(res.data?.data?.childTurnOverArray.map(user => {
+          return{
+            id: user.userID,
+            comPercent: user.comPercent.toFixed(2),
+            netProfit: user.netProfit.toFixed(2),
+            ...user,
+          }
+        }))
+      }else{
+        console.log("calendar")
+        const res = await axios.post(
+          "https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/turnover",
+          {
+            userID: parseInt(loggedUser),
+            from: startMom._i,
+            to: endMom._i,
+            gameType: gameType,
+          }
+        );
+        setGameData({id: parseInt(loggedUser), ...res.data?.data});
+        setUsersUnder(res.data?.data?.childTurnOverArray.map(user => {
+          return{
+            id: user.userID,
+            comPercent: user.comPercent.toFixed(2),
+            netProfit: user.netProfit.toFixed(2),
+            ...user,
+          }
+        }))
+      }
 
       // let fromDateString = new Date(from).toUTCString();
       // console.log("from1", fromDateString);
@@ -136,16 +201,6 @@ const Turnover2 = () => {
       // console.log("to1", fromDateString);
       // toDateString = toDateString.split(' ').slice(0, 5).join(' ');
       // console.log("to", toDateString);
-
-      setGameData({id: parseInt(loggedUser), ...res.data?.data});
-      setUsersUnder(res.data?.data?.childTurnOverArray.map(user => {
-        return{
-          id: user.userID,
-          comPercent: user.comPercent.toFixed(2),
-          netProfit: user.netProfit.toFixed(2),
-          ...user,
-        }
-      }))
     } catch (error) {
       console.log(error);
     } finally {
@@ -209,38 +264,31 @@ const Turnover2 = () => {
         </div>
 
         <div className="input-field">
-          <label>Select Date Range &nbsp;
-            <span style={{cursor: 'pointer'}}>
-            {!showDatePicker ? <BsCalendar3 onClick={datePickerHandler} /> : <IoClose onClick={datePickerHandler} />}
-            </span>
-          </label>
-          <p>{moment(startDate).format('DD.M.YYYY')} - {moment(endDate).add(1, 'days').subtract(1, 'seconds').format('DD.M.YYYY')}</p>
+          <div>
+            <label>Select Date Range &nbsp;
+              <span style={{cursor: 'pointer'}}>
+              {!showDatePicker ? <BsCalendar3 onClick={datePickerHandler} /> : <IoClose onClick={datePickerHandler} />}
+              </span>
+            </label>
+            {selectDate === '' && <p>{moment(startDate).format('DD.M.YYYY')} - {moment(endDate).add(1, 'days').subtract(1, 'seconds').format('DD.M.YYYY')}</p>}
+            {(selectDate === 'lastweek' || selectDate === 'lastmonth') && <p>{printStart} - {printEnd}</p>}
 
-          {showDatePicker && 
-          <DateRangePicker 
-          ranges={[selectionRange]} 
-          onChange={handleSelect} 
-          weekStartsOn={1}
-          />}
+            {showDatePicker && 
+            <DateRangePicker 
+            ranges={[selectionRange]} 
+            onChange={handleSelect}
+            weekStartsOn={1}
+            />}
+          </div>
+
+          <div>
+            <select name="selectDate" onChange={handleLastWeek} onClick={() => setShowDatePicker(false)}>
+              <option value="" selected={selectDate === ''} disabled>Auto Date Range</option>
+              <option value="lastweek">Last 7 Days</option>
+              <option value="lastmonth">Last 30 Days</option>
+            </select>
+          </div>
         </div>
-
-        {/* <div className="input-field">
-          <label>Start Date</label>
-          <input value={from} disabled />
-          <span className="iconStyle">
-            <BsCalendar3 onClick={calHandler} />
-          </span>
-          {showCal && <Calendar onChange={setFrom} value={from} />}
-        </div> */}
-
-        {/* <div className="input-field">
-          <label>End Date</label>
-          <input value={to} disabled />
-          <span className="iconStyle">
-            <BsCalendar3 onClick={EndHandler} />
-          </span>
-          {showCalEnd && <Calendar onChange={setTo} value={to} />}
-        </div> */}
 
         <button onClick={onSearchHandler}>Search</button>
       </form>
