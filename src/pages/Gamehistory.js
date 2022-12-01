@@ -1,5 +1,4 @@
 import React, { useState ,useEffect} from "react";
-import { Link } from "react-router-dom";
 import ReactModal from 'react-modal';
 import axios from "axios";
 import {
@@ -16,19 +15,9 @@ import "react-calendar/dist/Calendar.css";
 import * as AiIcons from "react-icons/ai";
 import "./Icon.css";
 import "./Turnover.css";
-import {
-  MDBTable,
-  MDBTableHead,
-  MDBTableBody,
-  MDBRow,
-  MDBCol,
-  MDBContainer,
-  MDBBtn,
-  MDBBtnGroup,
-} from "mdb-react-ui-kit";
 import { DataGrid } from "@mui/x-data-grid";
 import styled from "styled-components";
-import BetDetails from "../components/BetDetails";
+// import BetDetails from "../components/BetDetails";
 ReactModal.setAppElement("#root")
 
 const DataTable = styled.div`
@@ -42,12 +31,10 @@ const DataTable = styled.div`
   }
 `;
 
-
-
 const Gamehistory = () => {
   const [pageSize, setPageSize] = useState(25);
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const[getAdmin,setAdmins]=useState( );
+  const[getAdmin,setAdmins]=useState();
 
   const date=new Date();
   date.setHours(0,0,0,0)
@@ -68,6 +55,7 @@ const Gamehistory = () => {
 
   const {btn} =btnText
 
+
   const loggedUserTOCol = [
     { field: "ticketID", headerName: "Ticket ID", minWidth: 100, flex: 1 },
     { field: "autoClaim", headerName: "Auto Claim", minWidth: 100, sortable: false, flex: 1 },
@@ -81,28 +69,31 @@ const Gamehistory = () => {
     { field: "userID", headerName: "User ID", minWidth: 100, flex: 1 },
     { field: "userName", headerName: "Username", minWidth: 120, flex: 1 },
     { field: "win", headerName: "Win", minWidth: 100, flex: 1 },
-    // { field: "bets", headerName: "Bets", minWidth: 100, flex: 1 },
     {
       field: "bets", headerName: "Bets", minWidth: 100, sortable: false, flex: 1,
       renderCell: (params) => {
-        
+        // console.log(params)
+
+        const fetchBetDetails = async() => {
+          setIsModalOpen(true)
+          try {
+            const res = await axios.get(`https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/ticket/betdetails?ticketID=${params?.row?.ticketID}`)
+            setBetDetails(() => res?.data?.bets.map(bet => {
+              return {...bet}
+            }))
+            // console.log("bets", betDetails)
+          } catch (error) {
+            console.log(error.message)
+          }
+        }
         return(
           <>
             <div>
-              {/* {params?.row?.bets.map((bet, index) =>  */}
-                {/*
-                <span key={index}>[{bet.betOn} - {bet.betValue} - {bet.winAmount}] || </span> */}
-              {/* )} */}
-              <button onClick={() => setIsModalOpen(true)}>Bet Details</button>
+              <button onClick={fetchBetDetails}>Bet Details</button>
               <ReactModal isOpen={isModalOpen} shouldCloseOnOverlayClick={true} onRequestClose={() => setIsModalOpen(false)}>
                 <div className="app__modal">
-                  <div className='app__modal-content'>
-                      
+                  <div className='app__modal-content'>    
                     <h3>Bet Details</h3>
-                    {/* {params?.row.map(item => (
-                      <p>{item}</p>
-                    ))} */}
-                    {console.log(params?.row)}
                     <table>
                       <thead>
                         <tr>
@@ -112,7 +103,7 @@ const Gamehistory = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {params?.row?.bets?.map((bet, index) => (
+                        {betDetails?.map((bet, index) => (
                           <tr key={index}>
                             <td>{bet.betOn}</td>
                             <td>{bet.betValue}</td>
@@ -279,50 +270,7 @@ console.log(value, endValue, type, id)
       pageSize={pageSize}
       ></DataGrid>
     </DataTable>
-
-    {/* <MDBContainer>
-      <div style={{ marginTop: "80px" }}>
-      
-    <MDBRow>
-    <MDBCol size="12">
-      <MDBTable>
-        <MDBTableHead dark>
-          <tr>
-            <th scope=" col "> User id</th>
-            <th scope=" col ">Played </th>
-            <th scope=" col "> win </th>
-            <th scope=" col "> Details </th>
-          </tr>
-        </MDBTableHead>
-
-        {!allGameData? (
-          <MDBTableBody className="align-center mb-8">
-            <tr>
-              <td colspan={8} className=" text-center mb-8">
-                {" "}
-                No Data Found{" "}
-              </td>
-            </tr>
-          </MDBTableBody>
-        ) 
-        : (
-            <MDBTableBody >
-              <tr>
-                <td> {id}</td>
-                <td>{played}</td>
-                <td>{win}</td>
-              <td><Link to={`/tickethistory/${id}/${type}/${value}/${endValue}`}><Button variant="outline-secondary" size="sm">More Info</Button></Link></td>
-              </tr>
-            </MDBTableBody>
-        )}
-      </MDBTable>
-    </MDBCol>
-  </MDBRow>
- </div>
-</MDBContainer> */}
-
-
-</>
+  </>
   );
 };
 
