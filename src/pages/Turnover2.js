@@ -27,25 +27,28 @@ const DataTable = styled.div`
 `;
 
 const Turnover2 = () => {
-  const [pageSize, setPageSize] = useState(25);
-
   const date = new Date();
   date.setHours(0, 0, 0, 0);
   const date2 = new Date();
   date2.setHours(0, 0, 0, 0);
 
   const [gameType, setGameType] = useState("All");
+  // const [from, setFrom] = useState(date);
+  // const [to, setTo] = useState(date2);
   const [userRole, setUserRole] = useState("");
+  // const [showCal, setShowCal] = useState(false);
+  // const [showCalEnd, setShowCalEnd] = useState(false);
   const [gameData, setGameData] = useState({});
   const [usersUnder, setUsersUnder] = useState([])
   const [loading, setLoading] = useState("");
   const [showTable, setShowTable] = useState(false)
   const [showDatePicker, setShowDatePicker] = useState(false);
 
-  const [startRange, setStartRange] = useState()
+  const [startRange, setStartRange] = useState(null)
   const [endRange, setEndRange] = useState()
   const [selectDate, setSelectDate] = useState('')
-
+  // const [startLastMonth, setStartLastMonth] = useState()
+  // const [endLastMonth, setEndLastMonth] = useState()
 
   const datePickerHandler = () => {
     setShowDatePicker((prevState) => !prevState)
@@ -67,6 +70,7 @@ const Turnover2 = () => {
     setEndDate(ranges.selection.endDate)
   }
 
+
   // console.log(startDate, endDate)
   let startMom = moment(startDate).format('ddd DD MMM YYYY HH:mm:ss')
   startMom = moment(startMom)
@@ -76,6 +80,7 @@ const Turnover2 = () => {
   // console.log(endMom)
 
   const handleLastWeek = (e) => {
+    // console.log(e.target.value)
     setSelectDate(e.target.value)
 
     if(e.target.value === 'lastweek'){
@@ -98,6 +103,7 @@ const Turnover2 = () => {
 
   // console.log(printStart, printEnd, typeof printStart)
 
+
   const loggedUser = getCookie("token");
 
   (async () => {
@@ -111,7 +117,11 @@ const Turnover2 = () => {
     { field: "totalPlayed", headerName: "Play Point", minWidth: 120, flex: 1 },
     { field: "totalWin", headerName: "Win Point", minWidth: 120, flex: 1 },
     {
-      field: "", headerName: "End", minWidth: 120, sortable: false, flex: 1,
+      field: "",
+      headerName: "End",
+      minWidth: 120,
+      sortable: false,
+      flex: 1,
       renderCell: (params) => {
         return(
           <>{params.row.totalPlayed - params.row.totalWin}</>
@@ -123,6 +133,14 @@ const Turnover2 = () => {
   ];
 
 
+  // const calHandler = () => {
+  //   setShowCal(!showCal);
+  // };
+
+  // const EndHandler = () => {
+  //   setShowCalEnd(!showCalEnd);
+  // };
+
   // search Handler
   const onSearchHandler = async (e) => {
     e.preventDefault();
@@ -133,6 +151,7 @@ const Turnover2 = () => {
     setShowTable(true)
     try {
       if(selectDate === 'lastweek' || selectDate === 'lastmonth') {
+        console.log("custom")
         const res = await axios.post(
           "https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/turnover",
           {
@@ -152,6 +171,7 @@ const Turnover2 = () => {
           }
         }))
       }else{
+        console.log("calendar")
         const res = await axios.post(
           "https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/turnover",
           {
@@ -219,6 +239,11 @@ const Turnover2 = () => {
             </Link>
           )
         }
+        // if(userRole === "STOKIST"){
+        //   return (
+        //     <></>
+        //   )
+        // }
       }
     }
   ]
@@ -294,7 +319,185 @@ const Turnover2 = () => {
           <td>{gameData?.netProfit?.toFixed(2)}</td>
         </tr>
       </table>
- 
+
+      {/* <MDBContainer>
+        <div style={{ marginTop: "80px" }}>
+          <MDBRow>
+            <MDBCol size="12">
+              <MDBTable>
+                <MDBTableHead dark>
+                  <tr>
+                    <th scope=" col "> User Role </th>
+                    <th scope=" col ">Played </th>
+                    <th scope=" col "> Win </th>
+                    <th scope=" col ">Commission percent(%)</th>
+                    <th scope=" col "> Net </th>
+                  </tr>
+                </MDBTableHead>
+
+                {false ? (
+                  <MDBTableBody className="align-center mb-8">
+                    <tr>
+                      <td colspan={8} className=" text-center mb-8">
+                        {" "}
+                        No Data Found{" "}
+                      </td>
+                    </tr>
+                  </MDBTableBody>
+                ) : (
+                  // games.map((item, index) => (
+                  <MDBTableBody>
+                    <tr>
+                      <td>{userRole}</td>
+                      <td>{gameData.totalPlayed}</td>
+                      <td>{gameData.totalWin}</td>
+                      <td>{gameData.comPercent?.toFixed(2)}</td>
+                      <td>{gameData?.netProfit?.toFixed(2)}</td>
+                    </tr>
+                  </MDBTableBody>
+                )}
+              </MDBTable>
+            </MDBCol>
+          </MDBRow>
+        </div>
+      </MDBContainer> */}
+
+      {/* {show} */}
+      {/* {showTable && loading !== "" &&
+        <p style={{display: 'grid', placeItems: 'center', fontSize: '20px'}}>{loading}</p>
+      }
+      {
+        showTable && loading !== "Loading..." &&
+        <MDBContainer>
+          <div style={{ marginTop: "80px" }}>
+            <h1 className="text-center mb-5 text-muted">
+              {userRole === "SUPERADMIN" && "Administrators"}
+              {userRole === "ADMIN" && "Distributors"}
+              {userRole === "Distributor" && "Stokists"}
+              {userRole === "STOKIST" && "Players"}
+            </h1>
+            <MDBRow>
+              <MDBCol size="12">
+                <MDBTable>
+                  <MDBTableHead dark>
+                    <tr>
+                      <th scope="col">User Id</th>
+                      <th scope=" col "> User Role </th>
+                      <th scope=" col ">Played </th>
+                      <th scope=" col "> Win </th>
+                      <th scope=" col ">Commission percent(%)</th>
+                      <th scope=" col "> Net </th>
+                    </tr>
+                  </MDBTableHead>
+
+                  {!gameData?.childTurnOverArray ? (
+                    <MDBTableBody className="align-center mb-8">
+                      <tr>
+                        <td colspan={8} className=" text-center mb-8">
+                          {" "}
+                          No Data Found{" "}
+                        </td>
+                      </tr>
+                    </MDBTableBody>
+                  ) : (
+                    gameData?.childTurnOverArray.map((item, index) => (
+                      <MDBTableBody key={index}>
+                        <tr>
+                          <td>{item.userID}</td>
+                          <td>
+                            {userRole === "SUPERADMIN" && (
+                              <Link
+                                to={`/admin/distributor/${item.userID}/${from}-to-${to}/${gameType}`}
+                              >
+                                <Button variant="secondary" size="sm">
+                                  {item.fullName}(Admin)
+                                </Button>
+                              </Link>
+                            )}
+                            {userRole === "ADMIN" && (
+                              <Link
+                                to={`/distributor/stokist/${item.userID}/${from}-to-${to}/${gameType}`}
+                              >
+                                <Button variant="secondary" size="sm">
+                                  {item.fullName}(Distributor)
+                                </Button>
+                                {item.fullName}({othersRole})
+                              </Link>
+                            )}
+                            {userRole === "Distributor" && (
+                              <Link
+                                to={`/stokist/player/${item.userID}/${from}-to-${to}/${gameType}`}
+                              >
+                                <Button variant="secondary" size="sm">
+                                  {item.fullName}(Stokist)
+                                </Button>
+                              </Link>
+                            )}
+                            {userRole === "STOKIST" && <p>Player</p>}
+                          </td>
+                          <td>{item.totalPlayed}</td>
+                          <td>{item.totalWin}</td>
+                          <td> {item.comPercent?.toFixed(2)}</td>
+                          <td>{item?.netProfit?.toFixed(2)}</td>
+                        </tr>
+                      </MDBTableBody>
+                    ))
+                  )}
+                </MDBTable>
+              </MDBCol>
+            </MDBRow>
+          </div>
+        </MDBContainer>
+      } */}
+
+      {/* <table>
+        <thead>
+          <tr>
+            <th>User ID</th>
+            <th>User Role</th>
+            <th>Played</th>
+            <th>Win</th>
+            <th>Commission Percent</th>
+            <th>Net</th>
+          </tr>
+        </thead>
+        <tbody>
+          {gameData.childTurnOverArray?.map((user) => (
+            <tr>
+              <td>{user.userID}</td>
+              <td>
+                {userRole === "SUPERADMIN" && (
+                  <Link
+                    to={`/admin/distributor/${user.userID}/${from}-to-${to}/${gameType}`}
+                  >
+                    {user.fullName}({othersRole})
+                  </Link>
+                )}
+                {userRole === "ADMIN" && (
+                  <Link
+                    to={`/distributor/stokist/${user.userID}/${from}-to-${to}/${gameType}`}
+                  >
+                    {user.fullName}({othersRole})
+                  </Link>
+                )}
+                {userRole === "Distributor" && (
+                  <Link
+                    to={`/stokist/player/${user.userID}/${from}-to-${to}/${gameType}`}
+                  >
+                    {user.fullName}({othersRole})
+                  </Link>
+                )}
+              </td>
+              <td>{user.totalPlayed}</td>
+              <td>{user.totalWin}</td>
+              <td>{user.comPercent}</td>
+              <td>{user.netProfit}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table> */}
+
+      
       {showTable && loading !== "Loading..." && !gameData?.childTurnOverArray ? 
       <p style={{textAlign: 'center'}}>No Data Found</p> :
       <>
@@ -309,9 +512,7 @@ const Turnover2 = () => {
           rows={usersUnder}
           columns={loggedUserTOCol.concat(viewDetailsCol)}
           checkboxSelection={false}
-          rowsPerPageOptions={[25, 50, 100]}
-          onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-          pageSize={pageSize}
+          pageSize={25}
           ></DataGrid>
         </DataTable>
       </>
