@@ -81,7 +81,7 @@ const Gamehistory = () => {
             setBetDetails(() => res?.data?.bets.map(bet => {
               return {...bet}
             }))
-            // console.log("bets", betDetails)
+            console.log("bets", betDetails)
           } catch (error) {
             console.log(error.message)
           }
