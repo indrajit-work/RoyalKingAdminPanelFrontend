@@ -10,10 +10,10 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 import { DateRangePicker } from 'react-date-range';
 import { getCookie, getRole } from "../utils/auth";
 import { Link } from "react-router-dom";
-import { Button } from "react-bootstrap";
 import { BsCalendar3 } from "react-icons/bs";
 import { IoClose } from "react-icons/io5";
 import moment from "moment/moment";
+import { Button } from "@mui/material";
 
 const DataTable = styled.div`
   min-height: 500px;
@@ -46,7 +46,6 @@ const Turnover2 = () => {
   const [endRange, setEndRange] = useState()
   const [selectDate, setSelectDate] = useState('')
 
-
   const datePickerHandler = () => {
     setShowDatePicker((prevState) => !prevState)
   }
@@ -76,23 +75,51 @@ const Turnover2 = () => {
   // console.log(endMom)
 
   const handleLastWeek = (e) => {
-    setSelectDate(e.target.value)
+    setSelectDate(e.target.id)
+    setShowDatePicker(false)
+    // console.log(selectDate)
 
-    if(e.target.value === 'lastweek'){
+    // console.log(e)
+
+    if(e.target.id === 'lastweek'){
       let startMom = moment(date).subtract(7, 'days').format('ddd DD MMM YYYY HH:mm:ss')
       setStartRange(startMom)
       let endMom = moment(date).subtract(1, 'seconds').format('ddd DD MMM YYYY HH:mm:ss')
       setEndRange(endMom)
     }
 
-    if(e.target.value === 'lastmonth'){
-      let startMom = moment(date).subtract(30, 'days').format('ddd DD MMM YYYY HH:mm:ss')
+    if(e.target.id === 'thisweek'){
+      let startMom = moment(date).startOf('week').add(1, 'days').format('ddd DD MMM YYYY HH:mm:ss')
+      setStartRange(startMom)
+      let endMom = moment(date).endOf('week').add(1, 'days').format('ddd DD MMM YYYY HH:mm:ss')
+      setEndRange(endMom)
+    }
+    if(e.target.id === 'thismonth'){
+      let startMom = moment(date).startOf('month').format('ddd DD MMM YYYY HH:mm:ss')
+      setStartRange(startMom)
+      let endMom = moment(date).endOf('month').format('ddd DD MMM YYYY HH:mm:ss')
+      setEndRange(endMom)
+    }
+    if(e.target.id === 'yesterday'){
+      let startMom = moment(date).subtract(1, 'days').format('ddd DD MMM YYYY HH:mm:ss')
       setStartRange(startMom)
       let endMom = moment(date).subtract(1, 'seconds').format('ddd DD MMM YYYY HH:mm:ss')
       setEndRange(endMom)
     }
+    if(e.target.id === 'today'){
+      let startMom = moment(date).format('ddd DD MMM YYYY HH:mm:ss')
+      setStartRange(startMom)
+      let endMom = moment(date).add(1, 'days').subtract(1, 'seconds').format('ddd DD MMM YYYY HH:mm:ss')
+      setEndRange(endMom)
+    }
+    // if(e.target.value === 'lastmonth'){
+    //   let startMom = moment(date).subtract(30, 'days').format('ddd DD MMM YYYY HH:mm:ss')
+    //   setStartRange(startMom)
+    //   let endMom = moment(date).subtract(1, 'seconds').format('ddd DD MMM YYYY HH:mm:ss')
+    //   setEndRange(endMom)
+    // }
   }
-  // console.log("range", startRange, endRange)
+  console.log("range", startRange, endRange)
   const printStart = moment(startRange).format('DD.M.YYYY')
   const printEnd = moment(endRange).format('DD.M.YYYY')
 
@@ -132,7 +159,7 @@ const Turnover2 = () => {
     setLoading("Loading...");
     setShowTable(true)
     try {
-      if(selectDate === 'lastweek' || selectDate === 'lastmonth') {
+      if(selectDate === 'lastweek' || selectDate === 'thisweek' || selectDate === 'thismonth' || selectDate === 'yesterday' || selectDate === 'today') {
         const res = await axios.post(
           "https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/turnover",
           {
@@ -242,11 +269,11 @@ const Turnover2 = () => {
           <div>
             <label>Select Date Range &nbsp;
               <span style={{cursor: 'pointer'}}>
-              {!showDatePicker ? <BsCalendar3 onClick={datePickerHandler} /> : <IoClose onClick={datePickerHandler} />}
+              {!showDatePicker ? <BsCalendar3 onClick={datePickerHandler} style={{color: 'steelblue'}} /> : <IoClose onClick={datePickerHandler} />}
               </span>
             </label>
             {selectDate === '' && <p>{moment(startDate).format('DD.M.YYYY')} - {moment(endDate).add(1, 'days').subtract(1, 'seconds').format('DD.M.YYYY')}</p>}
-            {(selectDate === 'lastweek' || selectDate === 'lastmonth') && <p>{printStart} - {printEnd}</p>}
+            {(selectDate === 'lastweek' || selectDate === 'thisweek' || selectDate === 'thismonth' || selectDate === 'yesterday' || selectDate === 'today') && <p>{printStart} - {printEnd}</p>}
 
             {showDatePicker && 
             <DateRangePicker 
@@ -256,16 +283,28 @@ const Turnover2 = () => {
             />}
           </div>
 
-          <div>
+          <div className="date-buttons">
+            <div onClick={handleLastWeek} id='today'>Today</div>
+            <div onClick={handleLastWeek} id='yesterday'>Yesterday</div>
+            <div onClick={handleLastWeek} id='thisweek'>This Week</div>
+            <div onClick={handleLastWeek} id='lastweek'>Last Week</div>
+            <div onClick={handleLastWeek} id='thismonth'>This Month</div>
+          </div>
+
+          {/* <div>
             <select name="selectDate" onChange={handleLastWeek} onClick={() => setShowDatePicker(false)}>
               <option value="" selected={selectDate === ''} disabled>Auto Date Range</option>
-              <option value="lastweek">Last 7 Days</option>
+              <option value="today">Today</option>
+              <option value="yesterday">Yesterday</option>
+              <option value="thisweek">This Week</option>
+              <option value="lastweek">Last Week</option>
+              <option value="thismonth">This Month</option>
               <option value="lastmonth">Last 30 Days</option>
             </select>
-          </div>
+          </div> */}
         </div>
 
-        <button onClick={onSearchHandler}>Search</button>
+        <Button variant="contained" onClick={onSearchHandler}>Search</Button>
       </form>
 
       {showTable && loading !== "" &&
