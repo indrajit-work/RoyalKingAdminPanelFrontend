@@ -82,9 +82,9 @@ const Turnover2 = () => {
     // console.log(e)
 
     if(e.target.id === 'lastweek'){
-      let startMom = moment(date).subtract(7, 'days').format('ddd DD MMM YYYY HH:mm:ss')
+      let startMom = moment(date).startOf('week').subtract(6, 'days').format('ddd DD MMM YYYY HH:mm:ss')
       setStartRange(startMom)
-      let endMom = moment(date).subtract(1, 'seconds').format('ddd DD MMM YYYY HH:mm:ss')
+      let endMom = moment(date).endOf('week').subtract(6, 'days').format('ddd DD MMM YYYY HH:mm:ss')
       setEndRange(endMom)
     }
 
@@ -123,7 +123,7 @@ const Turnover2 = () => {
   const printStart = moment(startRange).format('DD.M.YYYY')
   const printEnd = moment(endRange).format('DD.M.YYYY')
 
-  // console.log(printStart, printEnd, typeof printStart)
+  // console.log(printStart, printEnd)
 
   const loggedUser = getCookie("token");
 
