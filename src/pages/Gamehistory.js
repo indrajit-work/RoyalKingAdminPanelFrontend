@@ -1,5 +1,5 @@
 import React, { useState ,useEffect} from "react";
-import { Link } from "react-router-dom";
+import ReactModal from 'react-modal';
 import axios from "axios";
 import {
   Card,
@@ -15,46 +15,116 @@ import "react-calendar/dist/Calendar.css";
 import * as AiIcons from "react-icons/ai";
 import "./Icon.css";
 import "./Turnover.css";
-import {
-  MDBTable,
-  MDBTableHead,
-  MDBTableBody,
-  MDBRow,
-  MDBCol,
-  MDBContainer,
-  MDBBtn,
-  MDBBtnGroup,
-} from "mdb-react-ui-kit";
+import { DataGrid } from "@mui/x-data-grid";
+import styled from "styled-components";
+// import BetDetails from "../components/BetDetails";
+ReactModal.setAppElement("#root")
 
+const DataTable = styled.div`
+  min-height: 500px;
+  height: 80vh;
+  padding: 0 5rem;
+  margin: 3rem auto;
+  @media (max-width: 768px) {
+    height: 300px;
+    padding: 0 1rem;
+  }
+`;
 
+const Gamehistory = () => {
+  const [pageSize, setPageSize] = useState(25);
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const[getAdmin,setAdmins]=useState();
 
-
-
-
-const Gamehistory = (props) => {
-  const[getAdmin,setAdmins]=useState( );
   const date=new Date();
   date.setHours(0,0,0,0)
   const date2=new Date();
   date2.setHours(23,59,59,59)
+
   const [value, onChanage] = useState(date);
   const [endValue, eonChanage] = useState(date2);
   const [showCal, setShowCal] = useState(false);
   const [showCalEnd,setshowCalEnd]=useState(false);
-const [type,setType]=useState();
-const[btnText,setbtn]=useState({
-  btn:"Search"
-});
-const[id,setId]=useState("0");
-const [allGameData,setAllGameData]=useState({
-  played:0,
-  win:0,
- 
-})
-const {btn} =btnText
-const{win,played,commPercent,net,userID}=allGameData;
-  //showing cal on clicking icon
+  const [type,setType]=useState();
+  const[btnText,setbtn]=useState({
+    btn:"Search"
+  });
+  const [id, setId] = useState("0");
+  const [allGameData, setAllGameData] = useState([])
+  const [betDetails, setBetDetails] = useState([])
 
+  const {btn} =btnText
+
+
+  const loggedUserTOCol = [
+    { field: "ticketID", headerName: "Ticket ID", minWidth: 100, flex: 1 },
+    { field: "autoClaim", headerName: "Auto Claim", minWidth: 100, sortable: false, flex: 1 },
+    { field: "claimed", headerName: "Claimed", minWidth: 100, flex: 1 },
+    { field: "createdTimeReadable", headerName: "Date", minWidth: 200, flex: 1 },
+    { field: "gameID", headerName: "Game ID", minWidth: 120, flex: 1 },
+    { field: "gameType", headerName: "Game Type", minWidth: 120, flex: 1 },
+    { field: "multiplier", headerName: "Multiplier", minWidth: 100, flex: 1 },
+    { field: "played", headerName: "Played", minWidth: 100, flex: 1 },
+    { field: "ticketStatus", headerName: "Ticket Status", minWidth: 120, flex: 1 },
+    { field: "userID", headerName: "User ID", minWidth: 100, flex: 1 },
+    { field: "userName", headerName: "Username", minWidth: 120, flex: 1 },
+    { field: "win", headerName: "Win", minWidth: 100, flex: 1 },
+    {
+      field: "bets", headerName: "Bets", minWidth: 100, sortable: false, flex: 1,
+      renderCell: (params) => {
+        // console.log(params)
+
+        const fetchBetDetails = async() => {
+          setIsModalOpen(true)
+          try {
+            const res = await axios.get(`https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/ticket/betdetails?ticketID=${params?.row?.ticketID}`)
+            setBetDetails(() => res?.data?.bets.map(bet => {
+              return {...bet}
+            }))
+            console.log("bets", betDetails)
+          } catch (error) {
+            console.log(error.message)
+          }
+        }
+        return(
+          <>
+            <div>
+              <button onClick={fetchBetDetails}>Bet Details</button>
+              <ReactModal isOpen={isModalOpen} shouldCloseOnOverlayClick={true} onRequestClose={() => setIsModalOpen(false)}>
+                <div className="app__modal">
+                  <div className='app__modal-content'>    
+                    <h3>Bet Details</h3>
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Bet</th>
+                          <th>Played</th>
+                          <th>Win</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {betDetails?.map((bet, index) => (
+                          <tr key={index}>
+                            <td>{bet.betOn}</td>
+                            <td>{bet.betValue}</td>
+                            <td>{bet.winAmount}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  <AiIcons.AiOutlineCloseCircle className='close' onClick={() => setIsModalOpen(false)} />
+                </div>
+              </ReactModal>
+            </div>
+
+          </>
+        )
+      }
+    }
+  ];
+
+  //showing cal on clicking icon
 
 useEffect(()=>{
   getAdminsData();
@@ -62,7 +132,7 @@ useEffect(()=>{
   //admins state
 
 //const{admins}=getAdmin
-  
+
   const calHandler = () => {
     setShowCal(!showCal);
   };
@@ -76,14 +146,6 @@ const userIdHandler=(e)=>{
     setId(e.target.value);
 }
 
-  //..........................................................................................
-console.log(value);
-console.log(endValue)
- 
-  
-
- 
-
 const getAdminsData=async ()=>{
   return  await  axios.post("https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/getbyrole",{
     userRole:"PLAYER"
@@ -92,18 +154,16 @@ const getAdminsData=async ()=>{
 }
 
 //game selecter
-
 const gameTypeHandler=(e)=>{
   //console.log(e.target.value);
   setType(e.target.value);
 }
 
-
-
 const getGameData=async ()=>{
 setbtn({
   btn:"Searching"
 })
+console.log(value, endValue, type, id)
   try{
    const res=await  axios.post("https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/gettickethistory",{
       startTime:value,
@@ -111,14 +171,16 @@ setbtn({
       gameType:type,
       userID:id
     })
-    setAllGameData({
-      win:res.data.win,
-      played:res.data.played,
-    })
+    setAllGameData(res?.data?.tickets?.map(ticket => {
+      return{
+        ...ticket,
+        id: ticket.ticketID
+      }
+    }))
     setbtn({
       btn:"Search"
     })
-    console.log("Response",res)
+    console.log("gameData", allGameData)
   }catch(err){
     console.log("Error in game details",err);
   }
@@ -171,7 +233,7 @@ setbtn({
                 </Form.Label>
                 <Form.Select   className="w-50" onChange={userIdHandler} aria-label="Floating label select example">
                 <option>Select below...</option>
-                <option value={"0"}>All</option>
+                <option value="all">All</option>
                     {!getAdmin? (
                       <option>No data...</option>
                     ) : (
@@ -198,54 +260,17 @@ setbtn({
       </Card>
     </Container>
 
-    <MDBContainer>
-      <div style={{ marginTop: "80px" }}>
-      
-    <MDBRow>
-    <MDBCol size="12">
-      <MDBTable>
-        <MDBTableHead dark>
-          <tr>
-            <th scope=" col "> User id</th>
-            <th scope=" col ">Played </th>
-            <th scope=" col "> win </th>
-            <th scope=" col "> Details </th>
-            {/* <th scope=" col "></th>
-            <th scope=" col ">  </th> */}
-          </tr>
-        </MDBTableHead>
-
-        {!allGameData? (
-          <MDBTableBody className="align-center mb-8">
-            <tr>
-              <td colspan={8} className=" text-center mb-8">
-                {" "}
-                No Data Found{" "}
-              </td>
-            </tr>
-          </MDBTableBody>
-        ) 
-        : (
-          // games.map((item, index) => (
-            <MDBTableBody >
-              <tr>
-                <td> {id}</td>
-                <td>{played}</td>
-                <td>{win}</td>
-              <td><Link to={`/tickethistory/${id}/${type}/${value}/${endValue}`}><Button variant="outline-secondary" size="sm">More Info</Button></Link></td>
-              </tr>
-            </MDBTableBody>
-        // ))
-        // )}
-        )}
-      </MDBTable>
-    </MDBCol>
-  </MDBRow>
- </div>
-</MDBContainer>
-
-
-</>
+    <DataTable>
+      <DataGrid
+      rows={allGameData}
+      columns={loggedUserTOCol}
+      checkboxSelection={false}
+      rowsPerPageOptions={[25, 50, 100]}
+      onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+      pageSize={pageSize}
+      ></DataGrid>
+    </DataTable>
+  </>
   );
 };
 
