@@ -17,6 +17,7 @@ import "./Icon.css";
 import "./Turnover.css";
 import { DataGrid } from "@mui/x-data-grid";
 import styled from "styled-components";
+import moment from "moment/moment";
 // import BetDetails from "../components/BetDetails";
 ReactModal.setAppElement("#root")
 
@@ -222,15 +223,19 @@ const gameTypeHandler=(e)=>{
   setType(e.target.value);
 }
 
+// console.log("value", value)
 const getGameData=async ()=>{
-setbtn({
-  btn:"Searching"
-})
-console.log(value, endValue, type, id)
+  setbtn({
+    btn:"Searching"
+  })
+  let start = value.toString().split(" ").slice(0, 5).join(" ")
+  let end = endValue.toString().split(" ").slice(0, 5).join(" ")
+  console.log(start, end, type, id)
+
   try{
    const res=await  axios.post("https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/gettickethistory",{
-      startTime:value,
-      endTime:endValue,
+      startTime:start,
+      endTime:end,
       gameType:type,
       userID:id
     })
