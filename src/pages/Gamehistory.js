@@ -31,6 +31,13 @@ const DataTable = styled.div`
   }
 `;
 
+const Table = styled.table`
+  width: 80%;
+  @media screen and (max-width: 425px) {
+    width: 100%;
+  }
+`
+
 const Gamehistory = () => {
   const [pageSize, setPageSize] = useState(25);
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -79,13 +86,69 @@ const Gamehistory = () => {
           try {
             const res = await axios.get(`https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/ticket/betdetails?ticketID=${params?.row?.ticketID}`)
             setBetDetails(() => res?.data?.bets.map(bet => {
+              console.log(bet)
               return {...bet}
             }))
             console.log("bets", betDetails)
+
+            // prizeOnBet(res.data.gameType, _, res.data.bets, )
           } catch (error) {
             console.log(error.message)
           }
         }
+        
+        //prizeOnBet function return win for each bet
+        const prizeOnBet = (gameType, value, allBets, key) => {
+          let prizeOnThisBet = 0;
+          switch (gameType) {
+            case 'jeetoJoker':
+              prizeOnThisBet = value * 10; //* gameDetails.multiplier; //multiplier not be considered 
+              break;
+            case 'cards16':
+              prizeOnThisBet = value * 14;
+              break;
+            case 'cards52':
+              prizeOnThisBet = value * 45;
+              break;
+            case 'singleChance':
+              prizeOnThisBet = value * 9;
+              break;
+            case 'doubleChance':
+              const originalBet = key.split(".");
+  
+              if (originalBet[1] == "Andar" || originalBet[1] == "Bahar") {
+                console.log("Not considering andar bahar bet here " + originalBet);
+              }
+              else {
+                prizeOnThisBet = value * 90;
+                console.log("Full Bet On  " + key + " prize will be " + prizeOnThisBet);
+                Object.entries(allBets).forEach(([singleKey, singleValue]) => {
+
+                  const betOnArray = singleKey.split(".");
+                  const position = betOnArray[1];
+                  if (position == "Andar" || position == "Bahar") {
+
+                    const singleBetOn = betOnArray[0];
+                    console.log("Single Bet On  " + singleBetOn + " Position  " + position);
+                    if (position == "Bahar") {
+                      if (originalBet[0] == singleBetOn) {
+                        prizeOnThisBet += singleValue * 9;
+                        console.log("Original bet bahar possiton  " + originalBet[0] + " Bahar bet is  " + singleBetOn + " prize will be in total " + prizeOnThisBet);
+                      }
+                    }
+                    else if (position == "Andar") {
+                      if (originalBet[1] == singleBetOn)
+                        prizeOnThisBet += singleValue * 9;
+                    }
+                  }
+                });
+              }
+                break;
+          }
+      
+          return prizeOnThisBet;
+        }
+
         return(
           <>
             <div>
@@ -93,10 +156,10 @@ const Gamehistory = () => {
               <ReactModal isOpen={isModalOpen} shouldCloseOnOverlayClick={true} onRequestClose={() => setIsModalOpen(false)}>
                 <div className="app__modal">
                   <div className='app__modal-content'>    
-                    <h3>Bet Details</h3>
-                    <table>
+                    <h1>Bet Details</h1>
+                    <Table>
                       <thead>
-                        <tr>
+                        <tr style={{color: 'gray'}}>
                           <th>Bet</th>
                           <th>Played</th>
                           <th>Win</th>
@@ -111,7 +174,7 @@ const Gamehistory = () => {
                           </tr>
                         ))}
                       </tbody>
-                    </table>
+                    </Table>
                   </div>
                   <AiIcons.AiOutlineCloseCircle className='close' onClick={() => setIsModalOpen(false)} />
                 </div>

@@ -119,6 +119,25 @@ input[type="button"]{
   transform: translateX(-50%);
 }
 
+.ReactModal{
+  height: 100vh;
+  width: 100vw;
+  background-color: pink;
+  margin:  0 auto;
+}
+
+.ReactModal__Content{
+  width: 50vw;
+  height: 80vh;
+  margin: 0 auto;
+}
+
+.ReactModal__Overlay{
+  background-color: rgba(42, 42, 42, 0.7) !important;
+  z-index: 999;
+
+}
+
 .app__modal{
   position: relative;
 }
@@ -156,6 +175,10 @@ input[type="button"]{
 }
 
 @media screen and (max-width: 425px) {
+  .ReactModal__Content{
+    width: 90vw;
+    margin: 0 auto;
+  }
   .form-container{
     width: 90vw;
     margin: 0 auto;

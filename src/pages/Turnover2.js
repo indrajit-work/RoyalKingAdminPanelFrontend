@@ -26,6 +26,15 @@ const DataTable = styled.div`
   }
 `;
 
+const dateRangeArr = [
+  ['today', 'Today', 0], 
+  ['yesterday', 'Yesterday', 1], 
+  ['lastweek', 'Last Week', 2], 
+  ['thisweek', 'This Week', 3], 
+  ['lastmonth', 'Last Month', 4],
+  ['thismonth', 'This Month', 5]
+]
+
 const Turnover2 = () => {
   const [pageSize, setPageSize] = useState(25);
 
@@ -45,6 +54,9 @@ const Turnover2 = () => {
   const [startRange, setStartRange] = useState()
   const [endRange, setEndRange] = useState()
   const [selectDate, setSelectDate] = useState('')
+
+  // const [active, setActive] = useState(99)
+  // const [classname, setClassname] = useState('')
 
   const datePickerHandler = () => {
     setShowDatePicker((prevState) => !prevState)
@@ -77,9 +89,6 @@ const Turnover2 = () => {
   const handleLastWeek = (e) => {
     setSelectDate(e.target.id)
     setShowDatePicker(false)
-    // console.log(selectDate)
-
-    // console.log(e)
 
     if(e.target.id === 'lastweek'){
       let startMom = moment(date).startOf('week').subtract(6, 'days').format('ddd DD MMM YYYY HH:mm:ss')
@@ -112,18 +121,18 @@ const Turnover2 = () => {
       let endMom = moment(date).add(1, 'days').subtract(1, 'seconds').format('ddd DD MMM YYYY HH:mm:ss')
       setEndRange(endMom)
     }
-    // if(e.target.value === 'lastmonth'){
-    //   let startMom = moment(date).subtract(30, 'days').format('ddd DD MMM YYYY HH:mm:ss')
-    //   setStartRange(startMom)
-    //   let endMom = moment(date).subtract(1, 'seconds').format('ddd DD MMM YYYY HH:mm:ss')
-    //   setEndRange(endMom)
-    // }
+
+    if(e.target.id === 'lastmonth'){
+      let startMom = moment(date).startOf('month').subtract(1, 'months').format('ddd DD MMM YYYY HH:mm:ss')
+      setStartRange(startMom)
+      let endMom = moment(date).endOf('month').subtract(1, 'months').format('ddd DD MMM YYYY HH:mm:ss')
+      setEndRange(endMom)
+    }
+
   }
   console.log("range", startRange, endRange)
   const printStart = moment(startRange).format('DD.M.YYYY')
   const printEnd = moment(endRange).format('DD.M.YYYY')
-
-  // console.log(printStart, printEnd)
 
   const loggedUser = getCookie("token");
 
@@ -158,8 +167,9 @@ const Turnover2 = () => {
     // console.log(typeof startMom, typeof endMom)
     setLoading("Loading...");
     setShowTable(true)
+    // console.log(dateRangeArr.map(item => item[0]).some(selectDate), Array.isArray(dateRangeArr))
     try {
-      if(selectDate === 'lastweek' || selectDate === 'thisweek' || selectDate === 'thismonth' || selectDate === 'yesterday' || selectDate === 'today') {
+      if(selectDate === 'lastweek' || selectDate === 'thisweek' || selectDate === 'thismonth' || selectDate === 'yesterday' || selectDate === 'today' || selectDate === 'lastmonth'){
         const res = await axios.post(
           "https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/turnover",
           {
@@ -273,7 +283,7 @@ const Turnover2 = () => {
               </span>
             </label>
             {selectDate === '' && <p>{moment(startDate).format('DD.M.YYYY')} - {moment(endDate).add(1, 'days').subtract(1, 'seconds').format('DD.M.YYYY')}</p>}
-            {(selectDate === 'lastweek' || selectDate === 'thisweek' || selectDate === 'thismonth' || selectDate === 'yesterday' || selectDate === 'today') && <p>{printStart} - {printEnd}</p>}
+            {(selectDate === 'lastweek' || selectDate === 'thisweek' || selectDate === 'thismonth' || selectDate === 'yesterday' || selectDate === 'today' || selectDate === 'lastmonth') && <p>{printStart} - {printEnd}</p>}
 
             {showDatePicker && 
             <DateRangePicker 
@@ -284,11 +294,23 @@ const Turnover2 = () => {
           </div>
 
           <div className="date-buttons">
-            <div onClick={handleLastWeek} id='today'>Today</div>
+            {dateRangeArr.map((item, index) => {
+              return(
+                <div 
+                  id={item[0]} 
+                  key={index}
+                  onClick={handleLastWeek} 
+                  // className={parseInt(active[2]) === index ? 'active' : ''}
+                >
+                  {item[1]}
+                </div>
+              )
+            })}
+            {/* <div onClick={handleLastWeek} id='today'>Today</div>
             <div onClick={handleLastWeek} id='yesterday'>Yesterday</div>
             <div onClick={handleLastWeek} id='thisweek'>This Week</div>
             <div onClick={handleLastWeek} id='lastweek'>Last Week</div>
-            <div onClick={handleLastWeek} id='thismonth'>This Month</div>
+            <div onClick={handleLastWeek} id='thismonth'>This Month</div> */}
           </div>
 
           {/* <div>
