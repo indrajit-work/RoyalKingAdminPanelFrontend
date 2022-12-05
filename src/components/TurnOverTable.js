@@ -1,13 +1,5 @@
 import axios from "axios";
 import React, {useState, useEffect} from "react";
-import {
-  MDBTable,
-  MDBTableHead,
-  MDBTableBody,
-  MDBRow,
-  MDBCol,
-  MDBContainer,
-} from "mdb-react-ui-kit";
 import { Link } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import { DataGrid } from "@mui/x-data-grid";
@@ -129,97 +121,6 @@ const TurnOverTable = ({ userID, from, to, gameType, role, link }) => {
                             <td>{gameData?.netProfit?.toFixed(2)}</td>
                         </tr>
                     </table>
-                    {/* <MDBContainer>
-                        <div style={{ marginTop: "80px" }}>
-                        <MDBRow>
-                            <MDBCol size="12">
-                            <MDBTable>
-                                <MDBTableHead dark>
-                                <tr>
-                                    <th scope=" col "> User Id </th>
-                                    <th scope=" col ">Played </th>
-                                    <th scope=" col "> win </th>
-                                    <th scope=" col ">Commission percent(%)</th>
-                                    <th scope=" col "> Net </th>
-                                </tr>
-                                </MDBTableHead>
-                                {false ? (
-                                <MDBTableBody className="align-center mb-8">
-                                    <tr>
-                                    <td colspan={8} className=" text-center mb-8">
-                                        {" "}
-                                        No Data Found{" "}
-                                    </td>
-                                    </tr>
-                                </MDBTableBody>
-                                ) : (
-                                <MDBTableBody>
-                                    <tr>
-                                    <td>{userID}</td>
-                                    <td>{gameData.totalPlayed}</td>
-                                    <td>{gameData.totalWin}</td>
-                                    <td>{gameData.comPercent}</td>
-                                    <td>{gameData?.netProfit?.toFixed(2)}</td>
-                                    </tr>
-                                </MDBTableBody>
-                                )}
-                            </MDBTable>
-                            </MDBCol>
-                        </MDBRow>
-                        </div>
-                    </MDBContainer> */}
-
-                    {/* <MDBContainer>
-                        <div style={{ marginTop: "80px" }}>
-                        <h1 className="text-center mb-5 text-muted"> {role}s </h1>
-                        <MDBRow>
-                            <MDBCol size="12">
-                            <MDBTable>
-                                <MDBTableHead dark>
-                                <tr>
-                                    <th scope="col">User Id</th>
-                                    <th scope=" col "> User Role </th>
-                                    <th scope=" col ">Played </th>
-                                    <th scope=" col "> Win </th>
-                                    <th scope=" col ">Commission percent(%)</th>
-                                    <th scope=" col "> Net </th>
-                                </tr>
-                                </MDBTableHead>
-
-                                {!gameData?.childTurnOverArray ? (
-                                <MDBTableBody className="align-center mb-8">
-                                    <tr>
-                                    <td colspan={8} className=" text-center mb-8">
-                                        {" "}
-                                        No Data Found{" "}
-                                    </td>
-                                    </tr>
-                                </MDBTableBody>
-                                ) : (
-                                gameData?.childTurnOverArray.map((item, index) => (
-                                    <MDBTableBody key={index}>
-                                    <tr>
-                                        <td>{item.userID}</td>
-                                        <td>
-                                        <Link to={`${link}${item.userID}/${from}-to-${to}/${gameType}`}>
-                                            <Button disabled={!link} variant="secondary" size="sm">
-                                                {item.fullName}({role})
-                                            </Button>
-                                        </Link>
-                                        </td>
-                                        <td>{item.totalPlayed}</td>
-                                        <td>{item.totalWin}</td>
-                                        <td> {item.comPercent}</td>
-                                        <td>{item?.netProfit?.toFixed(2)}</td>
-                                    </tr>
-                                    </MDBTableBody>
-                                ))
-                                )}
-                            </MDBTable>
-                            </MDBCol>
-                        </MDBRow>
-                        </div>
-                    </MDBContainer> */}
 
                     <h1 className="text-center mt-5">{role}s</h1>
                     <DataTable>

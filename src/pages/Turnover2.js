@@ -237,21 +237,21 @@ const Turnover2 = () => {
       renderCell : (params) => {
         if(userRole === "SUPERADMIN"){
           return(
-            <Link to={`/admin/distributor/${params.row.userID}/${startMom._i}-to-${endMom._i}/${gameType}`}>
+            <Link to={`/admin/distributor/${params.row.userID}/${selectDate === '' ? startMom._i : startRange}-to-${selectDate === '' ? endMom._i : endRange}/${gameType}`}>
               <Button variant="secondary" size="sm">View Details</Button>
             </Link>
           )
         }
         if(userRole === "ADMIN"){
           return(
-            <Link to={`/distributor/stokist/${params.row.userID}/${startMom._i}-to-${endMom._i}/${gameType}`}>
+            <Link to={`/distributor/stokist/${params.row.userID}/${selectDate === '' ? startMom._i : startRange}-to-${selectDate === '' ? endMom._i : endRange}/${gameType}`}>
               <Button variant="secondary" size="sm">View Details</Button>
             </Link>
           )
         }
         if(userRole === "Distributor"){
           return(
-            <Link to={`/stokist/player/${params.row.userID}/${startMom._i}-to-${endMom._i}/${gameType}`}>
+            <Link to={`/stokist/player/${params.row.userID}/${selectDate === '' ? startMom._i : startRange}-to-${selectDate === '' ? endMom._i : endRange}/${gameType}`}>
               <Button variant="secondary" size="sm">View Details</Button>
             </Link>
           )
@@ -306,24 +306,7 @@ const Turnover2 = () => {
                 </div>
               )
             })}
-            {/* <div onClick={handleLastWeek} id='today'>Today</div>
-            <div onClick={handleLastWeek} id='yesterday'>Yesterday</div>
-            <div onClick={handleLastWeek} id='thisweek'>This Week</div>
-            <div onClick={handleLastWeek} id='lastweek'>Last Week</div>
-            <div onClick={handleLastWeek} id='thismonth'>This Month</div> */}
           </div>
-
-          {/* <div>
-            <select name="selectDate" onChange={handleLastWeek} onClick={() => setShowDatePicker(false)}>
-              <option value="" selected={selectDate === ''} disabled>Auto Date Range</option>
-              <option value="today">Today</option>
-              <option value="yesterday">Yesterday</option>
-              <option value="thisweek">This Week</option>
-              <option value="lastweek">Last Week</option>
-              <option value="thismonth">This Month</option>
-              <option value="lastmonth">Last 30 Days</option>
-            </select>
-          </div> */}
         </div>
 
         <Button variant="contained" onClick={onSearchHandler}>Search</Button>
