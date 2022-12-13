@@ -59,7 +59,7 @@ const Gamehistory = () => {
   const [id, setId] = useState("0");
   const [allGameData, setAllGameData] = useState([])
   const [bets, setBets] = useState([])
-  const [betDetails, setBetDetails] = useState({})
+  const [result, setResult] = useState('')
 
   const {btn} =btnText
 
@@ -89,6 +89,7 @@ const Gamehistory = () => {
             const res = await axios.get(`https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/ticket/betdetails?ticketID=${params?.row?.ticketID}`)
 
             console.log(res.data)
+            setResult(res.data?.gameResult)
             prizeOnBet(res.data?.bets, res.data?.gameResult, res.data?.multiplier, res.data?.gameType)
           } catch (error) {
             console.log(error.message)
@@ -137,7 +138,7 @@ const Gamehistory = () => {
                   let singleBetOn = betOnArray[0];
   
                   if (result !== null) {
-                    let resultArray = bet.betOn.split(".");
+                    let resultArray = result.split(".");
                     if (resultArray.length > 1) {
                       if (position === "Andar") {
                         if (singleBetOn === resultArray[1]) {
@@ -145,7 +146,7 @@ const Gamehistory = () => {
                           winAmount += bet.betValue * 9 * multiplier;
                         }
                       }
-                      else if (betOnArray[1] === "Bahar") {
+                      else if (position === "Bahar") {
                         if (singleBetOn === resultArray[0]) {
                           hasWon = true;
                           winAmount += bet.betValue * 9 * multiplier;
@@ -169,6 +170,7 @@ const Gamehistory = () => {
                 <div className="app__modal">
                   <div className='app__modal-content'>    
                     <h1>Bet Details</h1>
+                    <p>Game Result: <span style={{fontWeight: 'bold', color: 'green'}}>{result}</span></p>
                     <Table>
                       <thead>
                         <tr style={{color: 'gray'}}>
