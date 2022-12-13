@@ -17,7 +17,6 @@ import "./Icon.css";
 import "./Turnover.css";
 import { DataGrid } from "@mui/x-data-grid";
 import styled from "styled-components";
-import moment from "moment/moment";
 // import BetDetails from "../components/BetDetails";
 ReactModal.setAppElement("#root")
 
@@ -59,10 +58,12 @@ const Gamehistory = () => {
   });
   const [id, setId] = useState("0");
   const [allGameData, setAllGameData] = useState([])
-  const [betDetails, setBetDetails] = useState([])
+  const [bets, setBets] = useState([])
+  const [betDetails, setBetDetails] = useState({})
 
   const {btn} =btnText
 
+  // console.log(allGameData)
 
   const loggedUserTOCol = [
     { field: "ticketID", headerName: "Ticket ID", minWidth: 100, flex: 1 },
@@ -86,68 +87,78 @@ const Gamehistory = () => {
           setIsModalOpen(true)
           try {
             const res = await axios.get(`https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/ticket/betdetails?ticketID=${params?.row?.ticketID}`)
-            setBetDetails(() => res?.data?.bets.map(bet => {
-              console.log(bet)
-              return {...bet}
-            }))
-            console.log("bets", betDetails)
 
-            // prizeOnBet(res.data.gameType, _, res.data.bets, )
+            console.log(res.data)
+            prizeOnBet(res.data?.bets, res.data?.gameResult, res.data?.multiplier, res.data?.gameType)
           } catch (error) {
             console.log(error.message)
           }
         }
         
+        let winAmount = 0;
+        let hasWon = false;
+
         //prizeOnBet function return win for each bet
-        const prizeOnBet = (gameType, value, allBets, key) => {
-          let prizeOnThisBet = 0;
-          switch (gameType) {
-            case 'jeetoJoker':
-              prizeOnThisBet = value * 10; //* gameDetails.multiplier; //multiplier not be considered 
-              break;
-            case 'cards16':
-              prizeOnThisBet = value * 14;
-              break;
-            case 'cards52':
-              prizeOnThisBet = value * 45;
-              break;
-            case 'singleChance':
-              prizeOnThisBet = value * 9;
-              break;
-            case 'doubleChance':
-              const originalBet = key.split(".");
-  
-              if (originalBet[1] == "Andar" || originalBet[1] == "Bahar") {
-                console.log("Not considering andar bahar bet here " + originalBet);
+        const prizeOnBet = (bets, result, multiplier, gameType) => {
+          // console.log(bets, result, multiplier, gameType)
+
+          bets?.forEach(bet => {
+            winAmount = 0
+            if(bet.betOn === result){
+              switch (gameType) {
+                case "jeetoJoker":
+                  winAmount += bet.betValue * 10 * multiplier;
+                  break;
+                case "cards16":
+                  winAmount += bet.betValue * 14 * multiplier;
+                  break;
+                case "cards52":
+                  winAmount += bet.betValue * 45 * multiplier;
+                  break;
+                case "singleChance":
+                  winAmount += bet.betValue * 9 * multiplier;
+                  break;
+                case "doubleChance":
+                  winAmount += bet.betValue * 90 * multiplier;
+                  break;
+                default:
+                  break;
               }
-              else {
-                prizeOnThisBet = value * 90;
-                console.log("Full Bet On  " + key + " prize will be " + prizeOnThisBet);
-                Object.entries(allBets).forEach(([singleKey, singleValue]) => {
-
-                  const betOnArray = singleKey.split(".");
-                  const position = betOnArray[1];
-                  if (position == "Andar" || position == "Bahar") {
-
-                    const singleBetOn = betOnArray[0];
-                    console.log("Single Bet On  " + singleBetOn + " Position  " + position);
-                    if (position == "Bahar") {
-                      if (originalBet[0] == singleBetOn) {
-                        prizeOnThisBet += singleValue * 9;
-                        console.log("Original bet bahar possiton  " + originalBet[0] + " Bahar bet is  " + singleBetOn + " prize will be in total " + prizeOnThisBet);
+              bet.winAmount = winAmount
+              hasWon = true;
+            }
+            else { // For andar bahar 
+              if (gameType === "doubleChance") {
+                let betOnArray = bet.betOn.split(".");
+                let position = betOnArray[1];
+    
+                if (position === "Andar" || position === "Bahar") {
+    
+                  let singleBetOn = betOnArray[0];
+  
+                  if (result !== null) {
+                    let resultArray = bet.betOn.split(".");
+                    if (resultArray.length > 1) {
+                      if (position === "Andar") {
+                        if (singleBetOn === resultArray[1]) {
+                          hasWon = true;
+                          winAmount += bet.betValue * 9 * multiplier;
+                        }
+                      }
+                      else if (betOnArray[1] === "Bahar") {
+                        if (singleBetOn === resultArray[0]) {
+                          hasWon = true;
+                          winAmount += bet.betValue * 9 * multiplier;
+                        }
                       }
                     }
-                    else if (position == "Andar") {
-                      if (originalBet[1] == singleBetOn)
-                        prizeOnThisBet += singleValue * 9;
-                    }
                   }
-                });
+                }
               }
-                break;
-          }
-      
-          return prizeOnThisBet;
+              bet.winAmount = winAmount
+            }
+            setBets(bets)
+          })
         }
 
         return(
@@ -167,7 +178,7 @@ const Gamehistory = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {betDetails?.map((bet, index) => (
+                        {bets?.map((bet, index) => (
                           <tr key={index}>
                             <td>{bet.betOn}</td>
                             <td>{bet.betValue}</td>
