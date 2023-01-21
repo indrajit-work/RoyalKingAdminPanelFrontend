@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
 import axios from "axios";
 import './Broadcast.css'
 import {
@@ -33,7 +32,7 @@ const Broadcast = () => {
             message:msg
         })
         setBtn("Sent")
-        console.log(res);
+        // console.log(res);
     }
     
   return (

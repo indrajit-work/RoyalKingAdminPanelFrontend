@@ -1,25 +1,10 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { getCookie, getRole } from "../utils/auth";
-import { TiTick, TiTimes } from "react-icons/ti";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useHistory, useParams } from "react-router-dom";
-import { Modal, Typography } from "@mui/material";
-import { Box } from "@mui/system";
 import {AiOutlineEye, AiOutlineEyeInvisible} from 'react-icons/ai'
-
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-};
 
 const EditUser = () => {
   const [userName, setUserName] = useState("");
@@ -149,50 +134,19 @@ const EditUser = () => {
 
     if (userNameList.includes(input)) {
       setUsernameIsvalid(false);
-      // console.log("wrong");
     }
+
     setUserName(input);
   };
 
   //reset device handler
   const handleDeviceReset = () => {
-    // console.log("clicked");
     setResetDevice("");
-    // console.log(resetDevice);
   };
 
   // form submit logic
   const onHandleSubmit = async (e) => {
     e.preventDefault();
-
-    // console.log(resetDevice)
-    console.log(
-      "fullName",
-      fullName,
-      "userName",
-      userName,
-      "password",
-      password,
-      "role",
-      userRole,
-      "per",
-      commPercent,
-      "boss",
-      bossID,
-      "ph",
-      phNo,
-      "dob",
-      dateOfbirth,
-      "block",
-      block,
-      userID,
-      JSON.parse(verified),
-      "device",
-      resetDevice === undefined ? "" : resetDevice,
-      "payout",
-      payout,
-      "chngeUsername", changeUsername
-    );
 
     try {
       const res = await axios.post(
@@ -220,7 +174,7 @@ const EditUser = () => {
         history.push('/userManager')
       }, 2000);
     } catch (error) {
-      console.log("Error:", error);
+      console.log(error);
       toast.error("Something went wrong");
     }
   };

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Card, Container, Row } from "react-bootstrap";
-import { RiH4 } from "react-icons/ri";
 import "./Dashbaord.css";
 import { useHistory } from "react-router-dom";
 import { isAuth } from "../utils/auth";

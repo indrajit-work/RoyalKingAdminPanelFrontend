@@ -34,10 +34,6 @@ const ModifyLink = styled.div`
 const ListDistributor = ({userType, loggedUser, loggedUserRole}) => {
   // console.log(loggedUserRole)
   const [userList, setUserList] = useState([]);
-  const [loading, setLoading] = useState({
-    status: false,
-    msg: ''
-  })
   const [pageSize, setPageSize] = useState(10);
 
   const modifyColumn = [
@@ -84,7 +80,7 @@ const ListDistributor = ({userType, loggedUser, loggedUserRole}) => {
           };
         })
       );
-      console.log("users: ", userList);
+      // console.log("users: ", userList);
     } catch (error) {
       console.log(error);
     }

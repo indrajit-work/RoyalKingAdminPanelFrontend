@@ -56,8 +56,8 @@ const ListDistributor = ({ userType, loggedUser, loggedUserRole }) => {
         })
       );
 
-      console.log("res.data: ", res.data.players.Items);
-      console.log("users: ", userList);
+      // console.log("res.data: ", res.data.players.Items);
+      // console.log("users: ", userList);
     } catch (error) {
       console.log(error);
     }

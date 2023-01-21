@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import axios from "axios";
-import { getCookie, getRole } from "../utils/auth";
+import { getCookie } from "../utils/auth";
 import {
   Card,
   Container,
@@ -59,18 +59,6 @@ const AdjustPlayer = () => {
     }
     if (transactionType === "") alert("Enter type of transfer(Adjust)");
 
-    // if (transactionType === "substract") {
-    //   setSenderID(selectedPlayer)
-    //   setReceiverID(loggedUser)
-
-      // console.log(`loggedUser ${loggedUser} senderID ${senderID} ReceiverID ${receiverID} selectedPlayer ${selectedPlayer} - sub:`)
-    // } else {
-    //   setSenderID(loggedUser)
-    //   setReceiverID(selectedPlayer)
-
-      // console.log(`loggedUser ${loggedUser} senderID ${senderID} ReceiverID ${receiverID} selectedPlayer ${selectedPlayer} - sub:`)
-    // }
-
     try {
       const res = await axios.post(
         "https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/pointstransfer",
@@ -87,14 +75,14 @@ const AdjustPlayer = () => {
       setAmt(0)
       setComment("")
 
-      console.log("............", res.data);
+      // console.log("............", res.data);
       if(res.data.startsWith("Not")){
         alert("Not enough balance to deduct")
         return
       }
       toast.success(`Points ${transactionType === "add" ? 'added': 'deducted'} successfully`)
     } catch (err) {
-      console.log("Error from stokist adjust points:", err);
+      console.log(err);
     }
   };
 

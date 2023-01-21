@@ -21,7 +21,7 @@ const PlayerList = () => {
           setData(response.data.players.Items);
         }
       })
-      .catch((err) => console.error("Erroror", err));
+      .catch((err) => console.error(err));
   };
   
   const columns = [
@@ -53,7 +53,7 @@ const PlayerList = () => {
       dataField: "userStatus",
       text: "Status",
     },
-    console.log("Dtatat",data)
+    // console.log("Dtatat",data)
   ];
   return (
     //  <BootstrapTable  keyField="userID" data={data}  columns={columns}/>

@@ -43,16 +43,16 @@ const CreateUser = () => {
   } = user;
 
   const loggedUser = getCookie("token");
-  console.log("logeed in", loggedUser);
+  // console.log("logeed in", loggedUser);
 
   (async () => {
     const role = await getRole(loggedUser);
     setloggedUserRole(role)
   })();
 
-  console.log(loggedUserRole);
+  // console.log(loggedUserRole);
 
-  console.log(userRole)
+  // console.log(userRole)
 
   useEffect(() => {
     getBossInfo();
@@ -67,11 +67,11 @@ const CreateUser = () => {
     );
     setBossInfo(res.data.adminsAll);
   };
-  console.log(bossInfo)
+  // console.log(bossInfo)
 
   // fetch all the users data from DB and store the username in state
   const fetchuserList = async () => {
-    let userArr = []
+    // let userArr = []
     await fetch(
       "https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/getallusers"
     )
@@ -94,13 +94,13 @@ const CreateUser = () => {
 
     if (userNameList.includes(input)) {
       setUsernameIsvalid(false);
-      console.log("wrong");
+      // console.log("wrong");
     }
     setUser({ ...user, userName: input });
   };
 
   const handleChange = (name) => (e) => {
-    console.log(e.target.value);
+    // console.log(e.target.value);
     setUser({
       ...user,
       [name]: e.target.value,
@@ -130,7 +130,7 @@ const CreateUser = () => {
         }
       );
 
-      console.log("Submited:...............", res);
+      // console.log("Submited:...............", res);
       setUser({
         ...user,
         userName: "",
@@ -145,7 +145,7 @@ const CreateUser = () => {
       });
       toast.success("User added successfully")
     } catch (error) {
-      console.log("Error:", error);
+      console.log(error);
       setUser({
         ...user,
         buttonText: "Submit",
@@ -156,7 +156,6 @@ const CreateUser = () => {
   const [showCal, setShowCal] = useState(false);
 
   //showing cal on clicking icon
-
   const calHandler = () => {
     setShowCal(!showCal);
   };

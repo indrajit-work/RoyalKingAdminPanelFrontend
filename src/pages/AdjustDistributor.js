@@ -21,13 +21,13 @@ const AdjustDistributor = () => {
   const [comment, setComment] = useState("")
   const [selectedPlayer, setSelectedPlayer] = useState(0)
   const [amt, setAmt] = useState(0)
-  const [selectedUserBalance, setSelectedUserBalance] = useState(0)
+  // const [selectedUserBalance, setSelectedUserBalance] = useState(0)
 
   const [userRole, setUserRole] = useState("")
 
   //current user
   const loggedUser = getCookie("token");
-  console.log("logeed in", loggedUser);
+  // console.log("logeed in", loggedUser);
   // const userRole = getRole(loggedUser);
   // console.log(userRole)
 
@@ -50,7 +50,7 @@ const AdjustDistributor = () => {
       );
       setDistributors(
         res.data?.userUnderMe.filter(user => user.userRole === 'Distributor').map((user) => {
-          console.log(user)
+          // console.log(user)
           return {
             ...user,
             id: user.userID,

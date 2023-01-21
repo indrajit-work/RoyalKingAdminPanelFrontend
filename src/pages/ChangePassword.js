@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import { Card, Form, Button, Row, Container, Alert } from "react-bootstrap";
-import { DiWindows } from "react-icons/di";
 import "./ChagePassword.css";
 import axios from "axios";
 import { getCookie } from "../utils/auth";
-
 
 const ChangePassword = () => {
   const [state, setState] = useState({
@@ -20,7 +18,7 @@ const ChangePassword = () => {
 
   const userID=getCookie("token");
   const handleChange = (name) => (e) => {
-    console.log(e.target.value);
+    // console.log(e.target.value);
     setState({
       ...state,
       [name]: e.target.value,
@@ -42,7 +40,6 @@ const ChangePassword = () => {
         buttonText: "Submit",
       });
       alert("New Password and Verify Password doesn't match");
-
       return;
     }
 
@@ -65,20 +62,17 @@ const ChangePassword = () => {
         buttonText: "Submit",
         succmsg: res.data.msg,
       });
-     
     } catch (error) {
-      console.log("Error:", error);
+      console.log(error);
       setState({
         ...state,
         buttonText: "Login",
         errmsg: error.response.data.msg,
       });
     }
-
-
   };
+  
   return (
-    
     <Container>
       <Row>
         <Card

@@ -12,7 +12,7 @@ import {
 } from "react-bootstrap";
 import "./RegDis.css";
 import axios from "axios";
-import { getCookie,getRole,getEmail } from "../utils/auth";
+import { getEmail } from "../utils/auth";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import * as AiIcons from "react-icons/ai";
@@ -85,7 +85,7 @@ const ModifyPlayer = () => {
         ...user,
         email:optionalEMail
       })
-      console.log(email);
+      // console.log(email);
   }
   const getAdmins = async () => {
     const res = await axios.post(
@@ -99,7 +99,7 @@ const ModifyPlayer = () => {
 
   //reset device handler
   const handleDeviceReset = (e) => {
-    console.log("rset");
+    // console.log("rset");
     e.target.value = "";
     setUser({
       ...user,
@@ -124,7 +124,6 @@ const ModifyPlayer = () => {
   const { status, btnText } = block;
 
   const handleBlockReset = (e) => {
-
     if (status === "no") {
       setBlock({
         ...block,
@@ -182,7 +181,7 @@ const ModifyPlayer = () => {
         }
       );
 
-      console.log("Submited:...............", res);
+      // console.log("Submited:...............", res);
       setUser({
         userName: "",
         email: "",
@@ -196,7 +195,7 @@ const ModifyPlayer = () => {
         buttonText: "Submited",
       });
     } catch (error) {
-      console.log("Error:", error);
+      // console.log("Error:", error);
       setUser({
         ...user,
         buttonText: "Submit",
@@ -207,7 +206,6 @@ const ModifyPlayer = () => {
   const [showCal, setShowCal] = useState(false);
 
   //showing cal on clicking icon
-
   const calHandler = () => {
     setShowCal(!showCal);
   };

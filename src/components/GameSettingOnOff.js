@@ -42,7 +42,7 @@ const GameSettingOnOff = () => {
         const res = await axios.get(
           `https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/games/getactivegames?userID=${loggedUser}`
         );
-        console.log(res.data);
+        // console.log(res.data);
   
         setJeetoJoker(res.data.jeetoJoker);
         setSingleChance(res.data.singleChance);
@@ -72,7 +72,7 @@ const GameSettingOnOff = () => {
                   cards52
                 ]
             );
-            console.log(res.data)
+            // console.log(res.data)
       } catch (error) {
           console.log(error)
       }

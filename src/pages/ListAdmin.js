@@ -1,9 +1,8 @@
 import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { getCookie, getRole } from "../utils/auth";
 import { userColumns } from "../utils/TableDataSource";
 import {FaUserEdit} from 'react-icons/fa'
 
@@ -36,7 +35,7 @@ const ListAdmin = ({ userType, loggedUser, loggedUserRole }) => {
   const [userList, setUserList] = useState([]);
   const [pageSize, setPageSize] = useState(10)
 
-  const history = useHistory();
+  // const history = useHistory();
 
   // console.log(userList)
 
@@ -63,42 +62,6 @@ const ListAdmin = ({ userType, loggedUser, loggedUserRole }) => {
     },
   ];
 
-  //current user
-  // useEffect(() => {
-  //   const getUserRole = async () => {
-  //     const loggedUser = getCookie("token");
-  //     const loggedUserRole = await getRole(parseInt(loggedUser));
-  //     console.log("logeed in", loggedUser);
-  //     console.log("ROLE", loggedUserRole);
-  //   }
-
-  //   getUserRole()
-  // }, [])
-
-  //current user
-  // const loggedUser = getCookie("token");
-  // console.log("logeed in", loggedUser);
-
-  // (async () => {
-  //   const role = await getRole(loggedUser);
-  //   setUserRole(role)
-  // })();
-
-  // console.log("ROLE LOGGED IN", userRole);
-
-  // useEffect(() => {
-    // const getSUPERADMIN = async (hsitory) => {
-    //   const userID = getCookie("token");
-
-      // if (loggedRole !== "SUPERADMIN") {
-        // alert("UNAUTHORIZED ACCESS")
-      //   history.push("/distributor/list");
-      // }
-    // };
-    // getSUPERADMIN(history);
-    // loadUserData();
-  // }, []);
-
   useEffect(() => {
     loadUserData();
   }, []);
@@ -113,23 +76,23 @@ const ListAdmin = ({ userType, loggedUser, loggedUserRole }) => {
       );
       setUserList(
         res.data?.userUnderMe.map((user) => {
-          console.log(user)
+          // console.log(user)
           return {
             ...user,
             id: user.userID,
           };
         })
       );
-      console.log("res.data: ", res.data.userUnderMe);
-      console.log("users: ", userList);
+      // console.log("res.data: ", res.data.userUnderMe);
+      // console.log("users: ", userList);
     } catch (error) {
       console.log(error);
     }
   };
 
-  console.log(userList)
+  // console.log(userList)
   const adminList = userList.filter(user => user.userRole === 'ADMIN')
-  console.log(adminList);
+  // console.log(adminList);
 
   return (
     <>

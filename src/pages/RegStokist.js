@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Card, Form, Button, Row, Container, Alert } from "react-bootstrap";
 import "./RegDis.css";
 import axios from "axios";
-import { getCookie } from "../utils/auth";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import * as AiIcons from "react-icons/ai";
@@ -85,7 +84,7 @@ const RegStokist = () => {
   
       if (userNameList.includes(input)) {
         setUsernameIsvalid(false);
-        console.log("wrong");
+        // console.log("wrong");
       }
       setUser({ ...user, userName: input });
     };
@@ -118,7 +117,7 @@ const RegStokist = () => {
         }
       );
 
-      console.log("Submited:...............", res);
+      // console.log("Submited:...............", res);
       setUser({
         userName: "",
         email: "",
@@ -132,7 +131,7 @@ const RegStokist = () => {
         buttonText: "Submited",
       });
     } catch (error) {
-      console.log("Error:", error);
+      // console.log("Error:", error);
       setUser({
         ...user,
         buttonText: "Submit",

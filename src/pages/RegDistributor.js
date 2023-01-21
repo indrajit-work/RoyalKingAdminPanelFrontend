@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Card, Form, Button, Row, Container, Alert } from "react-bootstrap";
 import "./RegDis.css";
 import axios from "axios";
-import { getCookie } from "../utils/auth";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import * as AiIcons from "react-icons/ai";
@@ -72,14 +71,14 @@ const RegDistributor = () => {
   useEffect(() => {
     fetchuserList();
   }, []);
-  console.log(userNameList)
+  // console.log(userNameList)
 
   const usernameCheckHandler = (input) => {
     setUsernameIsvalid(true);
 
     if (userNameList.includes(input)) {
       setUsernameIsvalid(false);
-      console.log("wrong");
+      // console.log("wrong");
     }
     setUser({ ...user, userName: input });
   };
@@ -115,7 +114,7 @@ const RegDistributor = () => {
         }
       );
 
-      console.log("Submited:...............", res);
+      // console.log("Submited:...............", res);
       setUser({
         ...user,
         userName: "",
@@ -129,7 +128,7 @@ const RegDistributor = () => {
         buttonText: "Submited",
       });
     } catch (error) {
-      console.log("Error:", error);
+      // console.log(error);
       setUser({
         ...user,
         buttonText: "Submit",

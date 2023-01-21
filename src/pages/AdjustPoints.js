@@ -3,10 +3,6 @@ import { useState } from 'react'
 import styled from 'styled-components'
 import AdjustPointForm from '../components/AdjustPointForm'
 import { getCookie, getRole } from '../utils/auth'
-import AdjustDistributor from './AdjustDistributor'
-import AdjustPlayer from './AdjustPlayer'
-import AdjustPointsAdmin from './AdjustPointsAdmin'
-import AdjustStokist from './AdjustStokist'
 
 const ButtonContainer = styled.div`
   display: flex;

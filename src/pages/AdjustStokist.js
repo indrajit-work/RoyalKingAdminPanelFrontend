@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import axios from "axios";
 import { getCookie } from "../utils/auth";
-import { getRole } from "../utils/auth";
 import {
   Card,
   Container,
@@ -54,7 +52,7 @@ const AdjustStokist = () => {
     }
   };
 
-  console.log(stokists)
+  // console.log(stokists)
 
   const Transaction = async () => {
     if (parseInt(amt) <= 0) {
@@ -62,20 +60,6 @@ const AdjustStokist = () => {
     }
 
     if (transactionType === "") alert("Enter type of transfer(Adjust)");
-
-    // if (typeTrans === "substract") {
-    //   let tempID = parseInt(receiverID);
-    //   setTransaction({
-    //     ...transaction,
-    //     receiverID: parseInt(loggedUser),
-    //     senderID: parseInt(tempID),
-    //   });
-    // } else {
-    //   setTransaction({
-    //     ...transaction,
-    //     userRoleSender: userRole,
-    //   });
-    // }
 
     console.log(selectedPlayer, transactionType, loggedUser, amt)
 
@@ -95,14 +79,14 @@ const AdjustStokist = () => {
       setAmt(0)
       setComment("")
   
-      console.log("............", res);
+      // console.log("............", res);
       if(res.data.startsWith("Not")){
         alert("Not enough balance to deduct")
         return
       }
       toast.success(`Points ${transactionType === "add" ? 'added': 'deducted'} successfully`)
     } catch (error) {
-      console.log("Error from distributor adjust points:", error);
+      console.log(error);
     }
   };
 

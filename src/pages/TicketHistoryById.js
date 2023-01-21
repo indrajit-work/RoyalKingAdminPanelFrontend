@@ -1,18 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
 import axios from "axios";
 import {
-  Card,
-  Container,
   Button,
-  Col,
-  Form,
-  Row,
-  FloatingLabel,
   Modal,
 } from "react-bootstrap";
-import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import * as AiIcons from "react-icons/ai";
 import "./Icon.css";
@@ -24,16 +16,11 @@ import {
   MDBRow,
   MDBCol,
   MDBContainer,
-  MDBBtn,
-  MDBBtnGroup,
 } from "mdb-react-ui-kit";
 
 const TicketHistoryById = () => {
   const [ticket, setTicket] = useState();
-
   const [show, setShow] = useState(false);
-
-
 
   //temp state of bets
   const[bet,setBet]=useState();
@@ -70,9 +57,9 @@ const TicketHistoryById = () => {
       );
       setTicket(res.data.ticketHistory);
        
-      console.log("Response", res.data.ticketHistory);
+      // console.log("Response", res.data.ticketHistory);
     } catch (err) {
-      console.log("Error in game details", err);
+      console.log(err);
     }
   };
 
@@ -89,7 +76,6 @@ const TicketHistoryById = () => {
                 <MDBTableHead dark>
                   <tr>
                     <th scope=" col "> Game id</th>
-
                     <th scope=" col ">Create Time</th>
                     <th scope=" col "> Ticket Status </th>
                     <th scope=" col "> played </th>
@@ -98,9 +84,6 @@ const TicketHistoryById = () => {
                     <th scope=" col "> Ticket Id </th>
                     <th scope=" col "> User Id </th>
                     <th scope=" col "> Bets Details</th>
-
-                    {/* <th scope=" col "></th>
-            <th scope=" col ">  </th> */}
                   </tr>
                 </MDBTableHead>
 
@@ -118,7 +101,6 @@ const TicketHistoryById = () => {
                     <MDBTableBody>
                       <tr>
                         <td> {item.gameID}</td>
-
                         <td>{item.createTime}</td>
                         <td>{item.ticketStatus}</td>
                         <td>{item.played}</td>
@@ -161,9 +143,6 @@ const TicketHistoryById = () => {
                     <th scope=" col ">Bet On</th>
                     <th scope=" col "> Bet Value</th>
                     <th scope=" col "> Win Amount </th>
-            
-                    {/* <th scope=" col "></th>
-            <th scope=" col ">  </th> */}
                   </tr>
                 </MDBTableHead>
 
@@ -182,8 +161,7 @@ const TicketHistoryById = () => {
                       <tr>
                         <td>{item.bets[0].betOn}</td>
                        <td>{item.bets[0].betValue}</td>
-                        <td>{item.bets[0].winAmount}</td> 
-                        
+                        <td>{item.bets[0].winAmount}</td>                        
                       </tr>
                     </MDBTableBody>
                   ))

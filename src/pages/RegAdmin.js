@@ -3,7 +3,7 @@ import { Card, Form, Button, Row, Container, Alert } from "react-bootstrap";
 import "./RegDis.css";
 import axios from "axios";
 import { getCookie, getRole } from "../utils/auth";
-import { Redirect, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import * as AiIcons from "react-icons/ai";
@@ -12,7 +12,7 @@ import "./Icon.css"
 
 const RegAdmin = () => {
   const [value, onChanage] = useState(new Date());
-  const[admins,setAdmins]=useState()
+  // const[admins,setAdmins]=useState()
   const [usernameIsvalid, setUsernameIsvalid] = useState(null)
   const [user, setUser] = useState({
     userName: "",
@@ -50,7 +50,7 @@ useEffect(()=>{
 
         const userID=getCookie("token");
     const loggedRole= await getRole(parseInt(userID));
-    console.log("ROLE LOGGED IN",loggedRole);
+    // console.log("ROLE LOGGED IN",loggedRole);
     if(loggedRole!=="SUPERADMIN")
     {
         // alert("UNAUTHORIZED ACCESS")
@@ -81,7 +81,7 @@ const usernameCheckHandler = (input) => {
         
   if(userNameList.includes(input)){
       setUsernameIsvalid(false)
-      console.log('wrong')
+      // console.log('wrong')
   }
   setUser({...user, userName: input})
 }
@@ -118,7 +118,7 @@ const usernameCheckHandler = (input) => {
         }
       );
 
-      console.log("Submited:...............", res);
+      // console.log("Submited:...............", res);
       setUser({
         ...user,
         userName: "",
@@ -133,7 +133,7 @@ const usernameCheckHandler = (input) => {
     
       });
     } catch (error) {
-      console.log("Error:", error);
+      console.log(error);
       setUser({
         ...user,
         buttonText: "Submit",

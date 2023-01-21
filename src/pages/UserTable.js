@@ -46,29 +46,16 @@ const UserTable = () => {
   const [userRole, setUserRole] = useState('')
   const [loggedUserRole, setloggedUserRole] = useState('')
 
-  //current user
-  // useEffect(() => {
-  //   const getUserRole = async () => {
-  //     const loggedUser = getCookie("token");
-  //     const loggedUserRole = await getRole(parseInt(loggedUser));
-  //     console.log("logeed in", loggedUser);
-  //     console.log("ROLE", loggedUserRole);
-  //   }
-
-  //   getUserRole()
-  // }, [])
-
   const loggedUser = getCookie("token");
-  console.log("logeed in", loggedUser);
+  // console.log("logeed in", loggedUser);
 
   (async () => {
     const role = await getRole(loggedUser);
     setloggedUserRole(role)
   })();
 
-  console.log("loggedUser", loggedUser, "loggedUserRole", loggedUserRole)
+  // console.log("loggedUser", loggedUser, "loggedUserRole", loggedUserRole)
   
-
   return (
     <>
       <ButtonContainer>
@@ -97,10 +84,6 @@ const UserTable = () => {
         ))}
 
         {(loggedUserRole === 'SUPERADMIN' || loggedUserRole === 'ADMIN') && <AddLink to='/addUser'><BsPersonPlusFill /> Add User</AddLink>}
-
-          {/* <Button style={{backgroundColor: '#850000'}}>
-            Add User
-          </Button> */}
 
       </ButtonContainer>
 

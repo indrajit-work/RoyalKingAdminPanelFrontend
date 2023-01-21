@@ -13,7 +13,7 @@ import {
 } from "react-bootstrap";
 import "./RegDis.css";
 import axios from "axios";
-import { getCookie,getEmail } from "../utils/auth";
+import { getEmail } from "../utils/auth";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import * as AiIcons from "react-icons/ai";
@@ -88,7 +88,7 @@ const ModifyDistributor = () => {
       ...user,
       email:optionalEMail
     })
-    console.log(email);
+    // console.log(email);
 }
   
   const getAdmins = async () => {
@@ -103,7 +103,7 @@ const ModifyDistributor = () => {
 
   //reset device handler
   const handleDeviceReset = (e) => {
-    console.log("rset");
+    // console.log("rset");
     e.target.value = "";
     setUser({
       ...user,
@@ -159,7 +159,7 @@ const ModifyDistributor = () => {
         }
       );
 
-      console.log("Submited:...............", res);
+      // console.log("Submited:...............", res);
       setUser({
         userName: "",
         email: "",
@@ -173,7 +173,7 @@ const ModifyDistributor = () => {
         buttonText: "Submited",
       });
     } catch (error) {
-      console.log("Error:", error);
+      // console.log(error);
       setUser({
         ...user,
         buttonText: "Submit",

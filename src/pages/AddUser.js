@@ -108,12 +108,12 @@ const AddUser = () => {
                 payout
               }
             );
-            console.log("Submited:...............", res);
-            console.log(payout)
+            // console.log("Submited:...............", res);
+            // console.log(payout)
             reset()
             toast.success("User added successfully")
         } catch (error) {
-            console.log("Error:", error);
+            // console.log("Error:", error);
             toast.error("Something went wrong")
           }
         };

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import {
   Card,
@@ -21,6 +21,22 @@ const GameSettings = () => {
   const [gameType, setGameType] = useState("All")
   const [multiplier, setMultiplier] = useState("")
   const [payoutPercent, setpayoutPercent] = useState('')
+  const [allPayoutPercents, setAllPayoutPercents] = useState([])
+
+  useEffect(() => {
+    const getPayoutPercent = async () => {
+      try {
+        const res = await axios.get('https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod//users/login/admin/payoutpercent')
+        // console.log(res.data)
+        setAllPayoutPercents(res.data)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    getPayoutPercent()
+  }, [])
+
 
   const handleSubmitMultiplier = async (e) => {
     e.preventDefault()
@@ -31,7 +47,7 @@ const GameSettings = () => {
     }
 
     setMultiplier(e.target.value)
-    console.log(multiplier);
+    // console.log(multiplier);
 
     try {
       const res = await axios.post(
@@ -41,25 +57,20 @@ const GameSettings = () => {
           multiplier: multiplier
         }
       );
-      console.log(gameType, multiplier); 
-      console.log("Multiplier", res.data);
+      // console.log(gameType, multiplier); 
+      // console.log("Multiplier", res.data);
 
       setMultiplier("")
       setGameType("")
-      console.log("Settings:...............", res.data);
+      // console.log("Settings:...............", res.data);
       toast.success('Multiplier has been changed successfully')
     } catch (error) {
-      console.log("Error:", error);
+      console.log(error);
     }
   };
 
   const handleSubmitPercent = async (e) => {
     e.preventDefault()
-
-    // if (payoutPercent === 0) {
-    //   alert("Payout Percent cannot be zero");
-    //   return;
-    // }
 
     setpayoutPercent(e.target.value)
 
@@ -71,14 +82,14 @@ const GameSettings = () => {
           payoutPercent: payoutPercent,
         }
       );
-      console.log(res)
-      console.log(gameType, payoutPercent)
+      // console.log(res)
+      // console.log(gameType, payoutPercent)
       
       setpayoutPercent("")
       setGameType("")
       toast.success('Payout percent has been changed successfully')
     } catch (error) {
-      console.log("Error:", error);
+      console.log(error);
     }
   };
 
@@ -102,12 +113,12 @@ const GameSettings = () => {
                     value={gameType}
                     required
                   >
-                    <option value="All">All</option>
-                    <option value="cards16">Cards 16</option>
-                    <option value="cards52">Cards 52</option>
-                    <option value="jeetoJoker">jeetoJoker</option>
-                    <option value="doubleChance">doubleChance</option>
-                    <option value="singleChance">signleChance</option>
+                    <option value="All">All ⇨ Current payout percentage {allPayoutPercents.all}%</option>
+                    <option value="cards16">Cards 16 ⇨ Current payout percentage {allPayoutPercents.card16}%</option>
+                    <option value="cards52">Cards 52 ⇨ Current payout percentage {allPayoutPercents.card52}%</option>
+                    <option value="jeetoJoker">jeetoJoker ⇨ Current payout percentage {allPayoutPercents.jeetoJoker}%</option>
+                    <option value="doubleChance">doubleChance ⇨ Current payout percentage {allPayoutPercents.doubleChance}%</option>
+                    <option value="singleChance">signleChance ⇨ Current payout percentage {allPayoutPercents.singleChance}%</option>
                   </Form.Select>
                 </FloatingLabel>
               </Col>
@@ -141,30 +152,6 @@ const GameSettings = () => {
                 </FloatingLabel>
               </Col>
               <Col md> </Col>
-              {/* <h4 className="text-muted ml-4 mt-3 p-2 ">
-                Payout Mode
-                <small className="text-muted">(Select only one)</small>
-              </h4>
-              <Form className="mt-2 ml-3">
-                <Form.Check
-                  value="LowPayout"
-                  type="radio"
-                  label="Low Payout Mode"
-                  disabled
-                />
-                <Form.Check
-                  value="MediumPayout"
-                  type="radio"
-                  label="Medium Payout Mode"
-                  disabled
-                />
-                <Form.Check
-                  value="HighPayout"
-                  type="radio"
-                  label="High Payout Mode"
-                  disabled
-                />
-              </Form> */}
             </Row>
             <Button
               variant="secondary"

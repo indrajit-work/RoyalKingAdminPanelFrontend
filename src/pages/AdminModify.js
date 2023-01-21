@@ -7,14 +7,12 @@ import {
   Button,
   Row,
   InputGroup,
-  Container,
-  Alert,
-  Col,
+  Container
 } from "react-bootstrap";
 
 import "./RegDis.css";
 import axios from "axios";
-import { getCookie,getRole,getEmail } from "../utils/auth";
+import { getEmail } from "../utils/auth";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import * as AiIcons from "react-icons/ai";
@@ -23,7 +21,6 @@ import { TiTick, TiTimes } from "react-icons/ti";
 
 const AdminModify = () => {
   const [value, onChanage] = useState(new Date());
-  const [admins, setAdmins] = useState();
   const [usernameIsvalid, setUsernameIsvalid] = useState(null)
   const [userNameList, setUserNameList] = useState([])
 
@@ -91,7 +88,7 @@ useEffect(() => {
 
   //reset device handler
   const handleDeviceReset = (e) => {
-    console.log("rset");
+    // console.log("rset");
     e.target.value = "";
     setUser({
       ...user,
@@ -155,7 +152,7 @@ useEffect(() => {
       return;
     }
     setUser({ ...user, buttonText: "Submitting...." });
-    console.log("userdata", user)
+    // console.log("userdata", user)
     try {
       const res = await axios.post(
         `https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/modifyuser`,
@@ -174,7 +171,7 @@ useEffect(() => {
         }
       );
 
-      console.log("Submited:...............", res);
+      // console.log("Submited:...............", res);
       setUser({
         userName: "",
         email: "",
@@ -188,7 +185,7 @@ useEffect(() => {
         buttonText: "Submited",
       });
     } catch (error) {
-      console.log("Error:", error);
+      console.log(error);
       setUser({
         ...user,
         buttonText: "Submit",
@@ -199,7 +196,6 @@ useEffect(() => {
   const [showCal, setShowCal] = useState(false);
 
   //showing cal on clicking icon
-
   const calHandler = () => {
     setShowCal(!showCal);
   };

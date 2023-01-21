@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
@@ -43,24 +42,13 @@ const CleanData = () => {
         //     toast.error("Please enter a number between 1 and 30")
         //     return
         // }
-        console.log(daysToClean)
+        // console.log(daysToClean)
 
         let fromMom = moment(new Date()).subtract(daysToClean, 'days').format('DD MMM YYYY')
         setFrom(fromMom)
-        console.log(from)
-        // try {
-        //     const res = await axios.post(
-        //         '',
-        //         {
-        //             days: daysToClean
-        //         }
-        //     );
-        //     console.log(res.data)
-        //     toast.success('Data Cleaned')
-        // } catch (error) {
-        //     console.log(error)
-        // }
+        // console.log(from)
     }
+    
   return (
     <FormContainer>
         <Form onSubmit={cleanDataHandler}>

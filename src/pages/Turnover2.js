@@ -130,7 +130,8 @@ const Turnover2 = () => {
     }
 
   }
-  console.log("range", startRange, endRange)
+
+  // console.log("range", startRange, endRange)
   const printStart = moment(startRange).format('DD.M.YYYY')
   const printEnd = moment(endRange).format('DD.M.YYYY')
 
@@ -162,8 +163,8 @@ const Turnover2 = () => {
   // search Handler
   const onSearchHandler = async (e) => {
     e.preventDefault();
-    console.log(loggedUser, "start:", startMom._i, "end", endMom._i, gameType);
-    console.log(loggedUser, "start:", startRange, "end", endRange, gameType);
+    // console.log(loggedUser, "start:", startMom._i, "end", endMom._i, gameType);
+    // console.log(loggedUser, "start:", startRange, "end", endRange, gameType);
     // console.log(typeof startMom, typeof endMom)
     setLoading("Loading...");
     setShowTable(true)
@@ -208,25 +209,12 @@ const Turnover2 = () => {
           }
         }))
       }
-
-      // let fromDateString = new Date(from).toUTCString();
-      // console.log("from1", fromDateString);
-      // fromDateString = fromDateString.split(' ').slice(0, 6).join(' ');
-      // console.log("from", fromDateString);
-      
-      // let toDateString = new Date(from).toUTCString();
-      // console.log("to1", fromDateString);
-      // toDateString = toDateString.split(' ').slice(0, 5).join(' ');
-      // console.log("to", toDateString);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     } finally {
       setLoading("");
     }
   };
-  // console.log(gameData);
-  // console.log(usersUnder)
-  // console.log(showTable);
 
   const viewDetailsCol = [
     {
@@ -300,7 +288,7 @@ const Turnover2 = () => {
                   id={item[0]} 
                   key={index}
                   onClick={handleLastWeek} 
-                  // className={parseInt(active[2]) === index ? 'active' : ''}
+                  className={selectDate === item[0] ? 'active' : ''}
                 >
                   {item[1]}
                 </div>

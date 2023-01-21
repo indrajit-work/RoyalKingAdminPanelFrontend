@@ -1,5 +1,4 @@
-import React, { useState ,useEffect} from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
 import axios from "axios";
 import './GameResult.css'
 import {
@@ -27,38 +26,27 @@ import {
   MDBBtnGroup,
 } from "mdb-react-ui-kit";
 
-
-
-
-
-
 const GameResult = (props) => {
-  const[getAdmin,setAdmins]=useState( );
   const date=new Date();
   date.setHours(0,0,0,0)
   const date2=new Date();
   date2.setHours(23,59,59,59)
+
   const [value, onChanage] = useState(date);
   const [endValue, eonChanage] = useState(date2);
   const [showCal, setShowCal] = useState(false);
   const [showCalEnd,setshowCalEnd]=useState(false);
-const [type,setType]=useState();
-const[btnText,setbtn]=useState({
-  btn:"Search"
-});
-const[id,setId]=useState("0");
-const [allGameData,setAllGameData]=useState()
-const {btn} =btnText
+  const [type,setType]=useState();
+  const[btnText,setbtn]=useState({
+    btn:"Search"
+  });
+
+  const[id,setId]=useState("0");
+  const [allGameData,setAllGameData]=useState()
+  const {btn} =btnText
 // const{win,played,commPercent,net,userID}=allGameData;
   //showing cal on clicking icon
 
-
-// useEffect(()=>{
-//   getAdminsData();
-// },[])
-  //admins state
-
-//const{admins}=getAdmin
   
   const calHandler = () => {
     setShowCal(!showCal);
@@ -74,23 +62,13 @@ const userIdHandler=(e)=>{
 }
 
   //..........................................................................................
-console.log(value);
-console.log(endValue)
+// console.log(value);
+// console.log(endValue)
  
-  
-
- 
-
-
-
 //game selecter
-
 const gameTypeHandler=(e)=>{
-  //console.log(e.target.value);
   setType(e.target.value);
 }
-
-
 
 const getGameData=async ()=>{
 setbtn({
@@ -106,15 +84,14 @@ setbtn({
     setbtn({
       btn:"Search"
     })
-    console.log("Response",res)
+    // console.log("Response",res)
   }catch(err){
-    console.log("Error in game details",err);
+    console.log(err);
   }
 }
 
   return (
     <>
-    
     <Container>
       <Card className="mt-4 w-100 shadow-lg">
         <Card.Header>
@@ -152,13 +129,7 @@ setbtn({
               </span>
               {showCalEnd && <Calendar onChange={eonChanage} value={endValue} />}
             </Col>
-            {/* <Col md> */}
-            
-            {/* </Col> */}
-            
-              
               <Button variant="secondary"  className="ml-3 mt-4 submitBTN" type="submit" onClick={getGameData} >{btn}</Button>
-         
           </Row>
         </Card.Body>
       </Card>
@@ -166,19 +137,15 @@ setbtn({
 
     <MDBContainer>
       <div style={{ marginTop: "80px" }}>
-      
     <MDBRow>
     <MDBCol size="12">
       <MDBTable>
         <MDBTableHead dark>
           <tr>
-            <th scope=" col "> Game id</th>
+            <th scope=" col ">Game id</th>
             <th scope=" col ">Draw Time</th>
-            <th scope=" col "> Game Type </th>
-            <th scope=" col "> Result </th>
-        
-            {/* <th scope=" col "></th>
-            <th scope=" col ">  </th> */}
+            <th scope=" col ">Game Type</th>
+            <th scope=" col ">Result</th>
           </tr>
         </MDBTableHead>
 
@@ -200,10 +167,9 @@ setbtn({
                 <td>{item.drawTime}</td>
                 <td>{item.gameType}</td>
                 <td> {item.result}</td>
-            
               </tr>
             </MDBTableBody>
-        ))
+          ))
         )}
  
       </MDBTable>
@@ -211,8 +177,6 @@ setbtn({
   </MDBRow>
  </div>
 </MDBContainer>
-
-
 </>
   );
 };

@@ -17,7 +17,7 @@ import "./Icon.css";
 import "./Turnover.css";
 import { DataGrid } from "@mui/x-data-grid";
 import styled from "styled-components";
-// import BetDetails from "../components/BetDetails";
+
 ReactModal.setAppElement("#root")
 
 const DataTable = styled.div`
@@ -88,7 +88,7 @@ const Gamehistory = () => {
           try {
             const res = await axios.get(`https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/ticket/betdetails?ticketID=${params?.row?.ticketID}`)
 
-            console.log(res.data)
+            // console.log(res.data)
             setResult(res.data?.gameResult)
             prizeOnBet(res.data?.bets, res.data?.gameResult, res.data?.multiplier, res.data?.gameType)
           } catch (error) {
@@ -201,8 +201,6 @@ const Gamehistory = () => {
     }
   ];
 
-  //showing cal on clicking icon
-
 useEffect(()=>{
   getAdminsData();
 },[])
@@ -243,7 +241,7 @@ const getGameData=async ()=>{
   })
   let start = value.toString().split(" ").slice(0, 5).join(" ")
   let end = endValue.toString().split(" ").slice(0, 5).join(" ")
-  console.log(start, end, type, id)
+  // console.log(start, end, type, id)
 
   try{
    const res=await  axios.post("https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/gettickethistory",{
@@ -261,15 +259,14 @@ const getGameData=async ()=>{
     setbtn({
       btn:"Search"
     })
-    console.log("gameData", allGameData)
+    // console.log("gameData", allGameData)
   }catch(err){
-    console.log("Error in game details",err);
+    console.log(err);
   }
 }
 
   return (
     <>
-    
     <Container>
       <Card className="mt-4 w-100 shadow-lg">
         <Card.Header>

@@ -68,14 +68,6 @@ function App() {
           <Redirect to="/dashboard" />
         </Route>
 
-        {/* {loggedUserRole === 'ADMIN' && <Route path="/" exact>
-          <Redirect to="/dashboard" />
-        </Route>}
-
-        {loggedUserRole === 'Distributor' || loggedUserRole === 'STOKIST' && <Route path="/" exact>
-          <Redirect to="/userManager" />
-        </Route>} */}
-
         <Route path="/dashboard" exact>
           <Sidebar />
           <Dashboard />
@@ -96,11 +88,6 @@ function App() {
           <ChangePassword />
         </Route>
 
-        {/* <Route path="/createUser" exact>
-          <Sidebar />
-          <CreateUser />
-        </Route> */}
-
         <Route path="/addUser" exact>
           <Sidebar />
           <AddUser />
@@ -119,23 +106,12 @@ function App() {
           <Sidebar />
           <StokistList />
         </Route>
-        {/* <Route path="/stokist/create" exact>
-            <Sidebar/>
-            <RegStokist/>
-          </Route> */}
-        {/* <Route path="/player/create" exact>
-            <Sidebar/>
-            <RegPlayer/>
-          </Route> */}
+    
         <Route path="/player/list" exact>
           <Sidebar />
           <ListPlayer />
         </Route>
 
-        {/* <Route path="/turnover" exact>
-          <Sidebar />
-          <Turnover />
-        </Route> */}
         <Route path="/turnover" exact>
           <Sidebar />
           <Turnover2 />
@@ -169,26 +145,6 @@ function App() {
           <Sidebar />
           <AdjustPoints />
         </Route>
-
-        {/* <Route path="/adjustpointsAdmin" exact>
-          <Sidebar />
-          <AdjustPointsAdmin />
-        </Route>
-
-        <Route path="/adjustpointDistributor" exact>
-          <Sidebar />
-          <AdjustDistributor />
-        </Route>
-
-        <Route path="/adjustpointStokist" exact>
-          <Sidebar />
-          <AdjustStokist />
-        </Route>
-
-        <Route path="/adjustpointPlayers" exact>
-          <Sidebar />
-          <AdjustPlayer />
-        </Route> */}
 
         <Route path="/player/modify/:userID/:deviceID" exact>
           <Sidebar />

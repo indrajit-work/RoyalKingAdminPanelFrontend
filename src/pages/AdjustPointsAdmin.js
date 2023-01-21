@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import axios from "axios";
-import { getCookie, getRole } from "../utils/auth";
+import { getCookie } from "../utils/auth";
 import {
   Card,
   Container,
@@ -24,7 +23,7 @@ const AdjustPointsAdmin = () => {
 
   //current user
   const loggedUser = getCookie("token");
-  console.log("logeed in", loggedUser);
+  // console.log("logeed in", loggedUser);
 
   useEffect(() => {
     getAdmins();
@@ -61,14 +60,14 @@ const AdjustPointsAdmin = () => {
         }
       );
 
-      console.log("............", res.data);
+      // console.log("............", res.data);
       if(res.data.startsWith("Not")){
         alert("Not enough balance to deduct")
         return
       }
       toast.success(`Points ${transactionType === "add" ? 'added': 'deducted'} successfully`)
     } catch (err) {
-      console.log("Error from stokist adjust points:", err);
+      console.log(err);
     }
   };
 
