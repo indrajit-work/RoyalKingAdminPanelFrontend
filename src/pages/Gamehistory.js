@@ -241,7 +241,8 @@ const getGameData=async ()=>{
   })
   let start = value.toString().split(" ").slice(0, 5).join(" ")
   let end = endValue.toString().split(" ").slice(0, 5).join(" ")
-  // console.log(start, end, type, id)
+  console.log(start, end, type, id)
+  console.log(typeof id)
 
   try{
    const res=await  axios.post("https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/gettickethistory",{
@@ -316,7 +317,7 @@ const getGameData=async ()=>{
                       <option>No data...</option>
                     ) : (
                       
-                        getAdmin.map((item, index) => (
+                      getAdmin.sort((a,b) => a.userID - b.userID).map((item, index) => (
                         <option value={item.userID}>
                           {item.fullName}
                           

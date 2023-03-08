@@ -4,6 +4,7 @@ import "./Dashbaord.css";
 import { useHistory } from "react-router-dom";
 import { isAuth } from "../utils/auth";
 import axios from "axios";
+import OnlineUsers from "../components/OnlineUsers";
 
 const Dashboard = () => {
   const [count, setCount] = useState(0);
@@ -34,25 +35,29 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <Container>
-      <Row>
-        <Card
-          bg="light"
-          key="light"
-          style={{ width: "50rem", height: "13rem" }}
-          className="mb-2  mt-4"
-        >
-          <Card.Header className="text-center dashboard">
-            <div>Online Players</div>
-          </Card.Header>
-          <Card.Body>
-            <Card.Text>
-              <h1 className="text-center mt-4 text-muted">{count}</h1>
-            </Card.Text>
-          </Card.Body>
-        </Card>
-      </Row>
-    </Container>
+    <>
+      {/* <Container>
+        <Row>
+          <Card
+            bg="light"
+            key="light"
+            style={{ width: "50rem", height: "13rem" }}
+            className="mb-2  mt-4"
+          >
+            <Card.Header className="text-center dashboard">
+              <div>Online Players</div>
+            </Card.Header>
+            <Card.Body>
+              <Card.Text>
+                <h1 className="text-center mt-4 text-muted">{count}</h1>
+              </Card.Text>
+            </Card.Body>
+          </Card>
+        </Row>
+      </Container> */}
+
+      <OnlineUsers />
+    </>
   );
 };
 
