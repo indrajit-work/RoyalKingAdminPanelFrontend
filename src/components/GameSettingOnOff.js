@@ -28,6 +28,7 @@ const GameSettingOnOff = () => {
     const [doubleChance, setDoubleChance] = useState(null)
     const [cards16, setCards16] = useState(null)
     const [cards52, setCards52] = useState(null)
+    const [cards24, setCards24] = useState(null)
 
     // console.log(
     //     "jeetoJoker", jeetoJoker,
@@ -49,6 +50,7 @@ const GameSettingOnOff = () => {
         setDoubleChance(res.data.doubleChance);
         setCards16(res.data.cards16);
         setCards52(res.data.cards52);
+        setCards24(res.data.cards24);
       } catch (error) {
         console.log(error);
       }
@@ -69,7 +71,8 @@ const GameSettingOnOff = () => {
                   cards16,
                   singleChance,
                   doubleChance,
-                  cards52
+                  cards52,
+                  cards24
                 ]
             );
             // console.log(res.data)
@@ -101,6 +104,10 @@ const GameSettingOnOff = () => {
           <div>
             <input type="checkbox" name="cards52" id="cards52" checked={cards52} onChange={() => setCards52(prev => !prev)} />
             <Label htmlFor="cards52">Cards 52</Label>
+          </div>
+          <div>
+            <input type="checkbox" name="cards24" id="cards24" checked={cards24} onChange={() => setCards24(prev => !prev)} />
+            <Label htmlFor="cards24">Cards 24</Label>
           </div>
 
           <button>Save</button>

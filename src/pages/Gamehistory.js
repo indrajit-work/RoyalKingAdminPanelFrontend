@@ -286,6 +286,7 @@ const getGameData=async ()=>{
                   <option value="jeetoJoker">jeetoJoker</option>
                   <option value="doubleChance">doubleChance</option>
                   <option value="singleChance">signleChance</option>
+                  <option value="cards24">Cards 24</option>
                 </Form.Select>
               </FloatingLabel>
             </Col>

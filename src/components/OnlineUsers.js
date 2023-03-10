@@ -37,9 +37,9 @@ const OnlineUsers = () => {
 
   const onlineUsersCol = [
     { field: "userID", headerName: "User ID", minWidth: 30},
-    { field: "userName", headerName: "Username", minWidth: 80, flex: 1},
+    { field: "userName", headerName: "Username", minWidth: 80, flex: 1, sortable: false,},
     {
-      field: "userStatus", headerName: "Last Activity / Online Status", minWidth: 100, flex: 1,
+      field: "userStatus", headerName: "Last Activity / Online Status", minWidth: 100, flex: 1, sortable: false,
       renderCell: (params) => {
         return (
           <>
@@ -65,6 +65,16 @@ const OnlineUsers = () => {
           getRowId={(row) => row.userID}
           columnVisibilityModel={{
             userID: false
+          }}
+          initialState={{
+            sorting: {
+              sortModel: [
+                {
+                  field: 'userStatus',
+                  sort: 'desc',
+                },
+              ],
+            },
           }}
           checkboxSelection={false}
           rowsPerPageOptions={[25, 50, 100]}

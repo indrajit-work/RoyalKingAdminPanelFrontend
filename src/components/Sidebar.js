@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { NavLink,Link, useHistory } from "react-router-dom";
 import * as FaIcons from "react-icons/fa";
 import * as AiIcons from "react-icons/ai";
-import * as DiIcons from "react-icons/di";
+import {BiLogOut} from "react-icons/bi";
 import { SidebarData } from "./SidebarData";
 import SubMenu from "./SubMenu";
 import { IconContext } from "react-icons/lib";
@@ -98,8 +98,8 @@ const Sidebar = () => {
             <FaIcons.FaBars onClick={showSidebar} />
           </NavIcon>
           <h4 className=" ml-auto mr-5  ">
-            <Link  className=" logout" onClick={() => logout(history)} >
-              Logout
+            <Link className=" logout" onClick={() => logout(history)} >
+              <BiLogOut />
             </Link>
           </h4>
         </Nav>

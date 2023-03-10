@@ -128,7 +128,6 @@ const Turnover2 = () => {
       let endMom = moment(date).endOf('month').subtract(1, 'months').format('ddd DD MMM YYYY HH:mm:ss')
       setEndRange(endMom)
     }
-
   }
 
   // console.log("range", startRange, endRange)
@@ -159,12 +158,11 @@ const Turnover2 = () => {
     { field: "netProfit", headerName: "Net to Pay", minWidth: 120, flex: 1 },
   ];
 
-
   // search Handler
   const onSearchHandler = async (e) => {
     e.preventDefault();
     // console.log(loggedUser, "start:", startMom._i, "end", endMom._i, gameType);
-    // console.log(loggedUser, "start:", startRange, "end", endRange, gameType);
+    console.log(loggedUser, "start:", startRange, "end", endRange, gameType);
     // console.log(typeof startMom, typeof endMom)
     setLoading("Loading...");
     setShowTable(true)
@@ -260,6 +258,7 @@ const Turnover2 = () => {
             <option value="jeetoJoker">jeetoJoker</option>
             <option value="doubleChance">doubleChance</option>
             <option value="singleChance">signleChance</option>
+            <option value="cards24">Cards 24</option>
           </select>
         </div>
 

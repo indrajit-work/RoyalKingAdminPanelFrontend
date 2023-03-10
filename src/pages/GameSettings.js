@@ -119,6 +119,7 @@ const GameSettings = () => {
                     <option value="jeetoJoker">jeetoJoker ⇨ Current payout percentage {allPayoutPercents.jeetoJoker}%</option>
                     <option value="doubleChance">doubleChance ⇨ Current payout percentage {allPayoutPercents.doubleChance}%</option>
                     <option value="singleChance">signleChance ⇨ Current payout percentage {allPayoutPercents.singleChance}%</option>
+                    <option value="cards24">Cards 24 ⇨ Current payout percentage {allPayoutPercents.card24}%</option>
                   </Form.Select>
                 </FloatingLabel>
               </Col>
