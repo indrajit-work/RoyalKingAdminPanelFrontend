@@ -33,3 +33,7 @@ code {
 .MuiSvgIcon-root path{
   fill: #969696;
 }
+
+a, a:hover{
+  text-decoration: none;
+}

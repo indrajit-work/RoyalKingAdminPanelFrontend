@@ -17,6 +17,7 @@ import "./Icon.css";
 import "./Turnover.css";
 import { DataGrid } from "@mui/x-data-grid";
 import styled from "styled-components";
+import Select from "react-select";
 
 ReactModal.setAppElement("#root")
 
@@ -56,7 +57,8 @@ const Gamehistory = () => {
   const[btnText,setbtn]=useState({
     btn:"Search"
   });
-  const [id, setId] = useState("0");
+  // const [id, setId] = useState("0");
+  const [selectedPlayer, setSelectedPlayer] = useState()
   const [allGameData, setAllGameData] = useState([])
   const [bets, setBets] = useState([])
   const [result, setResult] = useState('')
@@ -217,9 +219,9 @@ const EndHandler=()=>{
   setshowCalEnd(!showCalEnd)
 }
 
-const userIdHandler=(e)=>{
-    setId(e.target.value);
-}
+// const userIdHandler=(e)=>{
+//     setId(e.target.value);
+// }
 
 const getAdminsData=async ()=>{
   return  await  axios.post("https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/getbyrole",{
@@ -241,15 +243,14 @@ const getGameData=async ()=>{
   })
   let start = value.toString().split(" ").slice(0, 5).join(" ")
   let end = endValue.toString().split(" ").slice(0, 5).join(" ")
-  console.log(start, end, type, id)
-  console.log(typeof id)
+  console.log(start, end, type, selectedPlayer)
 
   try{
    const res=await  axios.post("https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/gettickethistory",{
       startTime:start,
       endTime:end,
       gameType:type,
-      userID:id
+      userID:selectedPlayer
     })
     setAllGameData(res?.data?.tickets?.map(ticket => {
       return{
@@ -265,6 +266,11 @@ const getGameData=async ()=>{
     console.log(err);
   }
 }
+// console.log(getAdmin)
+const options = getAdmin?.map((user) => ({
+  value: user?.userID,
+  label: `${user.fullName} (UserID:${user.userID})`
+}));
 
   return (
     <>
@@ -311,7 +317,21 @@ const getGameData=async ()=>{
                 <Form.Label className="text-muted font-weight-bold ">
                   Players
                 </Form.Label>
-                <Form.Select   className="w-50" onChange={userIdHandler} aria-label="Floating label select example">
+                <Select 
+                  options={options}
+                  value={selectedPlayer?.value}
+                  onChange={(selectedPlayer) => {setSelectedPlayer(selectedPlayer.value)}}
+                  isSearchable={true}
+                  placeholder="Select Below..."
+                  styles={{
+                    control: (baseStyles) => ({
+                      ...baseStyles,
+                      borderColor: 'steelblue',
+                      width: '60%'
+                    }),
+                  }}
+                />
+                {/* <Form.Select   className="w-50" onChange={userIdHandler} aria-label="Floating label select example">
                 <option>Select below...</option>
                 <option value="all">All</option>
                     {!getAdmin? (
@@ -326,13 +346,10 @@ const getGameData=async ()=>{
                         </option>
                       ))
                     )}
-                    
-                    
-                  </Form.Select>
+                  </Form.Select> */}
               </Form.Group>
             {/* </Col> */}
             <Col md>
-              
               <Button variant="secondary"  className="ml-3 mt-4" type="submit" onClick={getGameData} >{btn}</Button>
             </Col>
           </Row>

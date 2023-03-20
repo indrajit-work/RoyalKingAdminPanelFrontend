@@ -33,12 +33,13 @@ const NavIcon = styled(Link)`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  text-decoration: none;
-
-  :hover{
-    text-decoration: none;
-  }
 `;
+
+const NavTitle = styled(Link)`
+  height: 100%;
+  display: flex;
+  align-items: center;
+`
 
 const SidebarNav = styled.nav`
   background: #15171c;
@@ -134,8 +135,10 @@ const Sidebar = () => {
         <Nav>
           <NavIcon to="#">
             <FaIcons.FaBars onClick={showSidebar} />
-            <Logo src={logo} alt="logo" />
-            <LogoTitle>Royal King Admin</LogoTitle>
+            <NavTitle to="/dashboard">
+              <Logo src={logo} alt="logo" />
+              <LogoTitle>Royal King Admin</LogoTitle>
+            </NavTitle>
           </NavIcon>
           <h4>
             <Link className="logout" onClick={() => logout(history)} >
