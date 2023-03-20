@@ -1,319 +1,353 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
-import {
-  Card,
-  Container,
-  Button,
-  Col,
-  Form,
-  Row,
-  FloatingLabel,
-} from "react-bootstrap";
-import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
-import * as AiIcons from "react-icons/ai";
-import "./Icon.css";
+import React, { useState } from "react";
+import styled from "styled-components";
 import "./Turnover.css";
-import {
-  MDBTable,
-  MDBTableHead,
-  MDBTableBody,
-  MDBRow,
-  MDBCol,
-  MDBContainer,
-  MDBBtn,
-  MDBBtnGroup,
-} from "mdb-react-ui-kit";
+// import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
+import 'react-date-range/dist/styles.css'; // main style file
+import 'react-date-range/dist/theme/default.css'; // theme css file
+import { DateRangePicker } from 'react-date-range';
+import { getCookie, getRole } from "../utils/auth";
+import { Link } from "react-router-dom";
+import { BsCalendar3 } from "react-icons/bs";
+import { IoClose } from "react-icons/io5";
+import moment from "moment/moment";
+import { Button } from "@mui/material";
 
-import { fetchAdmin } from "../utils/fetchAdmins";
+const DataTable = styled.div`
+  padding: 0 5rem;
+  margin: 3rem auto;
+  @media (max-width: 768px) {
+    height: 300px;
+    padding: 0 1rem;
+  }
+`;
 
-const Turnover = (props) => {
+const dateRangeArr = [
+  ['today', 'Today', 0], 
+  ['yesterday', 'Yesterday', 1], 
+  ['lastweek', 'Last Week', 2], 
+  ['thisweek', 'This Week', 3], 
+  ['lastmonth', 'Last Month', 4],
+  ['thismonth', 'This Month', 5]
+]
+
+const Turnover2 = () => {
+  const [pageSize, setPageSize] = useState(25);
+
   const date = new Date();
   date.setHours(0, 0, 0, 0);
   const date2 = new Date();
+  date2.setHours(0, 0, 0, 0);
 
-  date2.setHours(23, 59, 59, 59);
-  const [getAdmin, setAdmins] = useState();
-  const [value, onChanage] = useState(date);
-  const [endValue, eonChanage] = useState(date2);
-  const [showCal, setShowCal] = useState(false);
-  const [showCalEnd, setshowCalEnd] = useState(false);
-  const [type, setType] = useState();
-  const [btnText, setbtn] = useState({
-    btn: "Search",
-  });
-  const [ticket, setTicket] = useState()
+  const [gameType, setGameType] = useState("All");
+  const [userRole, setUserRole] = useState("");
+  const [gameData, setGameData] = useState({});
+  const [usersUnder, setUsersUnder] = useState([])
+  const [loading, setLoading] = useState("");
+  const [showTable, setShowTable] = useState(false)
+  const [showDatePicker, setShowDatePicker] = useState(false);
 
-  const [allGameData, setAllGameData] = useState({
-    played: 0,
-    win: 0,
-    commPercent: 0,
-    net: 0,
-    userID: 0,
-  });
-  const { btn } = btnText;
-  const { win, played, commPercent, net, userID, adminNet } = allGameData;
-  //showing cal on clicking icon
+  const [startRange, setStartRange] = useState()
+  const [endRange, setEndRange] = useState()
+  const [selectDate, setSelectDate] = useState('')
 
-  useEffect(() => {
-    getAdminsData();
-  }, []);
-  //admins state
+  // const [active, setActive] = useState(99)
+  // const [classname, setClassname] = useState('')
 
-  //const{admins}=getAdmin
+  const datePickerHandler = () => {
+    setShowDatePicker((prevState) => !prevState)
+  }
 
-  const calHandler = () => {
-    setShowCal(!showCal);
-  };
-  //console.log("...",value)
+  const [startDate, setStartDate] = useState(date)
+  const [endDate, setEndDate] = useState(date2)
 
-  const EndHandler = () => {
-    setshowCalEnd(!showCalEnd);
-  };
+  const selectionRange = {
+    startDate,
+    endDate,
+    key: 'selection',
+  }
 
-  //..........................................................................................
+  const handleSelect = (ranges) => {
+    // console.log("ranges", ranges)
+    setSelectDate('')
+    setStartDate(ranges.selection.startDate)
+    setEndDate(ranges.selection.endDate)
+  }
 
-  // console.log("TIMER", Date.parse(value));
-  // console.log("TIMERend", Date.parse(endValue));
+  // console.log(startDate, endDate)
+  let startMom = moment(startDate).format('ddd DD MMM YYYY HH:mm:ss')
+  startMom = moment(startMom)
+  // console.log(startMom)
+  let endMom = moment(endDate).add(1, 'days').subtract(1, 'seconds').format('ddd DD MMM YYYY HH:mm:ss')
+  endMom = moment(endMom)
+  // console.log(endMom)
 
-  const getAdminsData = async () => {
-    return await axios
-      .post(
-        "https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/getsuperadmin",
-        {
-          userRole: "ADMIN",
-        }
-      )
-      .then((res) => setAdmins(res.data))
-      .catch((err) => console.log(err));
-  };
+  const handleLastWeek = (e) => {
+    setSelectDate(e.target.id)
+    setShowDatePicker(false)
 
-  //game selecter
-  const gameTypeHandler = (e) => {
-    //console.log(e.target.value);
-    setType(e.target.value);
-  };
-
-  const getGameData = async () => {
-    setbtn({
-      btn: "Searching",
-    });
-    console.log("Checking......", getAdmin.admins.Items[0].userID);
-    try {
-      const res = await axios.post(
-        "https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/getgamesbytype",
-        {
-          startTime: value,
-          endTime: endValue,
-          gameType: type,
-          userID: getAdmin.admins.Items[0].userID,
-          commPercent: getAdmin.admins.Items[0].commPercent,
-        }
-      );
-      setAllGameData({
-        win: res.data.win,
-        played: res.data.played,
-        commPercent: res.data.superAdComm, //super Admins commission
-        net: res.data.net,
-        userID: res.data.userID,
-        adminNet: res.data.adminNet,
-      });
-      setbtn({
-        btn: "Search",
-      });
-      console.log("Response", res);
-    } catch (err) {
-      console.log("Error in game details", err);
+    if(e.target.id === 'lastweek'){
+      let startMom = moment(date).startOf('week').subtract(6, 'days').format('ddd DD MMM YYYY HH:mm:ss')
+      setStartRange(startMom)
+      let endMom = moment(date).endOf('week').subtract(6, 'days').format('ddd DD MMM YYYY HH:mm:ss')
+      setEndRange(endMom)
     }
-  };
 
-  const getTicketData = async () => {
-    try {
-      const res = await axios.post(
-        'https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/gettickethistory',
-        {
-          userID: getAdmin.admins.Items[0].userID,
-          gameType: type,
-          startTime: value,
-          endTime: endValue
-        }
-      )
-      setTicket(res.data.ticketHistory);
-      console.log(ticket)
-    } catch (error) {
-      console.log(error)
+    if(e.target.id === 'thisweek'){
+      let startMom = moment(date).startOf('week').add(1, 'days').format('ddd DD MMM YYYY HH:mm:ss')
+      setStartRange(startMom)
+      let endMom = moment(date).endOf('week').add(1, 'days').format('ddd DD MMM YYYY HH:mm:ss')
+      setEndRange(endMom)
+    }
+    if(e.target.id === 'thismonth'){
+      let startMom = moment(date).startOf('month').format('ddd DD MMM YYYY HH:mm:ss')
+      setStartRange(startMom)
+      let endMom = moment(date).endOf('month').format('ddd DD MMM YYYY HH:mm:ss')
+      setEndRange(endMom)
+    }
+    if(e.target.id === 'yesterday'){
+      let startMom = moment(date).subtract(1, 'days').format('ddd DD MMM YYYY HH:mm:ss')
+      setStartRange(startMom)
+      let endMom = moment(date).subtract(1, 'seconds').format('ddd DD MMM YYYY HH:mm:ss')
+      setEndRange(endMom)
+    }
+    if(e.target.id === 'today'){
+      let startMom = moment(date).format('ddd DD MMM YYYY HH:mm:ss')
+      setStartRange(startMom)
+      let endMom = moment(date).add(1, 'days').subtract(1, 'seconds').format('ddd DD MMM YYYY HH:mm:ss')
+      setEndRange(endMom)
+    }
+
+    if(e.target.id === 'lastmonth'){
+      let startMom = moment(date).startOf('month').subtract(1, 'months').format('ddd DD MMM YYYY HH:mm:ss')
+      setStartRange(startMom)
+      let endMom = moment(date).endOf('month').subtract(1, 'months').format('ddd DD MMM YYYY HH:mm:ss')
+      setEndRange(endMom)
     }
   }
 
+  // console.log("range", startRange, endRange)
+  const printStart = moment(startRange).format('DD.M.YYYY')
+  const printEnd = moment(endRange).format('DD.M.YYYY')
+
+  const loggedUser = getCookie("token");
+
+  (async () => {
+    const role = await getRole(loggedUser);
+    setUserRole(role);
+  })();
+
+  const loggedUserTOCol = [
+    { field: "userID", headerName: "User ID", minWidth: 80, flex: 1 },
+    { field: "userName", headerName: "Username", minWidth: 100, sortable: false, flex: 1 },
+    { field: "totalPlayed", headerName: "Play Point", minWidth: 120, flex: 1 },
+    { field: "totalWin", headerName: "Win Point", minWidth: 120, flex: 1 },
+    {
+      field: "", headerName: "End", minWidth: 120, sortable: false, flex: 1,
+      renderCell: (params) => {
+        return(
+          <>{params.row.totalPlayed - params.row.totalWin}</>
+        )
+      }
+    },
+    { field: "comPercent", headerName: "Commission Amount", minWidth: 160, flex: 1 },
+    { field: "netProfit", headerName: "Net to Pay", minWidth: 120, flex: 1 },
+  ];
+
+  // search Handler
+  const onSearchHandler = async (e) => {
+    e.preventDefault();
+    // console.log(loggedUser, "start:", startMom._i, "end", endMom._i, gameType);
+    console.log(loggedUser, "start:", startRange, "end", endRange, gameType);
+    // console.log(typeof startMom, typeof endMom)
+    setLoading("Loading...");
+    setShowTable(true)
+    // console.log(dateRangeArr.map(item => item[0]).some(selectDate), Array.isArray(dateRangeArr))
+    try {
+      if(selectDate === 'lastweek' || selectDate === 'thisweek' || selectDate === 'thismonth' || selectDate === 'yesterday' || selectDate === 'today' || selectDate === 'lastmonth'){
+        const res = await axios.post(
+          "https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/turnover",
+          {
+            userID: parseInt(loggedUser),
+            from: startRange,
+            to: endRange,
+            gameType: gameType,
+          }
+        );
+        setGameData({id: parseInt(loggedUser), ...res.data?.data});
+        setUsersUnder(res.data?.data?.childTurnOverArray.map(user => {
+          return{
+            id: user.userID,
+            comPercent: user.comPercent.toFixed(2),
+            netProfit: user.netProfit.toFixed(2),
+            ...user,
+          }
+        }))
+      }else{
+        const res = await axios.post(
+          "https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/turnover",
+          {
+            userID: parseInt(loggedUser),
+            from: startMom._i,
+            to: endMom._i,
+            gameType: gameType,
+          }
+        );
+        setGameData({id: parseInt(loggedUser), ...res.data?.data});
+        setUsersUnder(res.data?.data?.childTurnOverArray.map(user => {
+          return{
+            id: user.userID,
+            comPercent: user.comPercent.toFixed(2),
+            netProfit: user.netProfit.toFixed(2),
+            ...user,
+          }
+        }))
+      }
+    } catch (error) {
+      // console.log(error);
+    } finally {
+      setLoading("");
+    }
+  };
+
+  const viewDetailsCol = [
+    {
+      field: "details",
+      headerName: '',
+      width: 130,
+      sortable: false,
+      renderCell : (params) => {
+        if(userRole === "SUPERADMIN"){
+          return(
+            <Link to={`/admin/distributor/${params.row.userID}/${selectDate === '' ? startMom._i : startRange}-to-${selectDate === '' ? endMom._i : endRange}/${gameType}`}>
+              <Button variant="secondary" size="sm">View Details</Button>
+            </Link>
+          )
+        }
+        if(userRole === "ADMIN"){
+          return(
+            <Link to={`/distributor/stokist/${params.row.userID}/${selectDate === '' ? startMom._i : startRange}-to-${selectDate === '' ? endMom._i : endRange}/${gameType}`}>
+              <Button variant="secondary" size="sm">View Details</Button>
+            </Link>
+          )
+        }
+        if(userRole === "Distributor"){
+          return(
+            <Link to={`/stokist/player/${params.row.userID}/${selectDate === '' ? startMom._i : startRange}-to-${selectDate === '' ? endMom._i : endRange}/${gameType}`}>
+              <Button variant="secondary" size="sm">View Details</Button>
+            </Link>
+          )
+        }
+      }
+    }
+  ]
+  // console.log(gameData?.netProfit?.toFixed(2))
   return (
     <>
-      <Container>
-        <Card className="mt-4 w-100 shadow-lg">
-          <Card.Header>
-            <h4 className="text-center">Welcome Administrator</h4>
-          </Card.Header>
-          <Card.Body>
-            <Card.Title className="text-muted">
-              Turnover Report Search
-            </Card.Title>
-            <br />
+      <form className="input-area">
+        <div className="input-field">
+          <label>Game Type</label>
+          <select name="gameType" onChange={(e) => setGameType(e.target.value)}>
+            <option value="All" selected>All</option>
+            <option value="cards16">Cards 16</option>
+            <option value="cards52">Cards 52</option>
+            <option value="jeetoJoker">jeetoJoker</option>
+            <option value="doubleChance">doubleChance</option>
+            <option value="singleChance">signleChance</option>
+            <option value="cards24">Cards 24</option>
+          </select>
+        </div>
 
-            <Row className="g-2">
-              <Col md>
-                <FloatingLabel controlId="floatingSelectGrid">
-                  <Form.Select
-                    onChange={gameTypeHandler}
-                    className="mt-3"
-                    aria-label="Floating label select example"
-                  >
-                    {/* <option>Select from below</option> */}
-                    <option value="all">ALL</option>
-                    <option value="cards16">Cards 16</option>
-                    <option value="cards52">Cards 52</option>
-                    <option value="jeetoJoker">jeetoJoker</option>
-                    <option value="doubleChance">doubleChance</option>
-                    <option value="singleChance">signleChance</option>
-                  </Form.Select>
-                </FloatingLabel>
-              </Col>
-              <Col md>
-                <span>
-                  <label className="pl-3 text-muted ml-5">Start Date:</label>
-                </span>
-                <input value={value} disabled className="mb-3 ml-5" />
-                <span className="iconStyle">
-                  <AiIcons.AiFillSchedule onClick={calHandler} />
-                </span>
-                {showCal && <Calendar onChange={onChanage} value={value} />}
-              </Col>
-              <Col md>
-                <span>
-                  <label className="pl-3 text-muted ml-5">End Date:</label>
-                </span>
-                <input value={endValue} disabled className="mb-3 ml-5" />
-                <span className="iconStyle">
-                  <AiIcons.AiFillSchedule onClick={EndHandler} />
-                </span>
-                {showCalEnd && (
-                  <Calendar onChange={eonChanage} value={endValue} />
-                )}
-              </Col>
+        <div className="input-field">
+          <div>
+            <label>Select Date Range &nbsp;
+              <span style={{cursor: 'pointer'}}>
+              {!showDatePicker ? <BsCalendar3 onClick={datePickerHandler} style={{color: 'steelblue'}} /> : <IoClose onClick={datePickerHandler} />}
+              </span>
+            </label>
+            {selectDate === '' && <p>{moment(startDate).format('DD.M.YYYY')} - {moment(endDate).add(1, 'days').subtract(1, 'seconds').format('DD.M.YYYY')}</p>}
+            {(selectDate === 'lastweek' || selectDate === 'thisweek' || selectDate === 'thismonth' || selectDate === 'yesterday' || selectDate === 'today' || selectDate === 'lastmonth') && <p>{printStart} - {printEnd}</p>}
 
-              <Col md>
-                <Button
-                  variant="secondary"
-                  type="submit"
-                  className=" ml-5"
-                  onClick={getGameData}
+            {showDatePicker && 
+            <DateRangePicker 
+            ranges={[selectionRange]} 
+            onChange={handleSelect}
+            weekStartsOn={1}
+            />}
+          </div>
+
+          <div className="date-buttons">
+            {dateRangeArr.map((item, index) => {
+              return(
+                <div 
+                  id={item[0]} 
+                  key={index}
+                  onClick={handleLastWeek} 
+                  className={selectDate === item[0] ? 'active' : ''}
                 >
-                  {btn}
-                </Button>
-              </Col>
-            </Row>
-          </Card.Body>
-        </Card>
-      </Container>
-
-      <MDBContainer>
-        <div style={{ marginTop: "80px" }}>
-          <MDBRow>
-            <MDBCol size="12">
-              <MDBTable>
-                <MDBTableHead dark>
-                  <tr>
-                    <th scope=" col "> User Role </th>
-                    <th scope=" col ">Played </th>
-                    <th scope=" col "> win </th>
-                    <th scope=" col ">Commission percent(%)</th>
-                    <th scope=" col "> Net </th>
-                  </tr>
-                </MDBTableHead>
-
-                {false ? (
-                  <MDBTableBody className="align-center mb-8">
-                    <tr>
-                      <td colspan={8} className=" text-center mb-8">
-                        {" "}
-                        No Data Found{" "}
-                      </td>
-                    </tr>
-                  </MDBTableBody>
-                ) : (
-                  // games.map((item, index) => (
-                  <MDBTableBody>
-                    <tr>
-                      <td> SuperAdmin</td>
-                      <td>{played}</td>
-                      <td>{win}</td>
-                      <td> {commPercent}</td>
-                      <td> {net} </td>
-                    </tr>
-                  </MDBTableBody>
-                  // ))
-                  // )}
-                )}
-              </MDBTable>
-            </MDBCol>
-          </MDBRow>
+                  {item[1]}
+                </div>
+              )
+            })}
+          </div>
         </div>
-      </MDBContainer>
 
-      <MDBContainer>
-        <div style={{ marginTop: "80px" }}>
-          <MDBRow>
-            <MDBCol size="12">
-              <MDBTable>
-                <MDBTableHead dark>
-                  <tr>
-                    <th scope="col">User Id</th>
-                    <th scope=" col "> User Role </th>
-                    <th scope=" col "> Played </th>
-                    <th scope=" col "> win </th>
-                    <th scope=" col ">Commission percent(%)</th>
-                    <th scope=" col "> Net </th>
-                  </tr>
-                </MDBTableHead>
+        <Button variant="contained" onClick={onSearchHandler}>Search</Button>
+      </form>
 
-                {!getAdmin ? (
-                  <MDBTableBody className="align-center mb-8">
-                    <tr>
-                      <td colspan={8} className=" text-center mb-8">
-                        {" "}
-                        No Data Found{" "}
-                      </td>
-                    </tr>
-                  </MDBTableBody>
-                ) : (
-                  getAdmin.admins.Items.map((item, index) => (
-                    <MDBTableBody key={index}>
-                      <tr>
-                        <td> {item.userID} </td>
-                        <td>
-                          {" "}
-                          <Link
-                            to={`/admin/distributor/${item.userID}/${item.commPercent}`}
-                          >
-                            <Button variant="secondary" size="sm">
-                              {item.fullName} ( Admin)
-                            </Button>
-                          </Link>{" "}
-                        </td>
-                        <td> {index === 0 ? played : 0}</td>
-                        <td>{index === 1 ? win : 0}</td>
-                        <td> {item.commPercent}</td>
-                        <td> {index === 1 ? adminNet : 0} </td>
-                      </tr>
-                    </MDBTableBody>
-                  ))
-                )}
-              </MDBTable>
-            </MDBCol>
-          </MDBRow>
-        </div>
-      </MDBContainer>
+      {showTable && loading !== "" &&
+        <p style={{display: 'grid', placeItems: 'center', fontSize: '20px'}}>{loading}</p>
+      }
+
+      <table>
+        <tr>
+          <td>User Role</td>
+          <td>{userRole}</td>
+        </tr>
+        <tr>
+          <td>Play Point</td>
+          <td>{gameData.totalPlayed}</td>
+        </tr>
+        <tr>
+          <td>Win Point</td>
+          <td>{gameData.totalWin}</td>
+        </tr>
+        <tr>
+          <td>Commission Amount</td>
+          <td>{gameData?.comPercent?.toFixed(2)}</td>
+        </tr>
+        <tr>
+          <td>Net to Pay</td>
+          <td>{gameData?.netProfit?.toFixed(2)}</td>
+        </tr>
+      </table>
+ 
+      {showTable && loading !== "Loading..." && !gameData?.childTurnOverArray ? 
+      <p style={{textAlign: 'center'}}>No Data Found</p> :
+      <>
+        <h1 className="text-center mt-5">
+          {userRole === "SUPERADMIN" && "Administrators"}
+          {userRole === "ADMIN" && "Distributors"}
+          {userRole === "Distributor" && "Stokists"}
+          {userRole === "STOKIST" && "Players"}
+        </h1>
+        <DataTable>
+          <DataGrid
+          rows={usersUnder}
+          columns={loggedUserTOCol.concat(viewDetailsCol)}
+          checkboxSelection={false}
+          rowsPerPageOptions={[25, 50, 100]}
+          autoHeight={true}
+          onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+          pageSize={pageSize}
+          ></DataGrid>
+        </DataTable>
+      </>
+      }
     </>
   );
 };
 
-export default Turnover;
+export default Turnover2;

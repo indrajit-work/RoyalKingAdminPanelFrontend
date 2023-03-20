@@ -16,12 +16,14 @@ import 'react-toastify/dist/ReactToastify.css'
 import { ToastContainer, toast } from 'react-toastify';
 import GameSettingOnOff from "../components/GameSettingOnOff";
 import RandomResult from "../components/RandomResult";
+import { getCookie, getRole } from "../utils/auth";
 
 const GameSettings = () => {
   const [gameType, setGameType] = useState("All")
   const [multiplier, setMultiplier] = useState("")
   const [payoutPercent, setpayoutPercent] = useState('')
   const [allPayoutPercents, setAllPayoutPercents] = useState([])
+  const [loggedUserRole, setloggedUserRole] = useState('')
 
   useEffect(() => {
     const getPayoutPercent = async () => {
@@ -37,6 +39,13 @@ const GameSettings = () => {
     getPayoutPercent()
   }, [])
 
+  // get logged user role
+  const loggedUser = getCookie("token");
+  (async () => {
+    const role = await getRole(loggedUser);
+    setloggedUserRole(role)
+  })();
+console.log(loggedUserRole)
 
   const handleSubmitMultiplier = async (e) => {
     e.preventDefault()
@@ -205,8 +214,13 @@ const GameSettings = () => {
         <br />
       </Container>
       
-      <GameSettingOnOff />
-      <hr style={{width: '80%', margin: '0 auto'}} />
+      {loggedUserRole === 'SUPERADMIN' && 
+      <>
+        <GameSettingOnOff />
+        <hr style={{width: '80%', margin: '0 auto'}} />
+      </>
+      }
+      
       <RandomResult />
 
       <ToastContainer />

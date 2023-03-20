@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { NavLink,Link, useHistory } from "react-router-dom";
-import * as FaIcons from "react-icons/fa";
-import * as AiIcons from "react-icons/ai";
+// import * as FaIcons from "react-icons/fa";
+// import * as AiIcons from "react-icons/ai";
+import {AiOutlineMenu} from "react-icons/ai";
 import {BiLogOut} from "react-icons/bi";
 import { SidebarData } from "./SidebarData";
 import SubMenu from "./SubMenu";
 import { IconContext } from "react-icons/lib";
 import { getCookie, getRole, logout } from "../utils/auth";
 import "./Sidebar.css"
-import {   AiOutlineCloseCircle } from "react-icons/ai";
+import { AiOutlineCloseCircle } from "react-icons/ai";
 import axios from "axios";
 import logo from '../images/royalKing.png';
 import userLogo from '../images/man.png'
@@ -68,6 +69,7 @@ const SidebarTop = styled.div`
   gap: 1rem;
   border-bottom: 2px solid #fff;
   margin-bottom: 1rem;
+  background-color: #111;
 `;
 
 const Logo = styled.img`
@@ -87,6 +89,9 @@ const LogoTitle = styled.span`
   font-weight: 700;
   color: gold;
   margin-left: 4px;
+  @media (max-width: 392px) {
+    display: none;
+  }
 `;
 
 const UserInfo = styled.div`
@@ -134,10 +139,10 @@ const Sidebar = () => {
       <IconContext.Provider value={{ color: "#fff" }}>
         <Nav>
           <NavIcon to="#">
-            <FaIcons.FaBars onClick={showSidebar} />
+            <AiOutlineMenu onClick={showSidebar} />
             <NavTitle to="/dashboard">
               <Logo src={logo} alt="logo" />
-              <LogoTitle>Royal King Admin</LogoTitle>
+              {!sidebar && <LogoTitle>Royal King Admin</LogoTitle>}
             </NavTitle>
           </NavIcon>
           <h4>

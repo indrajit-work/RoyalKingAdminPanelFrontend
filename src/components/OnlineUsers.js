@@ -4,6 +4,9 @@ import { DataGrid } from "@mui/x-data-grid";
 import styled from 'styled-components';
 import axios from 'axios';
 import moment from 'moment/moment';
+import DashboardInfo from './DashboardInfo';
+import users from '../images/sidebarIcons/human_resources.png'
+import online from '../images/sidebarIcons/status_available.png'
 
 const DataTable = styled.div`
   min-height: 500px;
@@ -17,10 +20,21 @@ const DataTable = styled.div`
   }
 `;
 
+const BoxWrapper = styled.div`
+  background-color: ${({background}) => background};
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 3rem;
+  margin: 5rem;
+  @media (max-width: 625px) {
+    margin: 1rem;
+  }
+`
+
 const OnlineUsers = () => {
   const [pageSize, setPageSize] = useState(25);
   const [onlineUsers, setOnlineUsers] = useState([])
-  // const [players, setPlayers] = useState([])
+  const [currentOnlineUsers, setCurrentOnlineUsers] = useState(0)
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -33,12 +47,19 @@ const OnlineUsers = () => {
       }
     };
     fetchUsers()
-  }, [onlineUsers.length]);
+  }, [onlineUsers]);
+
+  
+  useEffect(() => {
+    setCurrentOnlineUsers(onlineUsers?.filter(user => Date.now() - new Date(user?.userStatus).getTime() <= 300000))
+  }, [onlineUsers])
+  
+  // console.log(currentOnlineUsers.length)
 
   const onlineUsersCol = [
     { field: "userID", headerName: "User ID", minWidth: 30},
-    { field: "userName", headerName: "Username", minWidth: 80, flex: 1, sortable: false,},
-    { field: "balance", headerName: "Balance", minWidth: 80, flex: 1},
+    { field: "userName", headerName: "Username", minWidth: 80, flex: 1, sortable: false},
+    { field: "balance", headerName: "Balance", minWidth: 80, flex: 1,},
     { field: "LastGame", headerName: "Last Game", minWidth: 80, flex: 1, sortable: false,},
     {
       field: "userStatus", headerName: "Last Activity / Online Status", minWidth: 100, flex: 1, sortable: false,
@@ -47,7 +68,10 @@ const OnlineUsers = () => {
           <>
             {Date.now() - new Date(params?.value).getTime() >= 300000 
             ? <p>{moment(params?.value).format('LTS')}</p>
-            : <><GoPrimitiveDot style={{ color: '#00ee00' }} /></>
+            : <>
+              {/* {setCurrentOnlineUsers(prev => prev + 1)} */}
+              <GoPrimitiveDot style={{ color: '#00ee00' }} />
+            </>
             }
           </>
         )
@@ -55,12 +79,16 @@ const OnlineUsers = () => {
     }
   ]
 
+  // console.log(currentOnlineUsers)
+
   return (
     <>
+      <BoxWrapper>
+        <DashboardInfo title='Current Online Players' icon={online} background='#be8900' number={currentOnlineUsers.length} />
+        <DashboardInfo title="Total Online Players" icon={users} background='#7078b8' number={onlineUsers.length} />
+      </BoxWrapper>
+
       <DataTable>
-        <h2 style={{ textAlign: 'center' }}>Today's Total Loggedin Players: 
-          <span style={{color: '#00aa00', fontWeight: '700'}}> {onlineUsers?.length}</span>
-        </h2>
         <DataGrid
           rows={onlineUsers}
           columns={onlineUsersCol}
@@ -80,8 +108,27 @@ const OnlineUsers = () => {
           }}
           checkboxSelection={false}
           rowsPerPageOptions={[25, 50, 100]}
+          autoHeight={true}
           onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
           pageSize={pageSize}
+          headerClassName='super-app-theme--header'
+          sx={{
+            '.MuiDataGrid-columnSeparator': {
+              display: 'none',
+            },
+            '&.MuiDataGrid-root': {
+              border: 'none',
+            },
+            '& .MuiDataGrid-root::-webkit-scrollbar': {
+              display: 'none !important',
+            },
+            '& .MuiDataGrid-root::-webkit-scrollbar-thumb': {
+              display: 'none !important',
+            },
+            '& .MuiDataGrid-columnHeaders': {
+              backgroundColor: '#9c4c29',
+            },
+          }}
         ></DataGrid>
       </DataTable>
     </>

@@ -16,8 +16,8 @@ import moment from "moment/moment";
 import { Button } from "@mui/material";
 
 const DataTable = styled.div`
-  min-height: 500px;
-  height: 80vh;
+  /* min-height: 500px;
+  height: 80vh; */
   padding: 0 5rem;
   margin: 3rem auto;
   @media (max-width: 768px) {
@@ -343,6 +343,7 @@ const Turnover2 = () => {
           rowsPerPageOptions={[25, 50, 100]}
           onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
           pageSize={pageSize}
+          autoHeight={true}
           ></DataGrid>
         </DataTable>
       </>
