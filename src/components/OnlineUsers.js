@@ -20,19 +20,27 @@ const DataTable = styled.div`
   }
 `;
 
+const Title = styled.p`
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-top: 2rem;
+  color: #b92d2d;
+`
+
 const BoxWrapper = styled.div`
   background-color: ${({background}) => background};
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 3rem;
-  margin: 5rem;
+  margin: 2rem 5rem 3rem 5rem;
   @media (max-width: 625px) {
     margin: 1rem;
   }
 `
 
 const OnlineUsers = () => {
-  const [pageSize, setPageSize] = useState(25);
+  const [pageSize, setPageSize] = useState(10);
   const [onlineUsers, setOnlineUsers] = useState([])
   const [currentOnlineUsers, setCurrentOnlineUsers] = useState(0)
 
@@ -83,6 +91,7 @@ const OnlineUsers = () => {
 
   return (
     <>
+    <Title>Today's Summary</Title>
       <BoxWrapper>
         <DashboardInfo title='Current Online Players' icon={online} background='#be8900' number={currentOnlineUsers.length} />
         <DashboardInfo title="Total Online Players" icon={users} background='#7078b8' number={onlineUsers.length} />
@@ -107,7 +116,7 @@ const OnlineUsers = () => {
             },
           }}
           checkboxSelection={false}
-          rowsPerPageOptions={[25, 50, 100]}
+          rowsPerPageOptions={[10, 25, 50, 100]}
           autoHeight={true}
           onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
           pageSize={pageSize}
@@ -118,12 +127,6 @@ const OnlineUsers = () => {
             },
             '&.MuiDataGrid-root': {
               border: 'none',
-            },
-            '& .MuiDataGrid-root::-webkit-scrollbar': {
-              display: 'none !important',
-            },
-            '& .MuiDataGrid-root::-webkit-scrollbar-thumb': {
-              display: 'none !important',
             },
             '& .MuiDataGrid-columnHeaders': {
               backgroundColor: '#9c4c29',

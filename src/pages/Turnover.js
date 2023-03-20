@@ -16,6 +16,8 @@ import moment from "moment/moment";
 import { Button } from "@mui/material";
 
 const DataTable = styled.div`
+  /* min-height: 500px;
+  height: 80vh; */
   padding: 0 5rem;
   margin: 3rem auto;
   @media (max-width: 768px) {
@@ -76,7 +78,7 @@ const Turnover2 = () => {
     setEndDate(ranges.selection.endDate)
   }
 
-  // console.log(startDate, endDate)
+  console.log(startDate, endDate)
   let startMom = moment(startDate).format('ddd DD MMM YYYY HH:mm:ss')
   startMom = moment(startMom)
   // console.log(startMom)
@@ -159,7 +161,7 @@ const Turnover2 = () => {
   // search Handler
   const onSearchHandler = async (e) => {
     e.preventDefault();
-    // console.log(loggedUser, "start:", startMom._i, "end", endMom._i, gameType);
+    console.log(loggedUser, "start:", startMom._i, "end", endMom._i, gameType);
     console.log(loggedUser, "start:", startRange, "end", endRange, gameType);
     // console.log(typeof startMom, typeof endMom)
     setLoading("Loading...");
@@ -339,9 +341,9 @@ const Turnover2 = () => {
           columns={loggedUserTOCol.concat(viewDetailsCol)}
           checkboxSelection={false}
           rowsPerPageOptions={[25, 50, 100]}
-          autoHeight={true}
           onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
           pageSize={pageSize}
+          autoHeight={true}
           ></DataGrid>
         </DataTable>
       </>

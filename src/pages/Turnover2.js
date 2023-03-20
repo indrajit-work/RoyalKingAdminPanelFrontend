@@ -14,6 +14,7 @@ import { BsCalendar3 } from "react-icons/bs";
 import { IoClose } from "react-icons/io5";
 import moment from "moment/moment";
 import { Button } from "@mui/material";
+import { DropdownComponent, DropdownDate } from "react-dropdown-date";
 
 const DataTable = styled.div`
   /* min-height: 500px;
@@ -35,6 +36,19 @@ const dateRangeArr = [
   ['thismonth', 'This Month', 5]
 ]
 
+const formatDate = (date) => {
+  // formats a JS date to 'yyyy-mm-dd'
+  var d = new Date(date),
+    month = "" + (d.getMonth() + 1),
+    day = "" + d.getDate(),
+    year = d.getFullYear();
+
+  if (month.length < 2) month = "0" + month;
+  if (day.length < 2) day = "0" + day;
+
+  return [year, month, day].join("-");
+};
+
 const Turnover2 = () => {
   const [pageSize, setPageSize] = useState(25);
 
@@ -54,6 +68,15 @@ const Turnover2 = () => {
   const [startRange, setStartRange] = useState()
   const [endRange, setEndRange] = useState()
   const [selectDate, setSelectDate] = useState('')
+
+  const [selectedStartDate, setSelectedStartDate] = useState(`${date.getFullYear()}-${date.toLocaleString('en-us',{month:'long'})}-${date.getDate()}`)
+  const [selectedEndDate, setSelectedEndDate] = useState(`${date.getFullYear()}-${date.toLocaleString('en-us',{month:'long'})}-${date.getDate()}`)
+  const [fromDate, setFromDate] = useState(null)
+  const [toDate, setToDate] = useState(null)
+
+  console.log(fromDate)
+  console.log(toDate)
+
 
   // const [active, setActive] = useState(99)
   // const [classname, setClassname] = useState('')
@@ -79,12 +102,12 @@ const Turnover2 = () => {
   }
 
   // console.log(startDate, endDate)
-  let startMom = moment(startDate).format('ddd DD MMM YYYY HH:mm:ss')
+  let startMom = moment(fromDate).format('ddd DD MMM YYYY HH:mm:ss')
   startMom = moment(startMom)
-  // console.log(startMom)
-  let endMom = moment(endDate).add(1, 'days').subtract(1, 'seconds').format('ddd DD MMM YYYY HH:mm:ss')
+  console.log(startMom._i)
+  let endMom = moment(toDate).add(1, 'days').subtract(1, 'seconds').format('ddd DD MMM YYYY HH:mm:ss')
   endMom = moment(endMom)
-  // console.log(endMom)
+  console.log(endMom._i)
 
   const handleLastWeek = (e) => {
     setSelectDate(e.target.id)
@@ -131,8 +154,8 @@ const Turnover2 = () => {
   }
 
   // console.log("range", startRange, endRange)
-  const printStart = moment(startRange).format('DD.M.YYYY')
-  const printEnd = moment(endRange).format('DD.M.YYYY')
+  // const printStart = moment(startRange).format('DD.M.YYYY')
+  // const printEnd = moment(endRange).format('DD.M.YYYY')
 
   const loggedUser = getCookie("token");
 
@@ -161,7 +184,7 @@ const Turnover2 = () => {
   // search Handler
   const onSearchHandler = async (e) => {
     e.preventDefault();
-    // console.log(loggedUser, "start:", startMom._i, "end", endMom._i, gameType);
+    console.log(loggedUser, "start:", startMom._i, "end", endMom._i, gameType);
     console.log(loggedUser, "start:", startRange, "end", endRange, gameType);
     // console.log(typeof startMom, typeof endMom)
     setLoading("Loading...");
@@ -263,21 +286,49 @@ const Turnover2 = () => {
         </div>
 
         <div className="input-field">
-          <div>
-            <label>Select Date Range &nbsp;
-              <span style={{cursor: 'pointer'}}>
-              {!showDatePicker ? <BsCalendar3 onClick={datePickerHandler} style={{color: 'steelblue'}} /> : <IoClose onClick={datePickerHandler} />}
-              </span>
-            </label>
-            {selectDate === '' && <p>{moment(startDate).format('DD.M.YYYY')} - {moment(endDate).add(1, 'days').subtract(1, 'seconds').format('DD.M.YYYY')}</p>}
-            {(selectDate === 'lastweek' || selectDate === 'thisweek' || selectDate === 'thismonth' || selectDate === 'yesterday' || selectDate === 'today' || selectDate === 'lastmonth') && <p>{printStart} - {printEnd}</p>}
-
-            {showDatePicker && 
-            <DateRangePicker 
-            ranges={[selectionRange]} 
-            onChange={handleSelect}
-            weekStartsOn={1}
-            />}
+          <div className="date-range">
+            <div className="start-date">
+              <DropdownDate
+                startDate={"2020-01-01"}
+                endDate={"2031-12-31" }
+                selectedDate={selectedStartDate}
+                onDateChange={(date) => {
+                  console.log(date);
+                  setFromDate(date)
+                  setSelectedStartDate(formatDate(date))
+                }}
+                // defaultValues={
+                //   {
+                //     year: new Date().getFullYear(),
+                //     month: new Date().toLocaleString('en-us',{month:'long'}),
+                //     day: new Date().getDate(),
+                //   }
+                // }
+                order={[                   
+                  DropdownComponent.day,
+                  DropdownComponent.month,
+                  DropdownComponent.year,         
+                ]}
+              />
+            </div>
+            <p>To</p>
+            <div className="end-date">
+              <DropdownDate
+                startDate={"2020-01-01"}
+                endDate={"2031-12-31" }
+                selectedDate={selectedEndDate}
+                onDateChange={(date) => {
+                  // console.log(date);
+                  setToDate(date)
+                  setSelectedEndDate(formatDate(date))
+                }}
+                order={[                   
+                  DropdownComponent.day,
+                  DropdownComponent.month,
+                  DropdownComponent.year,         
+                ]}
+              />
+            </div>
           </div>
 
           <div className="date-buttons">
@@ -344,6 +395,17 @@ const Turnover2 = () => {
           onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
           pageSize={pageSize}
           autoHeight={true}
+          sx={{
+            '.MuiDataGrid-columnSeparator': {
+              display: 'none',
+            },
+            '&.MuiDataGrid-root': {
+              border: 'none',
+            },
+            '& .MuiDataGrid-columnHeaders': {
+              backgroundColor: '#807138',
+            },
+          }}
           ></DataGrid>
         </DataTable>
       </>

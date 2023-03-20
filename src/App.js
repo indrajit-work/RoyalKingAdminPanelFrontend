@@ -13,7 +13,7 @@ import PlayerList from "./pages/PlayerList";
 import ListPlayer from "./pages/ListPlayers";
 import RegPlayer from "./pages/RegPlayer";
 import AdminDistributor from "./pages/AdminDistributor";
-import Turnover from "./pages/Turnover";
+// import Turnover from "./pages/Turnover";
 import DistributorStokist from "./pages/DistributorStokist";
 import StokistPlayer from "./pages/StokistPlayer";
 import GameSettings from "./pages/GameSettings";

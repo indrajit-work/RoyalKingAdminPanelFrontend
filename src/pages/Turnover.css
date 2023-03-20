@@ -9,7 +9,7 @@
     margin: 2rem 4rem;
     /* flex-wrap: wrap; */
     height: 200px;
-    background-color: #fff;
+    background-color: #ffd976;
     z-index: 9;
 }
 
@@ -42,20 +42,48 @@
 }
 
 .date-buttons div{
-    background-color: lightgrey;
+    background-color: #807138;
     border-radius: 5px;
     padding: 6px 10px;
     cursor: pointer;
+    color: #fff;
+    box-shadow: 4px 14px 24px 4px rgba(0,0,0,0.1);
 }
 
 .date-buttons .active{
     font-weight: 800;
     background-color: rgb(0, 131, 246);
-    color: #fff;
 }
 
 .react-calendar{
     z-index: 9;
+}
+
+.date-range{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.date-range p{
+    margin: 0;
+    font-weight: bolder;
+}
+
+.start-date #dropdown-date,
+.end-date #dropdown-date{
+    display: flex;
+    gap: 4px;
+}
+
+#dropdown-year select,
+#dropdown-month select,
+#dropdown-day select,
+.input-field select{
+    outline: none;
+    border-radius: 5px;
+    padding: 4px 8px;
 }
 
 table{
