@@ -6,42 +6,49 @@ import { getCookie, getRole } from '../utils/auth';
 const SidebarLink = styled(Link)`
   display: flex;
   color: #e1e9fc;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   padding: 10px;
   list-style: none;
-  height: 39px;
   text-decoration: none;
   font-size: 12px;
+  height: 50px;
+  gap: 12px;
+
   &:hover {
     background: #252831;
+    color: #ffb800;
     text-decoration:none;
-    border-left: 4px solid #632ce4;
+    border-left: 4px solid #ffb800;
     cursor: pointer;
     font-size:14px;
   }
 `;
 
+const SidebarIcon = styled.img`
+  height: 25px;
+  width: 25px;
+`;
+
 const SidebarLabel = styled.span`
-  margin-left: 16px;
+  font-size: 14px;
 `;
 
-
-const DropdownLink = styled(Link)`
-  background: #414757;
-  height: 50px;
-  padding-left: 3rem;
-  display: flex;
-  align-items: center;
-  text-decoration: none ;
-  color: #f5f5f5;
-  font-size: 15px;
-  &:hover {
-    background: #a9abafff;
-    text-decoration:none;
-    cursor: pointer;
-  }
-`;
+// const DropdownLink = styled(Link)`
+//   background: #414757;
+//   height: 50px;
+//   padding-left: 3rem;
+//   display: flex;
+//   align-items: center;
+//   text-decoration: none ;
+//   color: #f5f5f5;
+//   font-size: 15px;
+//   &:hover {
+//     background: #a9abafff;
+//     text-decoration:none;
+//     cursor: pointer;
+//   }
+// `;
 
 const SubMenu = ({ item ,showSide,showSideBar}) => {
   const [subnav, setSubnav] = useState(false);
@@ -66,17 +73,15 @@ const SubMenu = ({ item ,showSide,showSideBar}) => {
   return (
     <>
       <SidebarLink to={item.path} onClick={showSideBar}>
-        <div>
-          {item.icon}
-          <SidebarLabel>{item.title}</SidebarLabel>
-        </div>
-        <div>
+        <SidebarIcon src={item.icon} alt='sidebaricon' />
+        <SidebarLabel>{item.title}</SidebarLabel>
+        {/* <div>
           {item.subNav && subnav
             ? item.iconOpened
             : item.subNav
             ? item.iconClosed
             : null}
-        </div>
+        </div> */}
       </SidebarLink>
 
 

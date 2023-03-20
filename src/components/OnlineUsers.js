@@ -38,6 +38,8 @@ const OnlineUsers = () => {
   const onlineUsersCol = [
     { field: "userID", headerName: "User ID", minWidth: 30},
     { field: "userName", headerName: "Username", minWidth: 80, flex: 1, sortable: false,},
+    { field: "balance", headerName: "Balance", minWidth: 80, flex: 1},
+    { field: "LastGame", headerName: "Last Game", minWidth: 80, flex: 1, sortable: false,},
     {
       field: "userStatus", headerName: "Last Activity / Online Status", minWidth: 100, flex: 1, sortable: false,
       renderCell: (params) => {

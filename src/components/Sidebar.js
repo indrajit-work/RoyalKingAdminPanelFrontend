@@ -11,24 +11,33 @@ import { getCookie, getRole, logout } from "../utils/auth";
 import "./Sidebar.css"
 import {   AiOutlineCloseCircle } from "react-icons/ai";
 import axios from "axios";
+import logo from '../images/royalKing.png';
+import userLogo from '../images/man.png'
+
 const Nav = styled.div`
   background: #15171c;
   height: 60px;
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
+  padding: 0 2rem;
   position: sticky;
   top: 0;
   z-index: 9;
 `;
 
 const NavIcon = styled(Link)`
-  margin-left: 1.9rem;
+  /* margin-left: 1.9rem; */
   font-size: 1.9rem;
   height: 80px;
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  text-decoration: none;
+
+  :hover{
+    text-decoration: none;
+  }
 `;
 
 const SidebarNav = styled.nav`
@@ -50,9 +59,38 @@ const SidebarWrap = styled.div`
   width: 100%;
 `;
 
+const SidebarTop = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 1rem;
+  border-bottom: 2px solid #fff;
+  margin-bottom: 1rem;
+`;
+
+const Logo = styled.img`
+  width: 70px;
+  height: 70px;
+  margin-left: 8px;
+`;
+
+const UserLogo = styled.img`
+  width: 50px;
+  height: 50px;
+  margin-right: 8px;
+`;
+
+const LogoTitle = styled.span`
+  font-size: 20px;
+  font-weight: 700;
+  color: gold;
+  margin-left: 4px;
+`;
+
 const UserInfo = styled.div`
   color: white;
-  padding-bottom: 2rem;
+  /* padding-bottom: 2rem; */
 `
 
 const Sidebar = () => {
@@ -96,9 +134,11 @@ const Sidebar = () => {
         <Nav>
           <NavIcon to="#">
             <FaIcons.FaBars onClick={showSidebar} />
+            <Logo src={logo} alt="logo" />
+            <LogoTitle>Royal King Admin</LogoTitle>
           </NavIcon>
-          <h4 className=" ml-auto mr-5  ">
-            <Link className=" logout" onClick={() => logout(history)} >
+          <h4>
+            <Link className="logout" onClick={() => logout(history)} >
               <BiLogOut />
             </Link>
           </h4>
@@ -106,9 +146,15 @@ const Sidebar = () => {
        
         <SidebarNav sidebar={sidebar}>
           <SidebarWrap>
-            <NavIcon to="#" className="logo">
-              <AiOutlineCloseCircle onClick={showSidebar} />
-            </NavIcon>
+            <SidebarTop>
+              <UserInfo>
+                <UserLogo src={userLogo} alt="user" />
+                <spam>{userName}</spam>
+              </UserInfo>
+              <NavIcon to="#" className="logo">
+                <AiOutlineCloseCircle onClick={showSidebar} />
+              </NavIcon>
+            </SidebarTop>
             {userRole === 'SUPERADMIN' && SidebarData.map((item, index) => {
               return <SubMenu showSideBar={showSidebar} item={item} key={index} />;
             })}
@@ -124,14 +170,11 @@ const Sidebar = () => {
             })}
           </SidebarWrap>
 
-          {userRole !== 'SUPERADMIN' && <UserInfo>
+          {/* {userRole !== 'SUPERADMIN' && <UserInfo>
             <p style={{marginBottom: '4px'}}>Username: 
               <span style={{fontWeight: 'bold'}}> {userName}</span>
             </p>
-            <p>Balance: 
-              <span style={{fontWeight: 'bold'}}> {balance}</span>
-            </p>
-          </UserInfo>}
+          </UserInfo>} */}
         </SidebarNav>
       </IconContext.Provider>
     </>
