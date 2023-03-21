@@ -6,8 +6,7 @@ import { getCookie, getRole } from "../utils/auth";
 import {MdRefresh} from 'react-icons/md'
 
 const DataTable = styled.div`
-  width: 100vw;
-  height: 800px;
+  width: 100%;
   padding: 0 3rem 3rem;
   margin: 0 auto;
   @media screen and (max-width: 768px) {
@@ -97,10 +96,22 @@ const TransactionTable = ({loggedUser}) => {
             columns={userColumns}
             rowsPerPageOptions={[20, 30, 40, 50]}
             pageSize={pageSize}
+            autoHeight={true}
             onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
             checkboxSelection={false}
             components={{ Toolbar: CustomToolbar }} 
             // onSortModelChange={(model) => setSortModel(model)}
+            sx={{
+              '.MuiDataGrid-columnSeparator': {
+                display: 'none',
+              },
+              '&.MuiDataGrid-root': {
+                border: 'none',
+              },
+              '& .MuiDataGrid-columnHeaders': {
+                backgroundColor: 'steelblue',
+              },
+            }}
             initialState={{
               sorting: {
                 sortModel: [

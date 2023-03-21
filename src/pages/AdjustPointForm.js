@@ -10,17 +10,47 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
+import { useLocation, useParams } from "react-router-dom";
+import { getCookie, getRole } from "../utils/auth";
+import AdjustPointButton from "../components/AdjustPointButton";
 
-const AdjustPointForm = ({ userRole, loggedUser }) => {
+const AdjustPointForm = () => {
+  const location = useLocation()
+  const {userRole} = useParams()
+
   const [users, setUsers] = useState();
-  const [transactionType, setTransactionType] = useState("");
+  const [transactionType, setTransactionType] = useState(location?.state?.transactionType || "");
   const [comment, setComment] = useState("");
   const [selectedPlayer, setSelectedPlayer] = useState();
   const [amt, setAmt] = useState();
+  const [role, setRole] = useState("")
+  const [loggedUserRole, setloggedUserRole] = useState('')
+
+  const loggedUser = getCookie("token");
+  (async () => {
+    const role = await getRole(loggedUser);
+    setloggedUserRole(role)
+  })();
+  
+  console.log(location.state)
+  console.log(userRole)
+  console.log(loggedUser)
+
+  useEffect(() => {
+    setTransactionType(() => location?.state?.transactionType)
+    setSelectedPlayer(() => location?.state?.selectedPlayer)
+    setRole(() => location?.state?.userRole)
+  }, []);
 
   useEffect(() => {
     loadUserData();
   }, []);
+
+  // useEffect(() => {
+  //   if(role.toLowerCase() !== userRole){
+  //     window.location.reload();
+  //   }
+  // }, [userRole]);
 
   const loadUserData = async () => {
     try {
@@ -32,7 +62,7 @@ const AdjustPointForm = ({ userRole, loggedUser }) => {
       );
       setUsers(
         res.data?.userUnderMe
-          .filter((user) => user.userRole === userRole)
+          .filter((user) => user.userRole.toLowerCase() === userRole)
           .map((user) => {
             return {
               id: user.userID,
@@ -95,14 +125,23 @@ const AdjustPointForm = ({ userRole, loggedUser }) => {
     }
   };
 
-  const options = users?.map((user) => ({
+  const options = 
+  users?.map((user) => ({
     value: user?.id,
     label: `${user.userName} (Balance:${user.balance})`
-  }));
-  // console.log(options)
-
+  })) 
+  // || 
+  // {
+  //   value: location?.state?.selectedPlayer,
+  //   label: `${location?.state?.userName} (Balance:${location?.state?.balance})`
+  // };
+  
+  console.log(selectedPlayer, transactionType, role)
+  console.log(location?.state, userRole)
   return (
     <>
+      <AdjustPointButton />
+
       <div className="form-container">
         <h2>Adjust Points</h2>
         <form className="form" onSubmit={transactionHandler}>
@@ -130,9 +169,19 @@ const AdjustPointForm = ({ userRole, loggedUser }) => {
             <Select 
               options={options}
               value={selectedPlayer?.value}
+              placeholder="Select Below..."
+              defaultValue={
+                // role.toLowerCase() === userRole ?
+                {
+                  label: location?.state?.userName ? `${location?.state?.userName} (Balance:${location?.state?.balance})` : "Select Below...", 
+                  value: location?.state?.selectedPlayer ?? "" }
+                // } : {
+                //   label: "Select Below....",
+                //   value: ""
+                // }
+              }
               onChange={(selectedPlayer) => {setSelectedPlayer(selectedPlayer.value)}}
               isSearchable={true}
-              placeholder="Select Below..."
               styles={{
                 control: (baseStyles) => ({
                   ...baseStyles,
@@ -157,6 +206,7 @@ const AdjustPointForm = ({ userRole, loggedUser }) => {
                 aria-labelledby="demo-row-radio-buttons-group-label"
                 name="row-radio-buttons-group"
                 onChange={(e) => setTransactionType(e.target.value)}
+                value={role?.toLowerCase() === userRole ? transactionType : ""}
               >
                 <FormControlLabel value="add" control={<Radio />} label="Add" />
                 <FormControlLabel value="substract" control={<Radio />} label="Deduct" />

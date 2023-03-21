@@ -8,5 +8,9 @@
 }
 
 .logo{
-    padding-left: 4rem;
+    font-size: 1.9rem;
+    height: 80px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
 }

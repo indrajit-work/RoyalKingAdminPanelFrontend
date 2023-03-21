@@ -44,7 +44,7 @@ const NavTitle = styled(Link)`
 
 const SidebarNav = styled.nav`
   background: #15171c;
-  width: 250px;
+  width: 240px;
   height: 100vh;
   display: flex;
   justify-content: space-between;
@@ -64,12 +64,12 @@ const SidebarWrap = styled.div`
 const SidebarTop = styled.div`
   width: 100%;
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
-  gap: 1rem;
   border-bottom: 2px solid #fff;
-  margin-bottom: 1rem;
-  background-color: #111;
+  margin-bottom: 8px;
+  padding: 1rem 0;
+  background-color: #000;
 `;
 
 const Logo = styled.img`
@@ -79,9 +79,8 @@ const Logo = styled.img`
 `;
 
 const UserLogo = styled.img`
-  width: 45px;
-  height: 45px;
-  margin-right: 6px;
+  width: 60px;
+  height: 60px;
 `;
 
 const LogoTitle = styled.span`
@@ -99,13 +98,8 @@ const UserInfo = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  `
-
-const User = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
   flex-direction: column;
+  width: 80%;
 `
 
 const Sidebar = () => {
@@ -166,14 +160,12 @@ const Sidebar = () => {
             <SidebarTop>
               <UserInfo>
                 <UserLogo src={userLogo} alt="user" />
-                <User>
-                  <span>{userName}</span>
-                  <span style={{fontSize: '12px'}}>Balance: <span style={{color: 'gold'}}>{balance}</span></span>
-                </User>
+                <span>{userName}</span>
+                <span style={{fontSize: '13px', textAlign: 'center'}}>Balance: <span style={{color: 'gold'}}>{balance}</span></span>
               </UserInfo>
-              <NavIcon to="#" className="logo">
+              <Link to="#" className="logo">
                 <AiOutlineCloseCircle onClick={showSidebar} />
-              </NavIcon>
+              </Link>
             </SidebarTop>
             {userRole === 'SUPERADMIN' && SidebarData.map((item, index) => {
               return <SubMenu showSideBar={showSidebar} item={item} key={index} />;

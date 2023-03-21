@@ -7,6 +7,7 @@ import moment from 'moment/moment';
 import DashboardInfo from './DashboardInfo';
 import users from '../images/sidebarIcons/human_resources.png'
 import online from '../images/sidebarIcons/status_available.png'
+import { Link } from 'react-router-dom';
 
 const DataTable = styled.div`
   min-height: 500px;
@@ -49,24 +50,25 @@ const OnlineUsers = () => {
       try {
         const res = await axios.get('https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/getallusers');
 
-        setOnlineUsers(res.data.users.filter(user => Boolean(user?.userStatus) && user.userRole === "PLAYER" && user?.userStatus !== "online" && moment(Date.now()).format('l') === moment(user?.userStatus).format('l')));
+        setOnlineUsers(res.data?.users?.filter(user => Boolean(user?.userStatus) && user?.userRole === "PLAYER" && user?.userStatus !== "online" && moment(Date.now()).format('l') === moment(user?.userStatus).format('l')));
       } catch (error) {
         console.error(error)
       }
     };
     fetchUsers()
-  }, [onlineUsers]);
+  }, [onlineUsers.length]);
 
   
   useEffect(() => {
     setCurrentOnlineUsers(onlineUsers?.filter(user => Date.now() - new Date(user?.userStatus).getTime() <= 300000))
-  }, [onlineUsers])
+  }, [onlineUsers.length])
   
   // console.log(currentOnlineUsers.length)
 
   const onlineUsersCol = [
     { field: "userID", headerName: "User ID", minWidth: 30},
-    { field: "userName", headerName: "Username", minWidth: 80, flex: 1, sortable: false},
+    { field: "userName", headerName: "Username", minWidth: 50, flex: 1, sortable: false},
+    // { field: "userRole", headerName: "Role", minWidth: 50, flex: 1, sortable: false},
     { field: "balance", headerName: "Balance", minWidth: 80, flex: 1,},
     { field: "LastGame", headerName: "Last Game", minWidth: 80, flex: 1, sortable: false,},
     {
@@ -84,17 +86,44 @@ const OnlineUsers = () => {
           </>
         )
       }
-    }
+    },
+    {
+      field: "", headerName: "Adjust Points", minWidth: 100, flex: 1, sortable: false,
+      renderCell: (params) => {
+        return (
+          <>
+            <Link to={{pathname: `/adjustpoints/${params.row.userRole.toLowerCase()}`, 
+              state: {
+                transactionType: 'add', 
+                userRole: params.row.userRole,
+                selectedPlayer: params.row.userID,
+                userName: params.row.userName,
+                balance: params.row.balance
+              }
+              }}>Add</Link>&nbsp;&nbsp;
+            <Link to={{pathname: `/adjustpoints/${params.row.userRole.toLowerCase()}`, 
+              state: {
+                transactionType: 'substract', 
+                userRole: params.row.userRole,
+                selectedPlayer: params.row.userID,
+                userName: params.row.userName,
+                balance: params.row.balance
+              }
+              }}>Deduct</Link>
+          </>
+        )
+      }
+    },
   ]
 
   // console.log(currentOnlineUsers)
 
   return (
     <>
-    <Title>Today's Summary</Title>
+      <Title>Today's Summary</Title>
       <BoxWrapper>
-        <DashboardInfo title='Current Online Players' icon={online} background='#be8900' number={currentOnlineUsers.length} />
-        <DashboardInfo title="Total Online Players" icon={users} background='#7078b8' number={onlineUsers.length} />
+        <DashboardInfo title='Current Online Players' icon={online} background='#be8900' number={currentOnlineUsers?.length} />
+        <DashboardInfo title="Total Online Players" icon={users} background='#7078b8' number={onlineUsers?.length} />
       </BoxWrapper>
 
       <DataTable>
@@ -120,7 +149,6 @@ const OnlineUsers = () => {
           autoHeight={true}
           onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
           pageSize={pageSize}
-          headerClassName='super-app-theme--header'
           sx={{
             '.MuiDataGrid-columnSeparator': {
               display: 'none',

@@ -11,17 +11,12 @@ import StokistList from "./pages/StokistList";
 import RegStokist from "./pages/RegStokist";
 import PlayerList from "./pages/PlayerList";
 import ListPlayer from "./pages/ListPlayers";
-import RegPlayer from "./pages/RegPlayer";
 import AdminDistributor from "./pages/AdminDistributor";
 // import Turnover from "./pages/Turnover";
 import DistributorStokist from "./pages/DistributorStokist";
 import StokistPlayer from "./pages/StokistPlayer";
 import GameSettings from "./pages/GameSettings";
 import Broadcast from "./pages/Broadcast";
-import AdjustPointsAdmin from "./pages/AdjustPointsAdmin";
-import AdjustDistributor from "./pages/AdjustDistributor";
-import AdjustStokist from "./pages/AdjustStokist";
-import AdjustPlayer from "./pages/AdjustPlayer";
 import ModifyPlayer from "./pages/ModifyPlayer";
 import ModifyDistributor from "./pages/ModifyDistributor";
 import ModifyStokist from "./pages/ModifyStokist";
@@ -32,13 +27,13 @@ import RegAdmin from "./pages/RegAdmin";
 import ListAdmin from "./pages/ListAdmin";
 import AdminModify from "./pages/AdminModify";
 import UserTable from "./pages/UserTable";
-import CreateUser from "./pages/CreateUser";
 import AddUser from "./pages/AddUser";
 import EditUser from "./pages/EditUser";
 import CleanData from "./pages/CleanData";
 import { useState } from "react";
 import AdjustPoints from "./pages/AdjustPoints";
 import Turnover2 from "./pages/Turnover2";
+import AdjustPointForm from "./pages/AdjustPointForm";
 
 function App() {
   const [loggedUserRole, setloggedUserRole] = useState('')
@@ -144,6 +139,11 @@ function App() {
         <Route path="/adjustpoints" exact>
           <Sidebar />
           <AdjustPoints />
+        </Route>
+
+        <Route path='/adjustpoints/:userRole' >
+          <Sidebar />
+          <AdjustPointForm />
         </Route>
 
         <Route path="/player/modify/:userID/:deviceID" exact>
