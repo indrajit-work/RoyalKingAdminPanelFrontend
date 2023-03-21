@@ -44,7 +44,7 @@ const NavTitle = styled(Link)`
 
 const SidebarNav = styled.nav`
   background: #15171c;
-  width: 240px;
+  width: 250px;
   height: 100vh;
   display: flex;
   justify-content: space-between;
@@ -79,9 +79,9 @@ const Logo = styled.img`
 `;
 
 const UserLogo = styled.img`
-  width: 50px;
-  height: 50px;
-  margin-right: 8px;
+  width: 45px;
+  height: 45px;
+  margin-right: 6px;
 `;
 
 const LogoTitle = styled.span`
@@ -96,7 +96,16 @@ const LogoTitle = styled.span`
 
 const UserInfo = styled.div`
   color: white;
-  /* padding-bottom: 2rem; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  `
+
+const User = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
 `
 
 const Sidebar = () => {
@@ -157,7 +166,10 @@ const Sidebar = () => {
             <SidebarTop>
               <UserInfo>
                 <UserLogo src={userLogo} alt="user" />
-                <spam>{userName}</spam>
+                <User>
+                  <span>{userName}</span>
+                  <span style={{fontSize: '12px'}}>Balance: <span style={{color: 'gold'}}>{balance}</span></span>
+                </User>
               </UserInfo>
               <NavIcon to="#" className="logo">
                 <AiOutlineCloseCircle onClick={showSidebar} />
