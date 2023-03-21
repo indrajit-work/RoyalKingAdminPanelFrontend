@@ -24,8 +24,13 @@
     gap: 1rem;
 }
 
-.input-field label{
+.input-field label, p{
     font-weight: bold;
+}
+
+.input-field > p{
+    margin: 0;
+    color: #0c559d;
 }
 
 .input-field input{

@@ -71,12 +71,8 @@ const Turnover2 = () => {
 
   const [selectedStartDate, setSelectedStartDate] = useState(`${date.getFullYear()}-${date.toLocaleString('en-us',{month:'long'})}-${date.getDate()}`)
   const [selectedEndDate, setSelectedEndDate] = useState(`${date.getFullYear()}-${date.toLocaleString('en-us',{month:'long'})}-${date.getDate()}`)
-  const [fromDate, setFromDate] = useState(null)
-  const [toDate, setToDate] = useState(null)
-
-  console.log(fromDate)
-  console.log(toDate)
-
+  const [fromDate, setFromDate] = useState(date)
+  const [toDate, setToDate] = useState(date2)
 
   // const [active, setActive] = useState(99)
   // const [classname, setClassname] = useState('')
@@ -101,7 +97,8 @@ const Turnover2 = () => {
     setEndDate(ranges.selection.endDate)
   }
 
-  // console.log(startDate, endDate)
+  console.log(fromDate, toDate)
+  // console.log(selectedStartDate, selectedEndDate)
   let startMom = moment(fromDate).format('ddd DD MMM YYYY HH:mm:ss')
   startMom = moment(startMom)
   console.log(startMom._i)
@@ -153,9 +150,9 @@ const Turnover2 = () => {
     }
   }
 
-  // console.log("range", startRange, endRange)
-  // const printStart = moment(startRange).format('DD.M.YYYY')
-  // const printEnd = moment(endRange).format('DD.M.YYYY')
+  console.log("range", startRange, endRange)
+  const printStart = moment(startRange).format('DD.MM.YYYY')
+  const printEnd = moment(endRange).format('DD.MM.YYYY')
 
   const loggedUser = getCookie("token");
 
@@ -286,6 +283,8 @@ const Turnover2 = () => {
         </div>
 
         <div className="input-field">
+            {selectDate === '' && <p>{moment(fromDate).format('DD.MM.YYYY')} - {moment(toDate).add(1, 'days').subtract(1, 'seconds').format('DD.MM.YYYY')}</p>}
+            {(selectDate === 'lastweek' || selectDate === 'thisweek' || selectDate === 'thismonth' || selectDate === 'yesterday' || selectDate === 'today' || selectDate === 'lastmonth') && <p>{printStart} - {printEnd}</p>}
           <div className="date-range">
             <div className="start-date">
               <DropdownDate
