@@ -12,8 +12,6 @@ import { Button } from '@mui/material';
 import { getCookie } from '../utils/auth';
 
 const DataTable = styled.div`
-  min-height: 500px;
-  height: 80vh;
   padding: 0 5rem;
   margin: 3rem auto;
   /* width: 30rem; */
@@ -46,16 +44,17 @@ const OnlineUsers = () => {
   const [pageSize, setPageSize] = useState(25);
   const [onlineUsers, setOnlineUsers] = useState([])
   const [currentOnlineUsers, setCurrentOnlineUsers] = useState(0)
-  const [usersUnderMe, setUsersUnderMe] = useState([])
 
   const loggedUser = getCookie("token");
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await axios.get('https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/getallusers');
+        const res = await axios.post('https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/usersunderme',{
+          userID: loggedUser
+        });
 
-        setOnlineUsers(res.data?.users?.filter(user => Boolean(user?.userStatus) && user?.userRole === "PLAYER" && user?.userStatus !== "online" && moment(Date.now()).format('l') === moment(user?.userStatus).format('l')));
+        setOnlineUsers(res.data?.userUnderMe?.filter(user => Boolean(user?.userStatus) && user?.userRole === "PLAYER" && user?.userStatus !== "online" && moment(Date.now()).format('l') === moment(user?.userStatus).format('l')));
       } catch (error) {
         console.error(error)
       }
@@ -66,26 +65,7 @@ const OnlineUsers = () => {
   useEffect(() => {
     setCurrentOnlineUsers(onlineUsers?.filter(user => Date.now() - new Date(user?.userStatus).getTime() <= 300000))
   }, [onlineUsers.length])
-  
-  //users under logged in user
-  useEffect(() => {
-    const fetchUnderUsers = async () => {
-      try {
-        const res = await axios.post('https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/usersunderme',{
-          userID: loggedUser
-        });
 
-        setUsersUnderMe(res?.data?.userIDsUnderMe)
-      } catch (error) {
-        console.error(error)
-      }
-    };
-    fetchUnderUsers()
-  }, [loggedUser]);
-  
-  // console.log(usersUnderMe)
-  
-  
   // console.log(currentOnlineUsers.length)
 
   const onlineUsersCol = [
@@ -115,35 +95,32 @@ const OnlineUsers = () => {
       renderCell: (params) => {
         return (
           <>
-            {usersUnderMe.includes(params.row.userID) &&
-            <>
-              <Link to={{pathname: `/adjustpoints/${params.row.userRole.toLowerCase()}`, 
-                state: {
-                  transactionType: 'add', 
-                  userRole: params.row.userRole,
-                  selectedPlayer: params.row.userID,
-                  userName: params.row.userName,
-                  balance: params.row.balance
-                }
-              }}>
-                <Button variant="contained" color="success" size='small'>
-                  Add
-                </Button>
-              </Link>&nbsp;
-              <Link to={{pathname: `/adjustpoints/${params.row.userRole.toLowerCase()}`, 
-                state: {
-                  transactionType: 'substract', 
-                  userRole: params.row.userRole,
-                  selectedPlayer: params.row.userID,
-                  userName: params.row.userName,
-                  balance: params.row.balance
-                }
-              }}>
-                <Button variant="outlined" color="error" size='small'>
-                  Deduct
-                </Button>
-              </Link>
-            </>}
+            <Link to={{pathname: `/adjustpoints/${params.row.userRole.toLowerCase()}`, 
+              state: {
+                transactionType: 'add', 
+                userRole: params.row.userRole,
+                selectedPlayer: params.row.userID,
+                userName: params.row.userName,
+                balance: params.row.balance
+              }
+            }}>
+              <Button variant="contained" color="success" size='small'>
+                Add
+              </Button>
+            </Link>&nbsp;
+            <Link to={{pathname: `/adjustpoints/${params.row.userRole.toLowerCase()}`, 
+              state: {
+                transactionType: 'substract', 
+                userRole: params.row.userRole,
+                selectedPlayer: params.row.userID,
+                userName: params.row.userName,
+                balance: params.row.balance
+              }
+            }}>
+              <Button variant="outlined" color="error" size='small'>
+                Deduct
+              </Button>
+            </Link>
           </>
         )
       }

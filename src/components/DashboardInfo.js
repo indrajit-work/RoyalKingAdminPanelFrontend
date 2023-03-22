@@ -12,7 +12,7 @@ const Box = styled.div`
     box-shadow: -1px 4px 12px -1px rgba(0,0,0,0.74);
     -webkit-box-shadow: -1px 4px 12px -1px rgba(0,0,0,0.74);
     -moz-box-shadow: -1px 4px 12px -1px rgba(0,0,0,0.74);
-    padding: 10px 1rem;
+    padding: 10px 1rem 0;
 `
 
 const BoxRow = styled.div`

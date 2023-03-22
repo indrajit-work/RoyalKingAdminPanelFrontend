@@ -86,8 +86,13 @@ const UserLogo = styled.img`
 const LogoTitle = styled.span`
   font-size: 20px;
   font-weight: 700;
-  color: gold;
-  margin-left: 4px;
+  margin-left: 2px;
+  background: #121FCF;
+  background: -webkit-radial-gradient(ellipse farthest-corner at center center, #FFFC60 0%, #f4831f 100%);
+  background: -moz-radial-gradient(ellipse farthest-corner at center center, #FFFC60 0%, #f4831f 100%);
+  background: radial-gradient(ellipse farthest-corner at center center, #FFFC60 0%, #f4831f 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   @media (max-width: 392px) {
     display: none;
   }

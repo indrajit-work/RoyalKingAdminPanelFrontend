@@ -24,7 +24,7 @@
     gap: 2rem;
 }
 
-.input-field label, p{
+.input-field label{
     font-weight: bold;
 }
 
@@ -33,6 +33,7 @@
     background-color: #0c559d;
     color: #fff;
     padding: 6px 10px;
+    font-weight: bold;
     border-radius: 5px;
     letter-spacing: 1px;
 }
