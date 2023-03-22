@@ -8,6 +8,8 @@ import DashboardInfo from './DashboardInfo';
 import users from '../images/sidebarIcons/human_resources.png'
 import online from '../images/sidebarIcons/status_available.png'
 import { Link } from 'react-router-dom';
+import { Button } from '@mui/material';
+import { getCookie } from '../utils/auth';
 
 const DataTable = styled.div`
   min-height: 500px;
@@ -41,9 +43,12 @@ const BoxWrapper = styled.div`
 `
 
 const OnlineUsers = () => {
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(25);
   const [onlineUsers, setOnlineUsers] = useState([])
   const [currentOnlineUsers, setCurrentOnlineUsers] = useState(0)
+  const [usersUnderMe, setUsersUnderMe] = useState([])
+
+  const loggedUser = getCookie("token");
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -58,26 +63,44 @@ const OnlineUsers = () => {
     fetchUsers()
   }, [onlineUsers.length]);
 
-  
   useEffect(() => {
     setCurrentOnlineUsers(onlineUsers?.filter(user => Date.now() - new Date(user?.userStatus).getTime() <= 300000))
   }, [onlineUsers.length])
   
+  //users under logged in user
+  useEffect(() => {
+    const fetchUnderUsers = async () => {
+      try {
+        const res = await axios.post('https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/usersunderme',{
+          userID: loggedUser
+        });
+
+        setUsersUnderMe(res?.data?.userIDsUnderMe)
+      } catch (error) {
+        console.error(error)
+      }
+    };
+    fetchUnderUsers()
+  }, [loggedUser]);
+  
+  // console.log(usersUnderMe)
+  
+  
   // console.log(currentOnlineUsers.length)
 
   const onlineUsersCol = [
-    { field: "userID", headerName: "User ID", minWidth: 30},
-    { field: "userName", headerName: "Username", minWidth: 50, flex: 1, sortable: false},
+    { field: "userID", headerName: "User ID"},
+    { field: "userName", headerName: "Username", minWidth: 100, flex: 1, sortable: false},
     // { field: "userRole", headerName: "Role", minWidth: 50, flex: 1, sortable: false},
-    { field: "balance", headerName: "Balance", minWidth: 80, flex: 1,},
-    { field: "LastGame", headerName: "Last Game", minWidth: 80, flex: 1, sortable: false,},
+    { field: "balance", headerName: "Balance", minWidth: 120, flex: 1,},
+    { field: "LastGame", headerName: "Last Game", minWidth: 110, flex: 1, sortable: false,},
     {
-      field: "userStatus", headerName: "Last Activity / Online Status", minWidth: 100, flex: 1, sortable: false,
+      field: "userStatus", headerName: "Last Activity / Online Status", minWidth: 200, flex: 1, sortable: false,
       renderCell: (params) => {
         return (
           <>
             {Date.now() - new Date(params?.value).getTime() >= 300000 
-            ? <p>{moment(params?.value).format('LTS')}</p>
+            ? <span>{moment(params?.value).format('LTS')}</span>
             : <>
               {/* {setCurrentOnlineUsers(prev => prev + 1)} */}
               <GoPrimitiveDot style={{ color: '#00ee00' }} />
@@ -88,28 +111,39 @@ const OnlineUsers = () => {
       }
     },
     {
-      field: "", headerName: "Adjust Points", minWidth: 100, flex: 1, sortable: false,
+      field: "", headerName: "Adjust Points", minWidth: 160, flex: 1, sortable: false,
       renderCell: (params) => {
         return (
           <>
-            <Link to={{pathname: `/adjustpoints/${params.row.userRole.toLowerCase()}`, 
-              state: {
-                transactionType: 'add', 
-                userRole: params.row.userRole,
-                selectedPlayer: params.row.userID,
-                userName: params.row.userName,
-                balance: params.row.balance
-              }
-              }}>Add</Link>&nbsp;&nbsp;
-            <Link to={{pathname: `/adjustpoints/${params.row.userRole.toLowerCase()}`, 
-              state: {
-                transactionType: 'substract', 
-                userRole: params.row.userRole,
-                selectedPlayer: params.row.userID,
-                userName: params.row.userName,
-                balance: params.row.balance
-              }
-              }}>Deduct</Link>
+            {usersUnderMe.includes(params.row.userID) &&
+            <>
+              <Link to={{pathname: `/adjustpoints/${params.row.userRole.toLowerCase()}`, 
+                state: {
+                  transactionType: 'add', 
+                  userRole: params.row.userRole,
+                  selectedPlayer: params.row.userID,
+                  userName: params.row.userName,
+                  balance: params.row.balance
+                }
+              }}>
+                <Button variant="contained" color="success" size='small'>
+                  Add
+                </Button>
+              </Link>&nbsp;
+              <Link to={{pathname: `/adjustpoints/${params.row.userRole.toLowerCase()}`, 
+                state: {
+                  transactionType: 'substract', 
+                  userRole: params.row.userRole,
+                  selectedPlayer: params.row.userID,
+                  userName: params.row.userName,
+                  balance: params.row.balance
+                }
+              }}>
+                <Button variant="outlined" color="error" size='small'>
+                  Deduct
+                </Button>
+              </Link>
+            </>}
           </>
         )
       }
@@ -145,7 +179,7 @@ const OnlineUsers = () => {
             },
           }}
           checkboxSelection={false}
-          rowsPerPageOptions={[10, 25, 50, 100]}
+          rowsPerPageOptions={[25, 50, 100]}
           autoHeight={true}
           onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
           pageSize={pageSize}

@@ -13,44 +13,44 @@ import FormControl from '@mui/material/FormControl';
 import { useLocation, useParams } from "react-router-dom";
 import { getCookie, getRole } from "../utils/auth";
 import AdjustPointButton from "../components/AdjustPointButton";
+import { Button } from "@mui/material";
 
 const AdjustPointForm = () => {
   const location = useLocation()
   const {userRole} = useParams()
 
   const [users, setUsers] = useState();
-  const [transactionType, setTransactionType] = useState(location?.state?.transactionType || "");
+  const [transactionType, setTransactionType] = useState(location?.state?.transactionType ?? "");
   const [comment, setComment] = useState("");
-  const [selectedPlayer, setSelectedPlayer] = useState();
+  const [selectedPlayer, setSelectedPlayer] = useState({
+    label: `${location?.state?.userName} (Balance:${location?.state?.balance})`, 
+    value: location?.state?.selectedPlayer
+  } ?? null);
   const [amt, setAmt] = useState();
-  const [role, setRole] = useState("")
+  const [role, setRole] = useState(location?.state?.userRole ?? "")
   const [loggedUserRole, setloggedUserRole] = useState('')
 
   const loggedUser = getCookie("token");
+  // console.log(loggedUser);
   (async () => {
-    const role = await getRole(loggedUser);
-    setloggedUserRole(role)
+    const loggedUserRole = await getRole(loggedUser);
+    setloggedUserRole(loggedUserRole)
   })();
   
-  console.log(location.state)
-  console.log(userRole)
-  console.log(loggedUser)
+  // console.log(location.state)
+  // console.log(userRole)
+  // console.log(loggedUser)
 
   useEffect(() => {
-    setTransactionType(() => location?.state?.transactionType)
-    setSelectedPlayer(() => location?.state?.selectedPlayer)
-    setRole(() => location?.state?.userRole)
-  }, []);
+    if(role?.toLowerCase() !== userRole){
+      setSelectedPlayer(null)
+      setTransactionType("")
+    }
+  }, [userRole]);
 
   useEffect(() => {
     loadUserData();
   }, []);
-
-  // useEffect(() => {
-  //   if(role.toLowerCase() !== userRole){
-  //     window.location.reload();
-  //   }
-  // }, [userRole]);
 
   const loadUserData = async () => {
     try {
@@ -75,26 +75,26 @@ const AdjustPointForm = () => {
       console.log(error);
     }
   };
-
   const transactionHandler = async (e) => {
     e.preventDefault();
-
+    
     if (parseInt(amt) <= 0) {
       alert("Enter correct Amount");
       // return
     }
-
+    
     if (transactionType === "") {
       alert("Enter type of transfer(Adjust)");
       // return
     }
-    console.log(selectedPlayer, transactionType, typeof amt)
+    
+    // console.log(selectedPlayer?.value, transactionType, amt)
     try {
       const res = await axios.post(
         "https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/pointstransfer",
         {
           loggedUser: loggedUser,
-          selectedPlayer: selectedPlayer,
+          selectedPlayer: selectedPlayer?.value,
           transactionType: transactionType,
           amount: parseInt(amt),
           comment: comment,
@@ -126,18 +126,21 @@ const AdjustPointForm = () => {
   };
 
   const options = 
-  users?.map((user) => ({
-    value: user?.id,
-    label: `${user.userName} (Balance:${user.balance})`
-  })) 
-  // || 
-  // {
-  //   value: location?.state?.selectedPlayer,
-  //   label: `${location?.state?.userName} (Balance:${location?.state?.balance})`
-  // };
+    users?.map((user) => ({
+      value: user?.id,
+      label: `${user.userName} (Balance:${user.balance})`
+    })) 
   
-  console.log(selectedPlayer, transactionType, role)
-  console.log(location?.state, userRole)
+  // console.log(selectedPlayer, transactionType, role)
+  // console.log(role, userRole, role?.toLowerCase() === userRole)
+
+  const defValue = role?.toLowerCase() === userRole ? 
+  {
+    label: location?.state?.userName ? `${location?.state?.userName} (Balance:${location?.state?.balance})` : "Select Below....", value: location?.state?.selectedPlayer ?? "" 
+  } : {
+    label: "Select Below..", value: ""
+  }
+
   return (
     <>
       <AdjustPointButton />
@@ -146,49 +149,23 @@ const AdjustPointForm = () => {
         <h2>Adjust Points</h2>
         <form className="form" onSubmit={transactionHandler}>
           <div className="input-control">
-            <label className="input-label">Choose <span style={{color: 'steelblue'}}>{userRole}</span></label>
-            {/* <select
-              name="selectedPlayer"
-              onChange={(e) => setSelectedPlayer(e.target.value)}
-            >
-              <option value="" disabled selected>
-                Select below...
-              </option>
-              {!users ? (
-                <option>No data...</option>
-              ) : (
-                users.map((item, index) => (
-                  <option key={index} value={item.userID}>
-                    {item.userName} (Balance:{item.balance})
-                  </option>
-                ))
-              )}
-            </select> */}
-
+            <label className="input-label">Choose <span style={{textTransform: 'capitalize'}}>{userRole}</span></label>
           </div>
-            <Select 
-              options={options}
-              value={selectedPlayer?.value}
-              placeholder="Select Below..."
-              defaultValue={
-                // role.toLowerCase() === userRole ?
-                {
-                  label: location?.state?.userName ? `${location?.state?.userName} (Balance:${location?.state?.balance})` : "Select Below...", 
-                  value: location?.state?.selectedPlayer ?? "" }
-                // } : {
-                //   label: "Select Below....",
-                //   value: ""
-                // }
-              }
-              onChange={(selectedPlayer) => {setSelectedPlayer(selectedPlayer.value)}}
-              isSearchable={true}
-              styles={{
-                control: (baseStyles) => ({
-                  ...baseStyles,
-                  borderColor: 'steelblue',
-                }),
-              }}
-            />
+
+          <Select 
+            options={options}
+            value={selectedPlayer}
+            placeholder="Select Below..."
+            defaultValue={defValue}
+            onChange={(selectedPlayer) => {setSelectedPlayer(selectedPlayer)}}
+            isSearchable={true}
+            styles={{
+              control: (baseStyles) => ({
+                ...baseStyles,
+                borderColor: 'steelblue',
+              }),
+            }}
+          />
 
           <div className="input-control" style={{marginTop: '12px'}}>
             <label className="input-label">Set Transaction Type</label>
@@ -224,7 +201,8 @@ const AdjustPointForm = () => {
             <textarea name="comment" value={comment} rows="3" placeholder="Enter Comment" onChange={(e) => setComment(e.target.value)}></textarea>
           </div>
 
-          <button className="button" style={{width: '100%', borderRadius: '5px', fontWeight: 'bold'}}>Submit</button>
+          {/* <button className="button" style={{width: '100%', borderRadius: '5px', fontWeight: 'bold'}}>Submit</button> */}
+          <Button variant="contained" sx={{width: '100%', backgroundColor: 'slateblue'}}>Submit</Button>
         </form>
       </div>
       

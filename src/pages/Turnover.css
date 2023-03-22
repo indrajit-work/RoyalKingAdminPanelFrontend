@@ -7,9 +7,9 @@
     justify-content: space-evenly;
     align-items: center;
     margin: 2rem 4rem;
-    padding: 1rem;
+    padding: 3rem 1rem;
     gap: 1rem;
-    height: 200px;
+    /* height: 200px; */
     background-color: #ffd976;
     z-index: 9;
 }
@@ -21,7 +21,7 @@
 }
 
 .input-field:nth-child(2){
-    gap: 1rem;
+    gap: 2rem;
 }
 
 .input-field label, p{
@@ -30,7 +30,11 @@
 
 .input-field > p{
     margin: 0;
-    color: #0c559d;
+    background-color: #0c559d;
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 5px;
+    letter-spacing: 1px;
 }
 
 .input-field input{
@@ -116,8 +120,6 @@ td:first-child{
         flex-direction: column;
         gap: 16px;
         margin: 2rem 2rem 4rem;
-        height: 380px;
-        padding: 8px;
     }
     .input-field input{
         width: 100%;
@@ -128,7 +130,7 @@ td:first-child{
     }
 }
 
-@media screen and (max-width: 392px) {
+@media screen and (max-width: 425px) {
     .input-area{
         margin: 2rem auto;
         height: fit-content;

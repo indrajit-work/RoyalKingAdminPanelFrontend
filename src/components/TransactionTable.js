@@ -21,7 +21,7 @@ const Button = styled.button`
   top: 1%;
   font-size: 1rem;
   background-color: transparent;
-  color: steelblue;
+  color: slateblue;
   border: none;
   z-index: 999;
   @media screen and (max-width: 768px) {
@@ -86,7 +86,7 @@ const TransactionTable = ({loggedUser}) => {
     <>
       <h2 style={{textAlign: 'center', paddingTop: '1rem'}}>Transaction List</h2>
       <div style={{position: 'relative'}}>
-        <Button title='Refresh' onClick={loadUserData}>
+        <Button title="Refresh" onClick={loadUserData}>
           Refresh <MdRefresh />
         </Button>
 
@@ -109,7 +109,7 @@ const TransactionTable = ({loggedUser}) => {
                 border: 'none',
               },
               '& .MuiDataGrid-columnHeaders': {
-                backgroundColor: 'steelblue',
+                backgroundColor: 'slateblue',
               },
             }}
             initialState={{

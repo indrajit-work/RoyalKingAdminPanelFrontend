@@ -97,14 +97,14 @@ const Turnover2 = () => {
     setEndDate(ranges.selection.endDate)
   }
 
-  console.log(fromDate, toDate)
+  // console.log(fromDate, toDate)
   // console.log(selectedStartDate, selectedEndDate)
   let startMom = moment(fromDate).format('ddd DD MMM YYYY HH:mm:ss')
   startMom = moment(startMom)
-  console.log(startMom._i)
+  // console.log(startMom._i)
   let endMom = moment(toDate).add(1, 'days').subtract(1, 'seconds').format('ddd DD MMM YYYY HH:mm:ss')
   endMom = moment(endMom)
-  console.log(endMom._i)
+  // console.log(endMom._i)
 
   const handleLastWeek = (e) => {
     setSelectDate(e.target.id)
@@ -150,7 +150,7 @@ const Turnover2 = () => {
     }
   }
 
-  console.log("range", startRange, endRange)
+  // console.log("range", startRange, endRange)
   const printStart = moment(startRange).format('DD.MM.YYYY')
   const printEnd = moment(endRange).format('DD.MM.YYYY')
 
@@ -181,8 +181,8 @@ const Turnover2 = () => {
   // search Handler
   const onSearchHandler = async (e) => {
     e.preventDefault();
-    console.log(loggedUser, "start:", startMom._i, "end", endMom._i, gameType);
-    console.log(loggedUser, "start:", startRange, "end", endRange, gameType);
+    // console.log(loggedUser, "start:", startMom._i, "end", endMom._i, gameType);
+    // console.log(loggedUser, "start:", startRange, "end", endRange, gameType);
     // console.log(typeof startMom, typeof endMom)
     setLoading("Loading...");
     setShowTable(true)
@@ -292,7 +292,7 @@ const Turnover2 = () => {
                 endDate={"2031-12-31" }
                 selectedDate={selectedStartDate}
                 onDateChange={(date) => {
-                  console.log(date);
+                  // console.log(date);
                   setFromDate(date)
                   setSelectedStartDate(formatDate(date))
                 }}

@@ -17,16 +17,14 @@ const ButtonContainer = styled.div`
 `
 
 const Button = styled(NavLink)`
-  background-color: steelblue;
+  background-color: slateblue;
   color: white;
   padding: 10px;
   border: none;
   border-radius: 5px;
   &:hover{
     text-decoration: none;
-    color: steelblue;
-    background-color: #fff;
-    font-weight: bold;
+    color: white;
   }
 `
 
@@ -42,9 +40,9 @@ const AdjustPointButton = () => {
     })();
 
     return (
-        <ButtonContainer>
+        <ButtonContainer> 
             {loggedUserRole === 'SUPERADMIN' && roles.map((role, i) => (
-                <Button to={`/adjustpoints/${role.toLowerCase()}`} key={i}>
+                <Button to={`/adjustpoints/${role.toLowerCase()}`} key={i} >
                     {role}
                 </Button>
             ))}

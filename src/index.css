@@ -10,12 +10,6 @@ body {
   overflow: scroll; 
 }
 
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
-
 .MuiDataGrid-virtualScrollerContent{
   background: rgb(255, 255, 255);
   width: 100vw;
@@ -36,4 +30,10 @@ code {
 
 a, a:hover{
   text-decoration: none;
+}
+
+.active{
+  background-color: #fff !important;
+  color: slateblue !important;
+  font-weight: bold;
 }
