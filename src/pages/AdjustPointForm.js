@@ -75,8 +75,11 @@ const AdjustPointForm = () => {
       console.log(error);
     }
   };
+
+  console.log(selectedPlayer, transactionType, amt)
   const transactionHandler = async (e) => {
     e.preventDefault();
+    console.log(selectedPlayer, transactionType, amt)
     
     if (parseInt(amt) <= 0) {
       alert("Enter correct Amount");
@@ -88,7 +91,6 @@ const AdjustPointForm = () => {
       // return
     }
     
-    // console.log(selectedPlayer?.value, transactionType, amt)
     try {
       const res = await axios.post(
         "https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/pointstransfer",
@@ -100,10 +102,10 @@ const AdjustPointForm = () => {
           comment: comment,
         }
       );
-    //   setAmt("")
-    //   setTransactionType("")
-    //   setComment("")
-    //   setSelectedPlayer(null)
+      setAmt("")
+      setTransactionType("")
+      setComment("")
+      setSelectedPlayer(null)
 
       // console.log("............", res);
       if (res.data.Message !== "SUCCESS") {
@@ -183,7 +185,7 @@ const AdjustPointForm = () => {
                 aria-labelledby="demo-row-radio-buttons-group-label"
                 name="row-radio-buttons-group"
                 onChange={(e) => setTransactionType(e.target.value)}
-                value={role?.toLowerCase() === userRole ? transactionType : ""}
+                value={transactionType}
               >
                 <FormControlLabel value="add" control={<Radio />} label="Add" />
                 <FormControlLabel value="substract" control={<Radio />} label="Deduct" />
@@ -201,8 +203,7 @@ const AdjustPointForm = () => {
             <textarea name="comment" value={comment} rows="3" placeholder="Enter Comment" onChange={(e) => setComment(e.target.value)}></textarea>
           </div>
 
-          {/* <button className="button" style={{width: '100%', borderRadius: '5px', fontWeight: 'bold'}}>Submit</button> */}
-          <Button variant="contained" sx={{width: '100%', backgroundColor: 'slateblue'}}>Submit</Button>
+          <button className="button" style={{width: '100%', borderRadius: '5px', fontWeight: 'bold', backgroundColor: 'slateblue'}}>Submit</button>
         </form>
       </div>
       
