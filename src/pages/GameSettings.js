@@ -24,12 +24,13 @@ const GameSettings = () => {
   const [payoutPercent, setpayoutPercent] = useState('')
   const [allPayoutPercents, setAllPayoutPercents] = useState([])
   const [loggedUserRole, setloggedUserRole] = useState('')
+  const [supAdminMultiplier, setSupAdminMulltiplier] = useState('')
 
   useEffect(() => {
     const getPayoutPercent = async () => {
       try {
         const res = await axios.get('https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod//users/login/admin/payoutpercent')
-        // console.log(res.data)
+        console.log(res.data)
         setAllPayoutPercents(res.data)
       } catch (error) {
         console.log(error)
@@ -38,6 +39,32 @@ const GameSettings = () => {
 
     getPayoutPercent()
   }, [])
+
+  useEffect(() => {
+    const fetchAdmin = async () => {
+      try {
+        const res = await axios.post(
+          "https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/getbyrole",
+          {
+            userRole: "ADMIN"
+          });
+        setSupAdminMulltiplier(res?.data?.adminsAll.map(ele => {
+          return{
+            adminID: ele.userID,
+            multiplier: parseInt(multiplier)
+          }
+        }))
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    fetchAdmin()
+  }, [multiplier])
+
+  console.log(supAdminMultiplier)
+  console.log(multiplier)
+  
 
   // get logged user role
   const loggedUser = getCookie("token");
@@ -56,17 +83,17 @@ console.log(loggedUserRole)
     }
 
     setMultiplier(e.target.value)
-    // console.log(multiplier);
+    console.log(multiplier);
 
     try {
       const res = await axios.post(
         `https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/setmultiplier`,
         {
           gameType: gameType,
-          multiplier: multiplier
+          multiplier: supAdminMultiplier
         }
       );
-      // console.log(gameType, multiplier); 
+      console.log(gameType, supAdminMultiplier); 
       // console.log("Multiplier", res.data);
 
       setMultiplier("")
