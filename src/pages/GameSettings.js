@@ -24,7 +24,8 @@ const GameSettings = () => {
   const [payoutPercent, setpayoutPercent] = useState('')
   const [allPayoutPercents, setAllPayoutPercents] = useState([])
   const [loggedUserRole, setloggedUserRole] = useState('')
-  const [supAdminMultiplier, setSupAdminMulltiplier] = useState('')
+  const [supAdminMultiplier, setSupAdminMultiplier] = useState([])
+  const [adminMultiplier, setAdminMultiplier] = useState([])
 
   useEffect(() => {
     const getPayoutPercent = async () => {
@@ -48,8 +49,8 @@ const GameSettings = () => {
           {
             userRole: "ADMIN"
           });
-        setSupAdminMulltiplier(res?.data?.adminsAll.map(ele => {
-          return{
+        setSupAdminMultiplier(res?.data?.adminsAll.map(ele => {
+          return {
             adminID: ele.userID,
             multiplier: parseInt(multiplier)
           }
@@ -64,7 +65,14 @@ const GameSettings = () => {
 
   console.log(supAdminMultiplier)
   console.log(multiplier)
-  
+
+  useEffect(() => {
+    const getMultiplierAdmin = async () => {
+      const res = await axios.get(`https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/getmultiplier?gameType=${gameType}`);
+      console.log(res.data?.multiplierArray)
+    }
+    getMultiplierAdmin()
+  }, [gameType])
 
   // get logged user role
   const loggedUser = getCookie("token");
@@ -72,11 +80,14 @@ const GameSettings = () => {
     const role = await getRole(loggedUser);
     setloggedUserRole(role)
   })();
-console.log(loggedUserRole)
+  console.log(loggedUserRole, loggedUser)
+  console.log(typeof loggedUser)
+  console.log(typeof multiplier)
 
+  //set multiplier
   const handleSubmitMultiplier = async (e) => {
     e.preventDefault()
-    
+
     if ((1 > multiplier) || (multiplier > 20)) {
       alert("select values in range 1-20");
       return;
@@ -86,24 +97,59 @@ console.log(loggedUserRole)
     console.log(multiplier);
 
     try {
-      const res = await axios.post(
+      // switch (loggedUserRole) {
+      //   case 'SUPERADMIN':
+      //     await axios.post(
+      //       `https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/setmultiplier`,
+      //       {
+      //         gameType: gameType,
+      //         userID: parseInt(loggedUser),
+      //         multiplier: supAdminMultiplier
+      //       }
+      //     );
+      //     break;
+
+      //   case 'ADMIN':
+      // const res = await axios.get(`https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/getmultiplier?gameType=${gameType}`);
+      // console.log(res.data)
+
+      // setAdminMultiplier(res.data?.multiplierArray.map(item => {
+      //   console.log(item.adminID)
+      //   if (item.adminID === parseInt(loggedUser)) {
+      //     return { 
+      //       ...item, 
+      //       multiplier: parseInt(multiplier) 
+      //     };
+      //   }
+      //   console.log(item)
+      //   return item;
+      // }))
+
+      // console.log(adminMultiplier)
+
+      await axios.post(
         `https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/setmultiplier`,
         {
           gameType: gameType,
-          multiplier: supAdminMultiplier
-        }
-      );
-      console.log(gameType, supAdminMultiplier); 
-      // console.log("Multiplier", res.data);
+          userID: parseInt(loggedUser),
+          multiplier: parseInt(multiplier),
+        })
+
+      //   break;
+
+      // default:
+      //   break;
+      // console.log(gameType, adminMultiplier);
 
       setMultiplier("")
       setGameType("")
-      // console.log("Settings:...............", res.data);
+
       toast.success('Multiplier has been changed successfully')
     } catch (error) {
       console.log(error);
     }
   };
+
 
   const handleSubmitPercent = async (e) => {
     e.preventDefault()
@@ -120,7 +166,7 @@ console.log(loggedUserRole)
       );
       // console.log(res)
       // console.log(gameType, payoutPercent)
-      
+
       setpayoutPercent("")
       setGameType("")
       toast.success('Payout percent has been changed successfully')
@@ -240,14 +286,14 @@ console.log(loggedUserRole)
 
         <br />
       </Container>
-      
-      {loggedUserRole === 'SUPERADMIN' && 
-      <>
-        <GameSettingOnOff />
-        <hr style={{width: '80%', margin: '0 auto'}} />
-      </>
+
+      {loggedUserRole === 'SUPERADMIN' &&
+        <>
+          <GameSettingOnOff />
+          <hr style={{ width: '80%', margin: '0 auto' }} />
+        </>
       }
-      
+
       <RandomResult />
 
       <ToastContainer />
@@ -255,3 +301,23 @@ console.log(loggedUserRole)
   );
 };
 export default GameSettings;
+
+
+// [
+//   {
+//    "adminID": 58,
+//    "multiplier": 4
+//   },
+//   {
+//    "adminID": 27,
+//    "multiplier": 4
+//   },
+//   {
+//    "adminID": 26,
+//    "multiplier": 4
+//   },
+//   {
+//    "adminID": 41,
+//    "multiplier": 4
+//   }
+//  ]
