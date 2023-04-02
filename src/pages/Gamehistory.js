@@ -103,8 +103,6 @@ const Gamehistory = () => {
 
         //prizeOnBet function return win for each bet
         const prizeOnBet = (bets, result, multiplier, gameType) => {
-          // console.log(bets, result, multiplier, gameType)
-
           bets?.forEach(bet => {
             winAmount = 0
             if(bet.betOn === result){
@@ -136,7 +134,6 @@ const Gamehistory = () => {
                 let position = betOnArray[1];
     
                 if (position === "Andar" || position === "Bahar") {
-    
                   let singleBetOn = betOnArray[0];
   
                   if (result !== null) {
@@ -266,10 +263,10 @@ const getGameData=async ()=>{
     console.log(err);
   }
 }
-// console.log(getAdmin)
+console.log("===========>", getAdmin)
 const options = getAdmin?.map((user) => ({
   value: user?.userID,
-  label: `${user.fullName} (UserID:${user.userID})`
+  label: `${user.userName} (UserID:${user.userID})`
 }));
 
   return (
