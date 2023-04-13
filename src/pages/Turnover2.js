@@ -9,7 +9,7 @@ import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import { DateRangePicker } from 'react-date-range';
 import { getCookie, getRole } from "../utils/auth";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { BsCalendar3 } from "react-icons/bs";
 import { IoClose } from "react-icons/io5";
 import moment from "moment/moment";

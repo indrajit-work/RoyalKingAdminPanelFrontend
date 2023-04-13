@@ -1,4 +1,4 @@
-import { Route, Switch, Redirect, Router } from "react-router-dom";
+import { Route, Switch, Redirect, Router, useHistory } from "react-router-dom";
 import './App.css'
 import { getCookie, getRole, isAuth } from "./utils/auth";
 import Login from "./components/Login";
@@ -30,14 +30,15 @@ import UserTable from "./pages/UserTable";
 import AddUser from "./pages/AddUser";
 import EditUser from "./pages/EditUser";
 import CleanData from "./pages/CleanData";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AdjustPoints from "./pages/AdjustPoints";
 import Turnover2 from "./pages/Turnover2";
 import AdjustPointForm from "./pages/AdjustPointForm";
 
 function App() {
   const [loggedUserRole, setloggedUserRole] = useState('')
-
+  const history = useHistory();
+  
   // get loggedin user id
   const loggedUser = getCookie("token");
   console.log("logeed in", loggedUser);
@@ -47,8 +48,9 @@ function App() {
     const role = await getRole(loggedUser);
     setloggedUserRole(role)
   })();
-  console.log(loggedUserRole);
-
+  
+  if (!isAuth()) history.push("/login");
+  
   return (
     <>
       <Route path="/login" exact>

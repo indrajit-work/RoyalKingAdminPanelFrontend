@@ -71,6 +71,7 @@ export const isAuth = () => {
       return false;
     }
   }
+  return false;
 };
 
 //logout

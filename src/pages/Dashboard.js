@@ -11,7 +11,7 @@ const Dashboard = () => {
 
   const history = useHistory();
 
-  if (!isAuth()) history.push("/login");
+  // if (!isAuth()) history.push("/login");
 
   useEffect(() => {
     const fetchData = async () => {

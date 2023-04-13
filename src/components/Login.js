@@ -38,14 +38,14 @@ import { isAuth } from "../utils/auth";
   
       setRegState({ ...regState, buttonText: "Logging in...." });
       try {
-        console.log(userName, password);
+        // console.log(userName, password);
         const res = await axios.post(
           `https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin?task=login`,
           {
             userName: userName,
             password: password,
           })
-          console.log(res)
+          // console.log(res)
   
         setRegState({
           ...regState,
