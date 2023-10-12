@@ -476,7 +476,8 @@ const EditUser = () => {
                 <button className='button'>{verified ? "Verified" : "Verify"}</button>
             </div> */}
 
-        <button className="button" disabled={(loggedUserRole === 'Distributor') || (loggedUserRole === 'STOKIST')}>Edit</button>
+        {/*<button className="button" disabled={(loggedUserRole === 'Distributor') || (loggedUserRole === 'STOKIST')}>Edit</button>*/}
+        <button className="button" disabled={(loggedUserRole === 'Distributor')}>Edit</button>
       </form>
       <ToastContainer
         style={{ position: "fixed", top: "5%", left: "0" }}
