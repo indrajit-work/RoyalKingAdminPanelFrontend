@@ -18,6 +18,7 @@ import "./Turnover.css";
 import { DataGrid } from "@mui/x-data-grid";
 import styled from "styled-components";
 import Select from "react-select";
+import { getCookie, getRole } from "../utils/auth";
 
 ReactModal.setAppElement("#root")
 
@@ -63,9 +64,19 @@ const Gamehistory = () => {
   const [bets, setBets] = useState([])
   const [result, setResult] = useState('')
 
+  const [loggedUserRole, setloggedUserRole] = useState('')
+
   const {btn} =btnText
 
   // console.log(allGameData)
+
+  // get logged user role
+  const loggedUser = getCookie("token");
+  (async () => {
+    const role = await getRole(loggedUser);
+    setloggedUserRole(role)
+  })();
+  console.log(loggedUserRole, loggedUser)
 
   const loggedUserTOCol = [
     { field: "ticketID", headerName: "Ticket ID", minWidth: 100, flex: 1 },
@@ -221,9 +232,11 @@ const EndHandler=()=>{
 // }
 
 const getAdminsData=async ()=>{
-  return  await  axios.post("https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/getbyrole",{
-    userRole:"PLAYER"
-}).then((res)=> setAdmins(res.data.adminsAll))
+  console.log("CHESTA KORCHI");
+  //return  await  axios.post("https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/getbyrole",{
+  return  await  axios.post("https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/users/login/admin/usersunderme",{
+    userID:getCookie("token")
+}).then((res)=> {setAdmins(res.data.userUnderMe); console.log(res);})
 .catch((err)=>console.log(err))
 }
 
