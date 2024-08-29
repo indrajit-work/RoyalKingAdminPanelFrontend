@@ -27,109 +27,109 @@ export const SidebarData = [
     icon: password,
     cName: "sub-nav",
   },
-  // {
-  //   title: "Profile",
-  //   path: "#",
-  //   icon: <AiIcons.AiFillHome />,
-  //   iconClosed: <RiIcons.RiArrowDownSFill />,
-  //   iconOpened: <RiIcons.RiArrowUpSFill />,
+  /*{
+    title: "Profile",
+    path: "#",
+    icon: <AiIcons.AiFillHome />,
+    iconClosed: <RiIcons.RiArrowDownSFill />,
+    iconOpened: <RiIcons.RiArrowUpSFill />,
 
-  //   subNav: [
-  //     {
-  //       title: "Change Username",
-  //       path: "/profile/username",
-  //       icon: <IoIcons.IoIosPaper />,
-  //     },
-  //     {
-  //       title: "Change Passowrd",
-  //       path: "/profile/changepassword",
-  //       icon: <IoIcons.IoIosPaper />,
-  //     },
-  //   ],
-  // },
-  // {
-  //   title: 'Admin',
-  //   icon: <FaIcons.FaCartPlus />,
-  //   iconClosed: <RiIcons.RiArrowDownSFill />,
-  //   iconOpened: <RiIcons.RiArrowUpSFill />,
-  //   subNav: [
-  //       {
-  //         title: 'Add Admin',
-  //         path: '/regAdmin',
-  //         icon: <IoIcons.IoIosPaper />,
-  //         cName: 'sub-nav'
-  //       },
-  //       {
-  //         title: ' List Admin',
-  //         path: '/listAdmin',
-  //         icon: <AiIcons.AiOutlineBars />,
-  //         cName:'sub-nav'
-  //       },
-  //   ]
-  //   },
-  // {
-  //   title: 'Distributor',
-  //   icon: <IoIcons.IoIosPaper />,
-  //   iconClosed: <RiIcons.RiArrowDownSFill />,
-  //   iconOpened: <RiIcons.RiArrowUpSFill />,
+    subNav: [
+      {
+        title: "Change Username",
+        path: "/profile/username",
+        icon: <IoIcons.IoIosPaper />,
+      },
+      {
+        title: "Change Passowrd",
+        path: "/profile/changepassword",
+        icon: <IoIcons.IoIosPaper />,
+      },
+    ],
+  },
+  {
+    title: 'Admin',
+    icon: <FaIcons.FaCartPlus />,
+    iconClosed: <RiIcons.RiArrowDownSFill />,
+    iconOpened: <RiIcons.RiArrowUpSFill />,
+    subNav: [
+        {
+          title: 'Add Admin',
+          path: '/regAdmin',
+          icon: <IoIcons.IoIosPaper />,
+          cName: 'sub-nav'
+        },
+        {
+          title: ' List Admin',
+          path: '/listAdmin',
+          icon: <AiIcons.AiOutlineBars />,
+          cName:'sub-nav'
+        },
+    ]
+    },
+  {
+    title: 'Distributor',
+    icon: <IoIcons.IoIosPaper />,
+    iconClosed: <RiIcons.RiArrowDownSFill />,
+    iconOpened: <RiIcons.RiArrowUpSFill />,
 
-  //   subNav: [
-  //     {
-  //       title: 'List Distributor',
-  //       path: '/distributor/list',
-  //       icon: <AiIcons.AiOutlineBars />,
-  //       cName: 'sub-nav'
-  //     },
-  //     {
-  //       title: 'Add Distributor ',
-  //       path: '/distributor/create',
-  //       icon: <IoIcons.IoIosPaper />,
-  //       cName: 'sub-nav'
-  //     },
-  //   ]
-  // },
-  // {
-  //   title: 'Stokist',
-  //   icon: <IoIcons.IoIosPaper />,
-  //   iconClosed: <RiIcons.RiArrowDownSFill />,
-  //   iconOpened: <RiIcons.RiArrowUpSFill />,
+    subNav: [
+      {
+        title: 'List Distributor',
+        path: '/distributor/list',
+        icon: <AiIcons.AiOutlineBars />,
+        cName: 'sub-nav'
+      },
+      {
+        title: 'Add Distributor ',
+        path: '/distributor/create',
+        icon: <IoIcons.IoIosPaper />,
+        cName: 'sub-nav'
+      },
+    ]
+  },
+  {
+    title: 'Stokist',
+    icon: <IoIcons.IoIosPaper />,
+    iconClosed: <RiIcons.RiArrowDownSFill />,
+    iconOpened: <RiIcons.RiArrowUpSFill />,
 
-  //   subNav: [
-  //     {
-  //       title: 'List Stokist',
-  //       path: '/stokist/list',
-  //       icon: <AiIcons.AiOutlineBars />,
-  //       cName: 'sub-nav'
-  //     },
-  //     {
-  //       title: 'Add Stokist ',
-  //       path: '/stokist/create',
-  //       icon: <IoIcons.IoIosPaper />,
-  //       cName: 'sub-nav'
-  //     },
-  //   ]
-  // },
-  // {
-  //   title: 'Player',
-  //   icon: <IoIcons.IoIosPaper />,
-  //   iconClosed: <RiIcons.RiArrowDownSFill />,
-  //   iconOpened: <RiIcons.RiArrowUpSFill />,
+    subNav: [
+      {
+        title: 'List Stokist',
+        path: '/stokist/list',
+        icon: <AiIcons.AiOutlineBars />,
+        cName: 'sub-nav'
+      },
+      {
+        title: 'Add Stokist ',
+        path: '/stokist/create',
+        icon: <IoIcons.IoIosPaper />,
+        cName: 'sub-nav'
+      },
+    ]
+  },
+  {
+    title: 'Player',
+    icon: <IoIcons.IoIosPaper />,
+    iconClosed: <RiIcons.RiArrowDownSFill />,
+    iconOpened: <RiIcons.RiArrowUpSFill />,
 
-  //   subNav: [
-  //     {
-  //       title: 'List Player',
-  //       path: '/player/list',
-  //       icon: <AiIcons.AiOutlineBars />,
-  //       cName: 'sub-nav'
-  //     },
-  //     {
-  //       title: 'Add Player ',
-  //       path: '/player/create',
-  //       icon: <IoIcons.IoIosPaper />,
-  //       cName: 'sub-nav'
-  //     },
-  //   ]
-  // },
+    subNav: [
+      {
+        title: 'List Player',
+        path: '/player/list',
+        icon: <AiIcons.AiOutlineBars />,
+        cName: 'sub-nav'
+      },
+      {
+        title: 'Add Player ',
+        path: '/player/create',
+        icon: <IoIcons.IoIosPaper />,
+        cName: 'sub-nav'
+      },
+    ]
+  },*/
   {
     title: "User Manager",
     path: "/userManager",
