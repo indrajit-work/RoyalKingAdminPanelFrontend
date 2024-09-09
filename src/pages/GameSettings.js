@@ -30,12 +30,12 @@ const GameSettings = () => {
   const [adminMultiplier, setAdminMultiplier] = useState([])
 
   const [mult_GameType, setMult_GameType] = useState("cards16");
-  const [mult_ExpHour, setMult_ExpHour] = useState(currHour + 1);
+  const [mult_ExpHour, setMult_ExpHour] = useState(1);
   const [mult_MultiplierAmt, setMult_MultiplierAmt] = useState("");
   const [mult_HowManyTimes, setMult_HowManyTimes] = useState("");
 
   // Array of hours from 0 to 23
-  const hoursArray = Array.from({ length: 24 }, (_, i) => i);
+  const hoursArray = Array.from({ length: 24 }, (_, i) => i + 1);
 
   // Convert 24-hour time to 12-hour time with AM/PM
   const formatHour = (hour) => {
@@ -240,7 +240,7 @@ const GameSettings = () => {
       // console.log(res)
       // console.log(gameType, payoutPercent)
 
-      setMult_ExpHour(currHour + 1);
+      setMult_ExpHour(1);
       setMult_GameType("cards16");
       setMult_HowManyTimes("");
       setMult_MultiplierAmt("");
@@ -397,8 +397,8 @@ const GameSettings = () => {
                     value={mult_ExpHour}
                   >
                     {hoursArray.map((hour) => (
-                      <option key={hour} value={hour}>
-                        Till {formatHour(hour)} | For {calculateDuration(hour)}
+                      <option key={hour} value={hour}>                        
+                        Next {hour} {hour > 1 ? "Hours" : "Hour"}
                       </option>
                     ))}
                   </Form.Select>
