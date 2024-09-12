@@ -322,7 +322,7 @@ const GameSettings = () => {
           </Card.Body>
         </Card>
 
-        <Card className="mt-4 w-100 shadow-lg">
+        {/*<Card className="mt-4 w-100 shadow-lg">
           <Card.Header>
             <h4 className="text-center">{gameType}</h4>
           </Card.Header>
@@ -358,7 +358,7 @@ const GameSettings = () => {
               </Col>
             </Row>
           </Card.Body>
-        </Card>
+        </Card>*/}
 
         <Card className="mt-4 w-100 shadow-lg">
           <Card.Header>
