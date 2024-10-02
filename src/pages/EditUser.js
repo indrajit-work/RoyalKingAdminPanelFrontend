@@ -446,7 +446,8 @@ const EditUser = () => {
           </select>
         </div>
         
-        <div className={`${loggedUserRole === 'Distributor' || loggedUserRole === 'STOKIST' ? 'hide' : ''}`}>
+        {/*<div className={`${loggedUserRole === 'Distributor' || loggedUserRole === 'STOKIST' ? 'hide' : ''}`}>*/}
+        <div className={`${loggedUserRole === 'PLAYER' ? 'hide' : ''}`}>
           <label className="input-label">Device ID</label>
           <div className="input-control single-input reset-input">
             <input
