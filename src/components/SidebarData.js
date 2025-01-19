@@ -67,4 +67,9 @@ export const SidebarData = [
     path: "/cleanData",
     icon: clear,
   },
+  {
+    title: "Manual Result",
+    path: "/manualResult",
+    icon: result,
+  },
 ];

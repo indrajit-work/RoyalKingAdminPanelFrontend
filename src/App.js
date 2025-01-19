@@ -34,6 +34,7 @@ import { useEffect, useState } from "react";
 import AdjustPoints from "./pages/AdjustPoints";
 import Turnover2 from "./pages/Turnover2";
 import AdjustPointForm from "./pages/AdjustPointForm";
+import ManualResult from "./pages/ManualResult";
 
 function App() {
   const [loggedUserRole, setloggedUserRole] = useState('')
@@ -189,6 +190,11 @@ function App() {
         <Route path="/cleanData" exact>
           <Sidebar />
           <CleanData />
+        </Route>
+
+        <Route path="/manualResult" exact>
+          <Sidebar />
+          <ManualResult />
         </Route>
       </Switch>
     </>
