@@ -3,6 +3,7 @@ import "./ManualResult.css";
 import { Container, FloatingLabel, Form, ProgressBar } from "react-bootstrap";
 import { getCardOrder } from "../utils/cardOrders";
 import axios from "axios";
+import { Checkbox } from "@material-ui/core";
 
 const API_URL = 'https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/games/currentgame/ticketlist';
 
@@ -13,7 +14,8 @@ const ManualResult = () => {
     const [apiBetStatus, setAPIBetStatus] = useState(null);
     const [lastRefreshTime, setLastRefreshTime] = useState(null);
     const [isBetLocked, setIsBetLocked] = useState(false);
-    const [hasRoundStarted, setHasRoundStarted] = useState(false);    
+    const [hasRoundStarted, setHasRoundStarted] = useState(false);
+    const [enableAutoRefresh, setEnableAutoRefresh] = useState(true);
 
     useEffect(() => {
         FetchAPIData();                
@@ -139,6 +141,11 @@ const ManualResult = () => {
         setHasRoundStarted(hasStarted);
     }
 
+    function Callback_AutoRefresh() {
+        console.log("Auto Refresh should be called");
+        FetchAPIData();
+    }
+
     return (
         <Container>
             <section className="secMain">
@@ -169,8 +176,13 @@ const ManualResult = () => {
                         <RoundTimer apiResponse={apiResponse} onBetLock={Callback_ChangeBetLockStatus} onRoundStart={Callback_ChangeRoundStartStatus} onComplete={() => FetchAPIData()}/>
                         
                         <div style={{display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem", height: "100%", borderStyle: "solid", borderWidth: "1px", borderRadius: "10px", borderColor: "rgb(68, 154, 235)", overflow: "clip"}}>
-                            <div style={{display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "0rem", padding: "0rem 0rem 0rem 0.5rem", fontSize: "0.7rem", color: "rgba(0, 0, 0, 0.5)"}}>
-                                <RefreshTimer lastRefreshedTime={lastRefreshTime}/>
+                            {/*<div style={{display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100%", gap: "0.2375rem", padding: "0rem 0.5rem 0rem 0.5rem", fontSize: "0.7rem", color: "rgba(0, 0, 0, 0.5)", borderRight: "1px solid rgb(68, 154, 235)"}}>
+                                <input type="checkbox" checked={enableAutoRefresh} onChange={(e) => setEnableAutoRefresh(e.target.checked)} />
+                                <div>Auto</div>
+                            </div>*/}
+
+                            <div style={{display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "0rem", padding: "0rem 0rem 0rem 0.5rem", fontSize: "0.7rem", color: "rgba(0, 0, 0, 0.5)"}}>                                
+                                <RefreshTimer lastRefreshedTime={lastRefreshTime} interval_AutoRefresh={10} isAutoRefresh={enableAutoRefresh} Callback_AutoRefresh={Callback_AutoRefresh}/>
                                 <div style={{}}>Since Refreshed</div>
                             </div>
 
@@ -189,13 +201,29 @@ const ManualResult = () => {
 
 export default ManualResult;
 
-export const RefreshTimer = ({ lastRefreshedTime }) => {
+export const RefreshTimer = ({ lastRefreshedTime, interval_AutoRefresh = 10, isAutoRefresh = true, Callback_AutoRefresh }) => {
     const [seconds, setSeconds] = useState(0);
+    const [autoRefreshEnabled, setAutoRefreshEnabled] = useState(isAutoRefresh);
 
     useEffect(() => {
+        setAutoRefreshEnabled(isAutoRefresh);
+    }, [isAutoRefresh]);
+
+    useEffect(() => {
+        let intervalID;
         if(lastRefreshedTime) {
-            const intervalID = setInterval(() => {
-                setSeconds(Math.floor((Date.now() - lastRefreshedTime) / 1000));
+            intervalID = setInterval(() => {
+                var currSeconds = Math.floor((Date.now() - lastRefreshedTime) / 1000);
+
+                if(autoRefreshEnabled && currSeconds > interval_AutoRefresh) {
+                    setSeconds(0);
+                    if(Callback_AutoRefresh) Callback_AutoRefresh();
+                    clearInterval(intervalID);
+                }
+                else setSeconds(currSeconds);
+
+                //setSeconds(Math.floor((Date.now() - lastRefreshedTime) / 1000));
+                //setSeconds(currSeconds);
             }, 1000);
             return () => {setSeconds(0); clearInterval(intervalID);}
         }
