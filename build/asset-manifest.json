@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/static/css/main.2b4d5304.css",
+    "main.js": "/static/js/main.c7838ba8.js",
+    "static/media/royalKing.png": "/static/media/royalKing.856ffa2e76d940242864.png",
+    "static/media/man.png": "/static/media/man.ab45eb1d42b1faaf3d12.png",
+    "static/media/human_resources.png": "/static/media/human_resources.8477f3da6b8007ad948e.png",
+    "index.html": "/index.html",
+    "main.2b4d5304.css.map": "/static/css/main.2b4d5304.css.map",
+    "main.c7838ba8.js.map": "/static/js/main.c7838ba8.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.2b4d5304.css",
+    "static/js/main.c7838ba8.js"
+  ]
+}
