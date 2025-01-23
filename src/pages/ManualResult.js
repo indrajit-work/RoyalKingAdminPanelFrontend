@@ -42,7 +42,7 @@ const ManualResult = () => {
     }
 
     function PostResultAPIData(gameID, selectedResult) {
-        setSelectedResult(result);
+        setSelectedResult(selectedResult);
 
         const url = `${RESULT_SELECT_API_URL}?gameID=${encodeURIComponent(gameID)}&result=${encodeURIComponent(selectedResult)}`;
     
