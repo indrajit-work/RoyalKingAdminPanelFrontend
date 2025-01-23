@@ -5,7 +5,8 @@ import { getCardOrder } from "../utils/cardOrders";
 import axios from "axios";
 import { Checkbox } from "@material-ui/core";
 
-const API_URL = 'https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/games/currentgame/ticketlist';
+const TICKET_API_URL = 'https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/games/currentgame/ticketlist';
+const RESULT_SELECT_API_URL = 'https://gf8mf58fp2.execute-api.ap-south-1.amazonaws.com/Royal_prod/games/result';
 
 const ManualResult = () => {
     const [gameType, setGameType] = useState("cards16");
@@ -13,29 +14,45 @@ const ManualResult = () => {
     const [isAPILoading, setIsAPILoading] = useState(true);
     const [apiBetStatus, setAPIBetStatus] = useState(null);
     const [lastRefreshTime, setLastRefreshTime] = useState(null);
+    const [selectedResult, setSelectedResult] = useState(null);
     const [isBetLocked, setIsBetLocked] = useState(false);
     const [hasRoundStarted, setHasRoundStarted] = useState(false);
     const [enableAutoRefresh, setEnableAutoRefresh] = useState(true);
 
     useEffect(() => {
-        FetchAPIData();                
+        FetchTicketAPIData();                
     }, [gameType])
 
-    function FetchAPIData() {
+    function FetchTicketAPIData() {
         setLastRefreshTime(new Date());
         setIsAPILoading(true);
 
-        axios.get(`${API_URL}?gameType=${gameType}`)
+        axios.get(`${TICKET_API_URL}?gameType=${gameType}`)
             .then(response => {
                 console.log(response.data);
                 setAPIResponse(response.data);
                 ParseAPIResponse(response.data);
                 setIsAPILoading(false);
+                setSelectedResult(response.data.manualResult);
             })
             .catch(error => {
                 console.error("Error fetching bet amounts: ", error);
                 setIsAPILoading(false);
             })
+    }
+
+    function PostResultAPIData(gameID, selectedResult) {
+        setSelectedResult(result);
+
+        const url = `${RESULT_SELECT_API_URL}?gameID=${encodeURIComponent(gameID)}&result=${encodeURIComponent(selectedResult)}`;
+    
+        axios.post(url)
+            .then(response => {
+                console.log('Response:', response.data);
+            })
+            .catch(error => {
+                console.error('There was an error posting the data!', error);
+            });
     }
 
     function ParseAPIResponse(response) {        
@@ -139,11 +156,11 @@ const ManualResult = () => {
 
     function Callback_ChangeRoundStartStatus(hasStarted) {
         setHasRoundStarted(hasStarted);
-    }
+    }    
 
     function Callback_AutoRefresh() {
         console.log("Auto Refresh should be called");
-        FetchAPIData();
+        FetchTicketAPIData();
     }
 
     return (
@@ -173,7 +190,7 @@ const ManualResult = () => {
                     <div className="divBodyHeader">
                         <h1>{GetGameName(gameType)} Live Bets</h1>
                         
-                        <RoundTimer apiResponse={apiResponse} onBetLock={Callback_ChangeBetLockStatus} onRoundStart={Callback_ChangeRoundStartStatus} onComplete={() => FetchAPIData()}/>
+                        <RoundTimer apiResponse={apiResponse} onBetLock={Callback_ChangeBetLockStatus} onRoundStart={Callback_ChangeRoundStartStatus} onComplete={() => FetchTicketAPIData()}/>
                         
                         <div style={{display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem", height: "100%", borderStyle: "solid", borderWidth: "1px", borderRadius: "10px", borderColor: "rgb(68, 154, 235)", overflow: "clip"}}>
                             {/*<div style={{display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100%", gap: "0.2375rem", padding: "0rem 0.5rem 0rem 0.5rem", fontSize: "0.7rem", color: "rgba(0, 0, 0, 0.5)", borderRight: "1px solid rgb(68, 154, 235)"}}>
@@ -186,12 +203,12 @@ const ManualResult = () => {
                                 <div style={{}}>Since Refreshed</div>
                             </div>
 
-                            <button className="btnRefresh" onClick={() => FetchAPIData()}>Refresh</button>
+                            <button className="btnRefresh" onClick={() => FetchTicketAPIData()}>Refresh</button>
                         </div> 
                     </div>
 
                     <div className="divBodyContent">
-                        <LiveBetGrid gameType={gameType} isLoading={isAPILoading} betData={apiBetStatus} isBetLocked={isBetLocked} hasRoundStarted={hasRoundStarted}/>
+                        <LiveBetGrid gameID={apiResponse?.gameID} gameType={gameType} isLoading={isAPILoading} betData={apiBetStatus} selectedResult={selectedResult} isBetLocked={isBetLocked} hasRoundStarted={hasRoundStarted} callback_OnManualResultSelect={PostResultAPIData}/>
                     </div>
                 </section>
             </section>
@@ -300,11 +317,13 @@ export const TimerProgressBar = ({currTime, totalTime, isBetLocked }) => {
     )
 }
 
-export const LiveBetGrid = ({ gameType, isLoading, betData, isBetLocked, hasRoundStarted }) => {
+export const LiveBetGrid = ({ gameID, gameType, isLoading, betData, selectedResult, isBetLocked, hasRoundStarted, callback_OnManualResultSelect }) => {
     const [gridRowCount, setGridRowCount] = useState(0);
     const [gridColCount, setGridColCount] = useState(0);
     const [gridCardType, setGridCardType] = useState(null);
     const [cards, setCards] = useState([]);
+    const [currGameID, setCurrGameID] = useState(0);
+    
 
     function GetGridDimensions(type) {
         let rows = 4, cols = 4;
@@ -347,6 +366,11 @@ export const LiveBetGrid = ({ gameType, isLoading, betData, isBetLocked, hasRoun
         else setGridCardType("Suite");
     }
 
+    function Callback_OnResultSelect(result) {
+        console.log("Game Type: " + gameType + " | Game ID: " + currGameID + " | Result: " + result);
+        if(callback_OnManualResultSelect != null) callback_OnManualResultSelect(currGameID, result);
+    }
+
     useEffect(() => {
         const { rows, cols } = GetGridDimensions(gameType);
         setGridRowCount(rows);
@@ -354,6 +378,10 @@ export const LiveBetGrid = ({ gameType, isLoading, betData, isBetLocked, hasRoun
         SelectGridCardType(gameType);
         setCards(getCardOrder(gameType));        
     }, [gameType]);
+
+    useEffect(() => {
+        setCurrGameID(gameID);
+    }, [gameID])
 
     const gridStyle = {
         position: 'relative',
@@ -403,18 +431,25 @@ export const LiveBetGrid = ({ gameType, isLoading, betData, isBetLocked, hasRoun
                 </div>
             )}
 
+            {hasRoundStarted && !isBetLocked && selectedResult && selectedResult != "xxx" && (
+                <div style={overlayStyle}>
+                    <div>Result Locked</div>
+                    <div>{selectedResult}</div>
+                </div>
+            )}
+
             {Array.from({ length: gridRowCount * gridColCount }, (_, index) => (
                 (gridCardType == "Suite") ?
-                (<GridCardSuite key={index} cardSuite={cards[index].suite} cardValue={cards[index].value} betData={betData}/>) :
+                (<GridCardSuite key={index} cardSuite={cards[index].suite} cardValue={cards[index].value} betData={betData} callback_OnResultSelect={Callback_OnResultSelect}/>) :
                 ((gridCardType == "SingleVal") ?
-                <GridCardSingleValue key={index} singleVal={index == 9 ? 0 : index + 1} betData={betData} /> :
-                <GridCardDoubleValue key={index} andarVal={Math.floor(index / gridColCount)} baharVal={index % gridColCount} betData={betData} />)
+                <GridCardSingleValue key={index} singleVal={index == 9 ? 0 : index + 1} betData={betData} callback_OnResultSelect={Callback_OnResultSelect} /> :
+                <GridCardDoubleValue key={index} andarVal={Math.floor(index / gridColCount)} baharVal={index % gridColCount} betData={betData} callback_OnResultSelect={Callback_OnResultSelect} />)
              ))} 
         </div>
     );    
 }
 
-export const GridCardSuite = ({ cardSuite, cardValue, betData }) => {
+export const GridCardSuite = ({ cardSuite, cardValue, betData, callback_OnResultSelect }) => {
     const [suiteImgURL, setSuiteImgURL] = useState(null);
 
     function SetCardSuite(suite) {
@@ -451,6 +486,12 @@ export const GridCardSuite = ({ cardSuite, cardValue, betData }) => {
         return betAmt;
     }
 
+    function SelectResult(e) {
+        e.preventDefault();
+
+        if(callback_OnResultSelect) callback_OnResultSelect(GetNumString(cardValue.toString()) + cardSuite);
+    }
+
     useEffect(() => {
         SetCardSuite(cardSuite);
     }, [cardSuite])
@@ -466,12 +507,12 @@ export const GridCardSuite = ({ cardSuite, cardValue, betData }) => {
                 <div style={{ verticalAlign: "center", fontSize: "0.8rem", justifyContent: "center", alignItems: "center", height: "100%" }}>{GetBetAmt()}</div>
             </div>
 
-            <button className="btnBet">Select</button>
+            <button className="btnBet" onClick={(e) => SelectResult(e)}>Select</button>
         </div>
     );
 }
 
-export const GridCardDoubleValue = ({ andarVal, baharVal, betData }) => {
+export const GridCardDoubleValue = ({ andarVal, baharVal, betData, callback_OnResultSelect }) => {
     
     function GetBetAmt() {
         let betAmt = 0;
@@ -487,6 +528,12 @@ export const GridCardDoubleValue = ({ andarVal, baharVal, betData }) => {
 
         return betAmt;
     }
+
+    function SelectResult(e) {
+        e.preventDefault();
+
+        if(callback_OnResultSelect) callback_OnResultSelect(GetNumString(andarVal.toString()) + "." + GetNumString(baharVal.toString()));
+    }
     
     return (
         <div style={{ display: 'flex', flexDirection: 'column', padding: "0.25rem", gap: "2px", alignItems: 'center', justifyContent: 'center', backgroundImage: "linear-gradient(rgb(255, 255, 255), rgb(250, 250, 250))", border: '1px solid rgba(128, 128, 128, 0.1)', borderRadius: "5px", boxShadow: "0px 2px 4px 0px rgba(0,0,0,0.15)" }}>
@@ -499,12 +546,12 @@ export const GridCardDoubleValue = ({ andarVal, baharVal, betData }) => {
                 <div style={{ verticalAlign: "center", fontSize: "0.65rem", justifyContent: "center", alignItems: "center", height: "100%" }}>{GetBetAmt()}</div>
             </div>
 
-            <button className="btnBetSmall">Select</button>
+            <button className="btnBetSmall" onClick={(e) => SelectResult(e)}>Select</button>
         </div>
     );
 }
 
-export const GridCardSingleValue = ({ singleVal, betData }) => {    
+export const GridCardSingleValue = ({ singleVal, betData, callback_OnResultSelect }) => {    
     
     function GetBetAmt () {
         let betAmt = 0;
@@ -521,6 +568,12 @@ export const GridCardSingleValue = ({ singleVal, betData }) => {
 
         return betAmt;
     }
+
+    function SelectResult(e) {
+        e.preventDefault();
+
+        if(callback_OnResultSelect) callback_OnResultSelect(GetNumString(singleVal.toString()));
+    }
     
     return (
         <div style={{ display: 'flex', flexDirection: 'column', padding: "0.25rem", gap: "5px", alignItems: 'center', justifyContent: 'center', minHeight: "4rem", backgroundImage: "linear-gradient(rgb(255, 255, 255), rgb(250, 250, 250))", border: '1px solid rgba(128, 128, 128, 0.1)', borderRadius: "5px", boxShadow: "0px 2px 4px 0px rgba(0,0,0,0.15)" }}>
@@ -532,7 +585,36 @@ export const GridCardSingleValue = ({ singleVal, betData }) => {
                 <div style={{ verticalAlign: "center", fontSize: "0.8rem", fontWeight: "bold", justifyContent: "center", alignItems: "center", height: "100%" }}>{GetBetAmt()}</div>
             </div>
 
-            <button className="btnBet">Select</button>
+            <button className="btnBet" onClick={(e) => SelectResult(e)}>Select</button>
         </div>
     );
+}
+
+function GetNumString(numString) {
+    switch(numString) {
+        case "0":
+            return "Zero";
+        case "1":
+            return "One";
+        case "2":
+            return "Two";
+        case "3":
+            return "Three";
+        case "4":
+            return "Four";
+        case "5":
+            return "Five";
+        case "6":
+            return "Six";
+        case "7":
+            return "Seven";
+        case "8":
+            return "Eight";
+        case "9":
+            return "Nine";
+        case "10":
+            return "Ten";
+        default:
+            return numString;
+    }
 }
