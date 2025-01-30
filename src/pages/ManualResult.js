@@ -33,7 +33,7 @@ const ManualResult = () => {
                 setAPIResponse(response.data);
                 ParseAPIResponse(response.data);
                 setIsAPILoading(false);
-                setSelectedResult(response.data.manualResult);
+                setSelectedResult(ParseSelectedResultResponse(response.data.manualResult));
             })
             .catch(error => {
                 console.error("Error fetching bet amounts: ", error);
@@ -42,7 +42,7 @@ const ManualResult = () => {
     }
 
     function PostResultAPIData(gameID, selectedResult) {
-        setSelectedResult(selectedResult);
+        setSelectedResult(ParseSelectedResultResponse(selectedResult));
 
         const url = `${RESULT_SELECT_API_URL}?gameID=${encodeURIComponent(gameID)}&result=${encodeURIComponent(selectedResult)}`;
     
@@ -99,6 +99,34 @@ const ManualResult = () => {
                 returnObj.push(currObj);
             }
             setAPIBetStatus(returnObj);
+        }
+    }
+
+    function ParseSelectedResultResponse(response) {
+        if(response == "xxx") return null;
+        
+        if(gameType == "singleChance") {
+            let currObj = {
+                singleVal: GetNumValue(response),                
+            }           
+                       
+            return currObj;
+        }
+        else if(gameType == "doubleChance") {            
+            let currObj = {
+                andarValue: GetNumValue(response.split(".")[0]),
+                baharValue: GetNumValue(response.split(".")[1]),                
+            }
+                       
+            return currObj;
+        }
+        else {
+            let currObj = {
+                cardS: response.slice(-1),
+                cardV: GetNumValue(response.slice(0, -1)).toString(),                
+            }
+            
+            return currObj;
         }
     }
 
@@ -364,12 +392,12 @@ export const LiveBetGrid = ({ gameID, gameType, isLoading, betData, selectedResu
         if (type == "singleChance") setGridCardType("SingleVal");
         else if (type == "doubleChance") setGridCardType("DoubleVal");
         else setGridCardType("Suite");
-    }
+    }    
 
     function Callback_OnResultSelect(result) {
         console.log("Game Type: " + gameType + " | Game ID: " + currGameID + " | Result: " + result);
         if(callback_OnManualResultSelect != null) callback_OnManualResultSelect(currGameID, result);
-    }
+    }    
 
     useEffect(() => {
         const { rows, cols } = GetGridDimensions(gameType);
@@ -431,26 +459,27 @@ export const LiveBetGrid = ({ gameID, gameType, isLoading, betData, selectedResu
                 </div>
             )}
 
-            {hasRoundStarted && !isBetLocked && selectedResult && selectedResult != "xxx" && (
+            {/*hasRoundStarted && !isBetLocked && selectedResult && selectedResult != "xxx" && (
                 <div style={overlayStyle}>
                     <div>Result Locked</div>
                     <div>{selectedResult}</div>
                 </div>
-            )}
+            )*/}
 
             {Array.from({ length: gridRowCount * gridColCount }, (_, index) => (
                 (gridCardType == "Suite") ?
-                (<GridCardSuite key={index} cardSuite={cards[index].suite} cardValue={cards[index].value} betData={betData} callback_OnResultSelect={Callback_OnResultSelect}/>) :
+                (<GridCardSuite key={index} cardSuite={cards[index].suite} cardValue={cards[index].value} betData={betData} selectedResult={selectedResult} callback_OnResultSelect={Callback_OnResultSelect}/>) :
                 ((gridCardType == "SingleVal") ?
-                <GridCardSingleValue key={index} singleVal={index == 9 ? 0 : index + 1} betData={betData} callback_OnResultSelect={Callback_OnResultSelect} /> :
-                <GridCardDoubleValue key={index} andarVal={Math.floor(index / gridColCount)} baharVal={index % gridColCount} betData={betData} callback_OnResultSelect={Callback_OnResultSelect} />)
+                <GridCardSingleValue key={index} singleVal={index == 9 ? 0 : index + 1} betData={betData} selectedResult={selectedResult} callback_OnResultSelect={Callback_OnResultSelect} /> :
+                <GridCardDoubleValue key={index} andarVal={Math.floor(index / gridColCount)} baharVal={index % gridColCount} betData={selectedResult} selectedResult={selectedResult} callback_OnResultSelect={Callback_OnResultSelect} />)
              ))} 
         </div>
     );    
 }
 
-export const GridCardSuite = ({ cardSuite, cardValue, betData, callback_OnResultSelect }) => {
+export const GridCardSuite = ({ cardSuite, cardValue, betData, selectedResult, callback_OnResultSelect }) => {
     const [suiteImgURL, setSuiteImgURL] = useState(null);
+    const [isSelectedResult, setIsSelectedResult] = useState(false);
 
     function SetCardSuite(suite) {
         switch (suite) {
@@ -496,6 +525,14 @@ export const GridCardSuite = ({ cardSuite, cardValue, betData, callback_OnResult
         SetCardSuite(cardSuite);
     }, [cardSuite])
 
+    useEffect(() => { 
+        if(selectedResult == null) {setIsSelectedResult(false); return;}        
+
+        if(selectedResult.cardS == cardSuite && selectedResult.cardV == cardValue) setIsSelectedResult(true);
+        else setIsSelectedResult(false);
+
+    }, [selectedResult])
+
     return (
         <div style={{ display: 'flex', flexDirection: 'column', padding: "0.25rem", gap: "5px", alignItems: 'center', justifyContent: 'center', minHeight: "4rem", backgroundImage: "linear-gradient(rgb(255, 255, 255), rgb(250, 250, 250))", border: '1px solid rgba(128, 128, 128, 0.1)', borderRadius: "5px", boxShadow: "0px 2px 4px 0px rgba(0,0,0,0.15)" }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: "5px" }}>
@@ -507,12 +544,15 @@ export const GridCardSuite = ({ cardSuite, cardValue, betData, callback_OnResult
                 <div style={{ verticalAlign: "center", fontSize: "0.8rem", justifyContent: "center", alignItems: "center", height: "100%" }}>{GetBetAmt()}</div>
             </div>
 
-            <button className="btnBet" onClick={(e) => SelectResult(e)}>Select</button>
+            {!isSelectedResult && (<button className="btnBet" onClick={(e) => SelectResult(e)}>Select</button>)}
+
+            {isSelectedResult && (<div className="betSelected">RS</div>)}
         </div>
     );
 }
 
-export const GridCardDoubleValue = ({ andarVal, baharVal, betData, callback_OnResultSelect }) => {
+export const GridCardDoubleValue = ({ andarVal, baharVal, betData, selectedResult, callback_OnResultSelect }) => {
+    const [isSelectedResult, setIsSelectedResult] = useState(false);
     
     function GetBetAmt() {
         let betAmt = 0;
@@ -534,6 +574,14 @@ export const GridCardDoubleValue = ({ andarVal, baharVal, betData, callback_OnRe
 
         if(callback_OnResultSelect) callback_OnResultSelect(GetNumString(andarVal.toString()) + "." + GetNumString(baharVal.toString()));
     }
+
+    useEffect(() => { 
+        if(selectedResult == null) {setIsSelectedResult(false); return;}        
+
+        if(selectedResult.andarValue == andarVal && selectedResult.baharValue == baharVal) setIsSelectedResult(true);
+        else setIsSelectedResult(false);
+
+    }, [selectedResult])
     
     return (
         <div style={{ display: 'flex', flexDirection: 'column', padding: "0.25rem", gap: "2px", alignItems: 'center', justifyContent: 'center', backgroundImage: "linear-gradient(rgb(255, 255, 255), rgb(250, 250, 250))", border: '1px solid rgba(128, 128, 128, 0.1)', borderRadius: "5px", boxShadow: "0px 2px 4px 0px rgba(0,0,0,0.15)" }}>
@@ -546,12 +594,15 @@ export const GridCardDoubleValue = ({ andarVal, baharVal, betData, callback_OnRe
                 <div style={{ verticalAlign: "center", fontSize: "0.65rem", justifyContent: "center", alignItems: "center", height: "100%" }}>{GetBetAmt()}</div>
             </div>
 
-            <button className="btnBetSmall" onClick={(e) => SelectResult(e)}>Select</button>
+            {!isSelectedResult && (<button className="btnBetSmall" onClick={(e) => SelectResult(e)}>Select</button>)}
+
+            {isSelectedResult && (<div className="betSelectedSmall">RS</div>)}
         </div>
     );
 }
 
-export const GridCardSingleValue = ({ singleVal, betData, callback_OnResultSelect }) => {    
+export const GridCardSingleValue = ({ singleVal, betData, selectedResult, callback_OnResultSelect }) => {
+    const[isSelectedResult, setIsSelectedResult] = useState(false);
     
     function GetBetAmt () {
         let betAmt = 0;
@@ -574,6 +625,14 @@ export const GridCardSingleValue = ({ singleVal, betData, callback_OnResultSelec
 
         if(callback_OnResultSelect) callback_OnResultSelect(GetNumString(singleVal.toString()));
     }
+
+    useEffect(() => { 
+        if(selectedResult == null) {setIsSelectedResult(false); return;}        
+
+        if(selectedResult.singleVal == singleVal) setIsSelectedResult(true);
+        else setIsSelectedResult(false);
+
+    }, [selectedResult])
     
     return (
         <div style={{ display: 'flex', flexDirection: 'column', padding: "0.25rem", gap: "5px", alignItems: 'center', justifyContent: 'center', minHeight: "4rem", backgroundImage: "linear-gradient(rgb(255, 255, 255), rgb(250, 250, 250))", border: '1px solid rgba(128, 128, 128, 0.1)', borderRadius: "5px", boxShadow: "0px 2px 4px 0px rgba(0,0,0,0.15)" }}>
@@ -585,7 +644,9 @@ export const GridCardSingleValue = ({ singleVal, betData, callback_OnResultSelec
                 <div style={{ verticalAlign: "center", fontSize: "0.8rem", fontWeight: "bold", justifyContent: "center", alignItems: "center", height: "100%" }}>{GetBetAmt()}</div>
             </div>
 
-            <button className="btnBet" onClick={(e) => SelectResult(e)}>Select</button>
+            {!isSelectedResult && (<button className="btnBet" onClick={(e) => SelectResult(e)}>Select</button>)}
+
+            {isSelectedResult && (<div className="betSelected">RS</div>)}
         </div>
     );
 }
